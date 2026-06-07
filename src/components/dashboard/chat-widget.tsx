@@ -15,19 +15,36 @@ import {
   XCircle,
   Volume2,
   VolumeX,
+  Plus,
+  Search,
+  Users,
+  MessageSquare,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePusherEvent } from "@/hooks/use-pusher";
 import { CHANNELS, EVENTS } from "@/lib/pusher";
 
-interface ChatConversation {
+// --- Types ---
+
+interface DirectConvo {
   id: string;
-  decision: string;
+  type: "direct";
+  otherUser: { id: string; firstName: string; lastName: string; role: string; image?: string | null };
+  lastMessage: string | null;
+  lastAt: string;
+  unreadCount: number;
+}
+
+interface WalkinConvo {
+  id: string;
+  type: "walkin";
+  visitorName: string;
+  recipient: { id: string; firstName: string; lastName: string; role: string };
   purpose: string;
-  createdAt: string;
-  waitTimeMinutes?: number;
-  visitor: { firstName: string; lastName: string; phone: string; company?: string };
-  recipient: { firstName: string; lastName: string };
+  decision: string;
+  lastMessage: string | null;
+  lastAt: string;
+  unreadCount: number;
 }
 
 interface ChatMessage {
@@ -36,7 +53,29 @@ interface ChatMessage {
   sender: { id: string; firstName: string; lastName: string; role: string };
   createdAt: string;
   walkInRequestId?: string;
+  conversationId?: string;
 }
+
+interface UserResult {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  department?: { name: string } | null;
+}
+
+type ActiveThread = {
+  type: "direct";
+  conversationId: string;
+  otherUser: { id: string; firstName: string; lastName: string; role: string };
+} | {
+  type: "walkin";
+  walkInId: string;
+  title: string;
+  decision: string;
+};
+
+type ViewMode = "list" | "thread" | "new-chat";
 
 const roleBadgeColor: Record<string, string> = {
   ADMIN: "bg-purple-100 text-purple-700",
@@ -59,14 +98,18 @@ export function ChatWidget({ userId }: { userId: string }) {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [conversations, setConversations] = useState<ChatConversation[]>([]);
-  const [activeConvo, setActiveConvo] = useState<ChatConversation | null>(null);
+  const [directConvos, setDirectConvos] = useState<DirectConvo[]>([]);
+  const [walkinConvos, setWalkinConvos] = useState<WalkinConvo[]>([]);
+  const [activeThread, setActiveThread] = useState<ActiveThread | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [isLoadingConvos, setIsLoadingConvos] = useState(false);
-  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<UserResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -76,7 +119,7 @@ export function ChatWidget({ userId }: { userId: string }) {
     audioRef.current.volume = 0.5;
   }, []);
 
-  // Fetch unread count (deferred to avoid blocking page paint)
+  // Fetch unread count
   const fetchUnread = useCallback(async () => {
     try {
       const res = await fetch("/api/chat/unread");
@@ -88,40 +131,40 @@ export function ChatWidget({ userId }: { userId: string }) {
   }, []);
 
   useEffect(() => {
-    // Delay initial fetch by 3s to not compete with page data loading
     const timeout = setTimeout(fetchUnread, 3000);
     const interval = setInterval(fetchUnread, 30000);
     return () => { clearTimeout(timeout); clearInterval(interval); };
   }, [fetchUnread]);
 
-  // Listen for incoming messages via Pusher (user-level channel)
+  // Listen for incoming messages via Pusher
   usePusherEvent(
     CHANNELS.userChat(userId),
     EVENTS.CHAT_INCOMING,
     (data: unknown) => {
       const msg = data as ChatMessage;
-      // Play sound
       if (soundEnabled && audioRef.current) {
         audioRef.current.play().catch(() => {});
       }
-      // Increment unread
       setUnreadCount((prev) => prev + 1);
-      // If viewing this thread, add message
-      if (activeConvo && msg.walkInRequestId === activeConvo.id) {
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === msg.id)) return prev;
-          return [...prev, msg];
-        });
+      // Add to current thread if viewing it
+      if (activeThread) {
+        const matchesDirect = activeThread.type === "direct" && msg.conversationId === activeThread.conversationId;
+        const matchesWalkin = activeThread.type === "walkin" && msg.walkInRequestId === activeThread.walkInId;
+        if (matchesDirect || matchesWalkin) {
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === msg.id)) return prev;
+            return [...prev, msg];
+          });
+        }
       }
     }
   );
 
-  // If active convo thread, also listen on the thread channel
+  // Also listen on walk-in thread channel if active
   usePusherEvent(
-    activeConvo ? CHANNELS.chat(activeConvo.id) : "disabled-channel",
+    activeThread?.type === "walkin" ? CHANNELS.chat(activeThread.walkInId) : "disabled-channel",
     EVENTS.CHAT_MESSAGE,
     (data: unknown) => {
-      if (!activeConvo) return;
       const msg = data as ChatMessage;
       setMessages((prev) => {
         if (prev.some((m) => m.id === msg.id)) return prev;
@@ -135,36 +178,54 @@ export function ChatWidget({ userId }: { userId: string }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Fetch conversations
+  // Fetch all conversations
   async function fetchConversations() {
-    setIsLoadingConvos(true);
+    setIsLoading(true);
     try {
-      const res = await fetch("/api/walkins/queue?status=ALL_TODAY");
+      const res = await fetch("/api/chat/conversations");
       if (res.ok) {
         const data = await res.json();
-        setConversations(data);
+        setDirectConvos(data.direct || []);
+        setWalkinConvos(data.walkin || []);
       }
     } catch { /* ignore */ }
-    setIsLoadingConvos(false);
+    setIsLoading(false);
   }
 
   // Open widget
   function handleOpen() {
     setIsOpen(true);
+    setViewMode("list");
     fetchConversations();
   }
 
-  // Open a conversation thread
-  async function openThread(convo: ChatConversation) {
-    setActiveConvo(convo);
-    setIsLoadingMessages(true);
+  // Open direct message thread
+  async function openDirectThread(convo: DirectConvo) {
+    setActiveThread({ type: "direct", conversationId: convo.id, otherUser: convo.otherUser });
+    setViewMode("thread");
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/chat/direct?conversationId=${convo.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data);
+      }
+      fetchUnread();
+    } catch { /* ignore */ }
+    setIsLoading(false);
+  }
+
+  // Open walk-in thread
+  async function openWalkinThread(convo: WalkinConvo) {
+    setActiveThread({ type: "walkin", walkInId: convo.id, title: convo.visitorName, decision: convo.decision });
+    setViewMode("thread");
+    setIsLoading(true);
     try {
       const res = await fetch(`/api/chat?walkInRequestId=${convo.id}`);
       if (res.ok) {
         const data = await res.json();
         setMessages(data);
       }
-      // Mark as read
       await fetch("/api/chat/unread", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -172,20 +233,58 @@ export function ChatWidget({ userId }: { userId: string }) {
       });
       fetchUnread();
     } catch { /* ignore */ }
-    setIsLoadingMessages(false);
+    setIsLoading(false);
+  }
+
+  // Start new chat with a user
+  async function startChatWith(user: UserResult) {
+    setViewMode("thread");
+    setActiveThread({ type: "direct", conversationId: "", otherUser: { id: user.id, firstName: user.firstName, lastName: user.lastName, role: user.role } });
+    setMessages([]);
+    setSearchQuery("");
+    setSearchResults([]);
+  }
+
+  // Search users
+  async function handleSearch(query: string) {
+    setSearchQuery(query);
+    if (query.length < 2) { setSearchResults([]); return; }
+    setIsSearching(true);
+    try {
+      const res = await fetch(`/api/public/staff?search=${encodeURIComponent(query)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const users = (data.staff || data || []) as UserResult[];
+        setSearchResults(users.filter((u: UserResult) => u.id !== userId));
+      }
+    } catch { /* ignore */ }
+    setIsSearching(false);
   }
 
   // Send message
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
-    if (!newMessage.trim() || !activeConvo || isSending) return;
+    if (!newMessage.trim() || !activeThread || isSending) return;
     setIsSending(true);
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ walkInRequestId: activeConvo.id, message: newMessage.trim() }),
-      });
+      let res;
+      if (activeThread.type === "direct") {
+        res = await fetch("/api/chat/direct", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipientId: activeThread.otherUser.id,
+            conversationId: activeThread.conversationId || undefined,
+            message: newMessage.trim(),
+          }),
+        });
+      } else {
+        res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ walkInRequestId: activeThread.walkInId, message: newMessage.trim() }),
+        });
+      }
       if (res.ok) {
         const msg = await res.json();
         setMessages((prev) => {
@@ -193,30 +292,49 @@ export function ChatWidget({ userId }: { userId: string }) {
           return [...prev, msg];
         });
         setNewMessage("");
+        // If new direct convo was just created, update the conversationId
+        if (activeThread.type === "direct" && !activeThread.conversationId && msg.conversationId) {
+          setActiveThread({ ...activeThread, conversationId: msg.conversationId });
+        }
       }
     } catch { /* ignore */ }
     setIsSending(false);
   }
 
-  // Quick decision actions (for staff)
+  // Walk-in decision
   async function handleDecision(decision: string) {
-    if (!activeConvo) return;
+    if (activeThread?.type !== "walkin") return;
     try {
-      const res = await fetch(`/api/walkins/${activeConvo.id}/decide`, {
+      const res = await fetch(`/api/walkins/${activeThread.walkInId}/decide`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ decision, note: "" }),
       });
       if (res.ok) {
-        setActiveConvo((prev) => prev ? { ...prev, decision } : null);
-        // Refresh conversations
+        setActiveThread({ ...activeThread, decision });
         fetchConversations();
       }
     } catch { /* ignore */ }
   }
 
-  const isStaff = session?.user?.role === "STAFF" || session?.user?.role === "DEPARTMENT_HEAD" || session?.user?.role === "ADMIN" || session?.user?.role === "SUPER_ADMIN";
-  const canDecide = isStaff && activeConvo?.decision === "PENDING";
+  function goBack() {
+    setActiveThread(null);
+    setMessages([]);
+    setViewMode("list");
+    fetchConversations();
+  }
+
+  const isStaff = ["STAFF", "DEPARTMENT_HEAD", "ADMIN", "SUPER_ADMIN"].includes(session?.user?.role || "");
+  const canDecide = isStaff && activeThread?.type === "walkin" && activeThread.decision === "PENDING";
+
+  // Get thread title
+  function getThreadTitle(): string {
+    if (!activeThread) return "Chat";
+    if (activeThread.type === "direct") return `${activeThread.otherUser.firstName} ${activeThread.otherUser.lastName}`;
+    return activeThread.title;
+  }
+
+  const totalUnread = unreadCount + directConvos.reduce((sum, c) => sum + c.unreadCount, 0);
 
   return (
     <>
@@ -227,9 +345,9 @@ export function ChatWidget({ userId }: { userId: string }) {
           className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center"
         >
           <MessageCircle className="h-6 w-6" />
-          {unreadCount > 0 && (
+          {totalUnread > 0 && (
             <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center font-bold animate-pulse">
-              {unreadCount > 9 ? "9+" : unreadCount}
+              {totalUnread > 9 ? "9+" : totalUnread}
             </span>
           )}
         </button>
@@ -241,127 +359,201 @@ export function ChatWidget({ userId }: { userId: string }) {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b bg-primary text-primary-foreground">
             <div className="flex items-center gap-2">
-              {activeConvo && (
-                <button onClick={() => setActiveConvo(null)} className="hover:opacity-70">
+              {viewMode !== "list" && (
+                <button onClick={goBack} className="hover:opacity-70">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
               )}
               <MessageCircle className="h-5 w-5" />
               <span className="font-semibold text-sm">
-                {activeConvo
-                  ? `${activeConvo.visitor.firstName} ${activeConvo.visitor.lastName}`
-                  : "Live Chat"}
+                {viewMode === "list" ? "Chat" : viewMode === "new-chat" ? "New Chat" : getThreadTitle()}
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <button
-                onClick={() => setSoundEnabled(!soundEnabled)}
-                className="p-1 hover:opacity-70"
-                title={soundEnabled ? "Mute" : "Unmute"}
-              >
+              {viewMode === "list" && (
+                <button onClick={() => setViewMode("new-chat")} className="p-1 hover:opacity-70" title="New Chat">
+                  <Plus className="h-4 w-4" />
+                </button>
+              )}
+              <button onClick={() => setSoundEnabled(!soundEnabled)} className="p-1 hover:opacity-70" title={soundEnabled ? "Mute" : "Unmute"}>
                 {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
               </button>
-              <button onClick={() => { setIsOpen(false); setActiveConvo(null); }} className="p-1 hover:opacity-70">
+              <button onClick={() => { setIsOpen(false); setActiveThread(null); setViewMode("list"); }} className="p-1 hover:opacity-70">
                 <X className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* Body */}
-          {!activeConvo ? (
-            /* Conversation list */
+          {/* CONVERSATION LIST */}
+          {viewMode === "list" && (
             <ScrollArea className="flex-1">
-              {isLoadingConvos && (
-                <p className="text-center text-sm text-muted-foreground py-8">Loading...</p>
+              {isLoading && <p className="text-center text-sm text-muted-foreground py-8">Loading...</p>}
+
+              {!isLoading && directConvos.length === 0 && walkinConvos.length === 0 && (
+                <div className="text-center py-12 px-4">
+                  <MessageSquare className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                  <p className="text-sm text-muted-foreground mb-3">No conversations yet</p>
+                  <Button size="sm" variant="outline" onClick={() => setViewMode("new-chat")}>
+                    <Plus className="h-3.5 w-3.5 mr-1" /> Start a Chat
+                  </Button>
+                </div>
               )}
-              {!isLoadingConvos && conversations.length === 0 && (
-                <p className="text-center text-sm text-muted-foreground py-8">No conversations today</p>
+
+              {/* Direct messages section */}
+              {directConvos.length > 0 && (
+                <>
+                  <div className="px-3 pt-3 pb-1">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Direct Messages</p>
+                  </div>
+                  {directConvos.map((convo) => (
+                    <button
+                      key={convo.id}
+                      onClick={() => openDirectThread(convo)}
+                      className="w-full text-left px-3 py-2.5 border-b hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
+                            {convo.otherUser.firstName[0]}{convo.otherUser.lastName[0]}
+                          </div>
+                          <div>
+                            <span className="text-sm font-medium">{convo.otherUser.firstName} {convo.otherUser.lastName}</span>
+                            <p className="text-xs text-muted-foreground truncate max-w-[180px]">
+                              {convo.lastMessage || "No messages yet"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                          {convo.unreadCount > 0 && (
+                            <span className="h-4 w-4 rounded-full bg-primary text-primary-foreground text-[9px] flex items-center justify-center">
+                              {convo.unreadCount}
+                            </span>
+                          )}
+                          <Badge variant="secondary" className={`text-[8px] px-1 py-0 ${roleBadgeColor[convo.otherUser.role] || ""}`}>
+                            {convo.otherUser.role.replace("_", " ")}
+                          </Badge>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </>
               )}
-              {conversations.map((convo) => (
-                <button
-                  key={convo.id}
-                  onClick={() => openThread(convo)}
-                  className="w-full text-left p-3 border-b hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      {convo.visitor.firstName} {convo.visitor.lastName}
-                    </span>
-                    <Badge variant="secondary" className={`text-[10px] ${decisionColors[convo.decision] || ""}`}>
-                      {convo.decision}
-                    </Badge>
+
+              {/* Walk-in threads section */}
+              {walkinConvos.length > 0 && (
+                <>
+                  <div className="px-3 pt-3 pb-1">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Walk-In Threads</p>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">
-                    To: {convo.recipient.firstName} {convo.recipient.lastName}
-                  </p>
-                  <div className="flex items-center justify-between mt-1">
-                    <p className="text-xs text-muted-foreground truncate max-w-[200px]">{convo.purpose}</p>
-                    {convo.waitTimeMinutes !== undefined && convo.decision === "PENDING" && (
-                      <span className="text-[10px] text-orange-600 font-medium">
-                        ⏱ {convo.waitTimeMinutes}m
-                      </span>
-                    )}
-                  </div>
-                </button>
-              ))}
+                  {walkinConvos.map((convo) => (
+                    <button
+                      key={convo.id}
+                      onClick={() => openWalkinThread(convo)}
+                      className="w-full text-left px-3 py-2.5 border-b hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-sm font-medium">{convo.visitorName}</span>
+                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+                            {convo.lastMessage || convo.purpose}
+                          </p>
+                        </div>
+                        <Badge variant="secondary" className={`text-[10px] ${decisionColors[convo.decision] || ""}`}>
+                          {convo.decision}
+                        </Badge>
+                      </div>
+                    </button>
+                  ))}
+                </>
+              )}
             </ScrollArea>
-          ) : (
-            /* Message thread */
+          )}
+
+          {/* NEW CHAT - USER SEARCH */}
+          {viewMode === "new-chat" && (
+            <div className="flex-1 flex flex-col">
+              <div className="p-3 border-b">
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    placeholder="Search staff by name..."
+                    className="pl-8 h-9 text-sm"
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <ScrollArea className="flex-1">
+                {isSearching && <p className="text-center text-sm text-muted-foreground py-4">Searching...</p>}
+                {!isSearching && searchQuery.length >= 2 && searchResults.length === 0 && (
+                  <p className="text-center text-sm text-muted-foreground py-4">No users found</p>
+                )}
+                {searchQuery.length < 2 && (
+                  <div className="text-center py-8 px-4">
+                    <Users className="h-8 w-8 mx-auto mb-2 text-muted-foreground/30" />
+                    <p className="text-xs text-muted-foreground">Type at least 2 characters to search</p>
+                  </div>
+                )}
+                {searchResults.map((user) => (
+                  <button
+                    key={user.id}
+                    onClick={() => startChatWith(user)}
+                    className="w-full text-left px-3 py-2.5 border-b hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
+                        {user.firstName[0]}{user.lastName[0]}
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium">{user.firstName} {user.lastName}</span>
+                        <div className="flex items-center gap-1">
+                          <Badge variant="secondary" className={`text-[8px] px-1 py-0 ${roleBadgeColor[user.role] || ""}`}>
+                            {user.role.replace("_", " ")}
+                          </Badge>
+                          {user.department && <span className="text-[10px] text-muted-foreground">{user.department.name}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </ScrollArea>
+            </div>
+          )}
+
+          {/* MESSAGE THREAD */}
+          {viewMode === "thread" && activeThread && (
             <div className="flex-1 flex flex-col overflow-hidden">
-              {/* Quick decision bar for staff */}
+              {/* Quick decision bar for walk-in threads */}
               {canDecide && (
                 <div className="flex items-center gap-1.5 px-3 py-2 border-b bg-muted/30">
                   <span className="text-xs text-muted-foreground mr-auto">Respond:</span>
-                  <Button
-                    size="sm"
-                    variant="default"
-                    className="h-7 text-xs bg-green-600 hover:bg-green-700"
-                    onClick={() => handleDecision("APPROVED")}
-                  >
+                  <Button size="sm" variant="default" className="h-7 text-xs bg-green-600 hover:bg-green-700" onClick={() => handleDecision("APPROVED")}>
                     <UserCheck className="h-3 w-3 mr-1" /> See Now
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-7 text-xs"
-                    onClick={() => handleDecision("WAIT")}
-                  >
+                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => handleDecision("WAIT")}>
                     <Clock className="h-3 w-3 mr-1" /> Wait
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    className="h-7 text-xs"
-                    onClick={() => handleDecision("DECLINED")}
-                  >
+                  <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => handleDecision("DECLINED")}>
                     <XCircle className="h-3 w-3 mr-1" /> No
                   </Button>
                 </div>
               )}
 
-              {/* Status bar if not pending */}
-              {activeConvo.decision !== "PENDING" && (
+              {/* Status bar for decided walk-ins */}
+              {activeThread.type === "walkin" && activeThread.decision !== "PENDING" && (
                 <div className="flex items-center gap-2 px-3 py-1.5 border-b bg-muted/20">
-                  <Badge variant="secondary" className={`text-[10px] ${decisionColors[activeConvo.decision] || ""}`}>
-                    {activeConvo.decision}
+                  <Badge variant="secondary" className={`text-[10px] ${decisionColors[activeThread.decision] || ""}`}>
+                    {activeThread.decision}
                   </Badge>
-                  <span className="text-xs text-muted-foreground">
-                    {activeConvo.decision === "APPROVED" && "Visitor has been approved to proceed"}
-                    {activeConvo.decision === "WAIT" && "Visitor has been asked to wait"}
-                    {activeConvo.decision === "DECLINED" && "Visit has been declined"}
-                  </span>
                 </div>
               )}
 
               {/* Messages */}
               <ScrollArea className="flex-1 px-3 py-2">
-                {isLoadingMessages && (
-                  <p className="text-center text-sm text-muted-foreground py-4">Loading...</p>
-                )}
-                {!isLoadingMessages && messages.length === 0 && (
-                  <p className="text-center text-sm text-muted-foreground py-4">
-                    No messages yet. Start the conversation!
-                  </p>
+                {isLoading && <p className="text-center text-sm text-muted-foreground py-4">Loading...</p>}
+                {!isLoading && messages.length === 0 && (
+                  <p className="text-center text-sm text-muted-foreground py-4">No messages yet. Start the conversation!</p>
                 )}
                 <div className="space-y-3">
                   {messages.map((msg) => {
@@ -370,18 +562,13 @@ export function ChatWidget({ userId }: { userId: string }) {
                       <div key={msg.id} className={`flex flex-col ${own ? "items-end" : "items-start"}`}>
                         <div className="flex items-center gap-1 mb-0.5">
                           <span className="text-[10px] font-medium text-muted-foreground">
-                            {own ? "You" : `${msg.sender.firstName}`}
+                            {own ? "You" : msg.sender.firstName}
                           </span>
-                          <Badge
-                            variant="secondary"
-                            className={`text-[8px] px-1 py-0 ${roleBadgeColor[msg.sender.role] || ""}`}
-                          >
+                          <Badge variant="secondary" className={`text-[8px] px-1 py-0 ${roleBadgeColor[msg.sender.role] || ""}`}>
                             {msg.sender.role.replace("_", " ")}
                           </Badge>
                         </div>
-                        <div className={`rounded-lg px-3 py-1.5 max-w-[75%] text-sm ${
-                          own ? "bg-primary text-primary-foreground" : "bg-muted"
-                        }`}>
+                        <div className={`rounded-lg px-3 py-1.5 max-w-[75%] text-sm ${own ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                           {msg.message}
                         </div>
                         <span className="text-[9px] text-muted-foreground mt-0.5">
@@ -403,6 +590,7 @@ export function ChatWidget({ userId }: { userId: string }) {
                     placeholder="Type a message..."
                     disabled={isSending}
                     className="flex-1 h-9 text-sm"
+                    autoFocus
                   />
                   <Button type="submit" size="icon" className="h-9 w-9" disabled={isSending || !newMessage.trim()}>
                     <Send className="h-4 w-4" />

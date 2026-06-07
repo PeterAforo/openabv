@@ -9,9 +9,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Count unread messages where user is the recipient of the walk-in
-    // OR user is a participant in the thread (sent a message before) but didn't send the latest
-    const unreadCount = await prisma.chatMessage.count({
+    // Count unread walk-in chat messages
+    const walkinUnread = await prisma.chatMessage.count({
       where: {
         isRead: false,
         senderId: { not: session.user.id },
@@ -28,7 +27,15 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ unreadCount });
+    // Count unread direct messages
+    const directUnread = await prisma.directMessage.count({
+      where: {
+        recipientId: session.user.id,
+        isRead: false,
+      },
+    });
+
+    return NextResponse.json({ unreadCount: walkinUnread + directUnread });
   } catch (error) {
     console.error("Failed to fetch unread count:", error);
     return NextResponse.json({ unreadCount: 0 });

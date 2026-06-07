@@ -91,6 +91,10 @@ model User {
   appointments  Appointment[]  @relation("AppointmentRecipient")
   walkInRequests WalkInRequest[] @relation("WalkInRecipient")
   chatMessages  ChatMessage[]
+  directMessagesSent DirectMessage[] @relation("DirectMessageSender")
+  directMessagesReceived DirectMessage[] @relation("DirectMessageRecipient")
+  conversationsAsUser1 Conversation[] @relation("ConvoUser1")
+  conversationsAsUser2 Conversation[] @relation("ConvoUser2")
   notifications Notification[]
   auditLogs     AuditLog[]
   calendarIntegrations CalendarIntegration[]
@@ -300,6 +304,44 @@ model ChatMessage {
 
   @@index([walkInRequestId])
   @@index([senderId])
+}
+
+model Conversation {
+  id          String   @id @default(uuid())
+  user1Id     String
+  user2Id     String
+  lastMessage String?
+  lastAt      DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user1    User             @relation("ConvoUser1", fields: [user1Id], references: [id])
+  user2    User             @relation("ConvoUser2", fields: [user2Id], references: [id])
+  messages DirectMessage[]
+
+  @@unique([user1Id, user2Id])
+  @@index([user1Id])
+  @@index([user2Id])
+  @@index([lastAt])
+}
+
+model DirectMessage {
+  id             String   @id @default(uuid())
+  conversationId String
+  senderId       String
+  recipientId    String
+  message        String
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  sender       User         @relation("DirectMessageSender", fields: [senderId], references: [id])
+  recipient    User         @relation("DirectMessageRecipient", fields: [recipientId], references: [id])
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([isRead])
 }
 
 model Notification {
