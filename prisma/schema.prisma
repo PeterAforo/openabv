@@ -1,0 +1,373 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUMS ====================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  SECURITY
+  RECEPTIONIST
+  STAFF
+  DEPARTMENT_HEAD
+}
+
+enum AppointmentStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  RESCHEDULED
+  CANCELLED
+  CHECKED_IN
+  CHECKED_OUT
+  NO_SHOW
+  COMPLETED
+}
+
+enum VisitorLogStatus {
+  CHECKED_IN
+  CHECKED_OUT
+}
+
+enum WalkInDecision {
+  PENDING
+  APPROVED
+  DECLINED
+  WAIT
+  RESCHEDULED
+}
+
+enum NotificationType {
+  EMAIL
+  SMS
+  IN_APP
+  PUSH
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  READ
+}
+
+enum IDType {
+  NATIONAL_ID
+  PASSPORT
+  DRIVERS_LICENSE
+  VOTER_ID
+  COMPANY_ID
+  OTHER
+}
+
+// ==================== MODELS ====================
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  phone         String?
+  role          UserRole  @default(STAFF)
+  isActive      Boolean   @default(true)
+  emailVerified DateTime?
+  image         String?
+  departmentId  String?
+  branchId      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  department    Department?    @relation(fields: [departmentId], references: [id])
+  branch        Branch?        @relation(fields: [branchId], references: [id])
+  staffProfile  StaffProfile?
+  appointments  Appointment[]  @relation("AppointmentRecipient")
+  walkInRequests WalkInRequest[] @relation("WalkInRecipient")
+  chatMessages  ChatMessage[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  calendarIntegrations CalendarIntegration[]
+  sessions      Session[]
+  accounts      Account[]
+
+  @@index([email])
+  @@index([role])
+  @@index([departmentId])
+  @@index([branchId])
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Department {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  users       User[]
+  appointments Appointment[]
+}
+
+model Branch {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  address     String?
+  city        String?
+  phone       String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  users       User[]
+  appointments Appointment[]
+  visitorLogs VisitorLog[]
+}
+
+model StaffProfile {
+  id          String  @id @default(uuid())
+  userId      String  @unique
+  title       String?
+  office      String?
+  extension   String?
+  bio         String?
+  availability String? // JSON string for availability schedule
+
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Visitor {
+  id          String    @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String
+  company     String?
+  idType      IDType?
+  idNumber    String?
+  vehicleNumber String?
+  photo       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  appointments Appointment[]
+  visitorLogs  VisitorLog[]
+  walkInRequests WalkInRequest[]
+
+  @@index([phone])
+  @@index([email])
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  appointmentCode String            @unique
+  qrCodeToken     String            @unique @default(uuid())
+  visitorId       String
+  recipientId     String
+  departmentId    String?
+  branchId        String?
+  purpose         String
+  date            DateTime
+  startTime       DateTime
+  endTime         DateTime
+  status          AppointmentStatus @default(PENDING)
+  notes           String?
+  declineReason   String?
+  rescheduledDate DateTime?
+  rescheduledTime DateTime?
+  googleEventId   String?
+  reminderSent    Boolean           @default(false)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+
+  visitor         Visitor           @relation(fields: [visitorId], references: [id])
+  recipient       User              @relation("AppointmentRecipient", fields: [recipientId], references: [id])
+  department      Department?       @relation(fields: [departmentId], references: [id])
+  branch          Branch?           @relation(fields: [branchId], references: [id])
+  visitorLog      VisitorLog?
+
+  @@index([appointmentCode])
+  @@index([qrCodeToken])
+  @@index([status])
+  @@index([date])
+  @@index([recipientId])
+  @@index([visitorId])
+}
+
+model VisitorLog {
+  id            String          @id @default(uuid())
+  visitorId     String
+  appointmentId String?         @unique
+  branchId      String?
+  purpose       String
+  recipientName String?
+  status        VisitorLogStatus @default(CHECKED_IN)
+  checkInTime   DateTime        @default(now())
+  checkOutTime  DateTime?
+  badgeNumber   String?
+  isWalkIn      Boolean         @default(false)
+  notes         String?
+  checkedInBy   String?
+  checkedOutBy  String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  visitor       Visitor         @relation(fields: [visitorId], references: [id])
+  appointment   Appointment?    @relation(fields: [appointmentId], references: [id])
+  branch        Branch?         @relation(fields: [branchId], references: [id])
+
+  @@index([visitorId])
+  @@index([status])
+  @@index([checkInTime])
+  @@index([isWalkIn])
+}
+
+model WalkInRequest {
+  id            String        @id @default(uuid())
+  visitorId     String
+  recipientId   String
+  purpose       String
+  decision      WalkInDecision @default(PENDING)
+  decisionNote  String?
+  respondedAt   DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  visitor       Visitor       @relation(fields: [visitorId], references: [id])
+  recipient     User          @relation("WalkInRecipient", fields: [recipientId], references: [id])
+  chatMessages  ChatMessage[]
+
+  @@index([recipientId])
+  @@index([decision])
+  @@index([createdAt])
+}
+
+model ChatMessage {
+  id            String    @id @default(uuid())
+  walkInRequestId String
+  senderId      String
+  message       String
+  isRead        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  walkInRequest WalkInRequest @relation(fields: [walkInRequestId], references: [id])
+  sender        User          @relation(fields: [senderId], references: [id])
+
+  @@index([walkInRequestId])
+  @@index([senderId])
+}
+
+model Notification {
+  id        String             @id @default(uuid())
+  userId    String
+  type      NotificationType
+  status    NotificationStatus @default(PENDING)
+  title     String
+  message   String
+  link      String?
+  metadata  String?            // JSON string for additional data
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime           @default(now())
+
+  user      User               @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model CalendarIntegration {
+  id            String   @id @default(uuid())
+  userId        String
+  provider      String   // google, apple
+  accessToken   String?  @db.Text
+  refreshToken  String?  @db.Text
+  expiresAt     DateTime?
+  calendarId    String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  oldValues String?  @db.Text // JSON
+  newValues String?  @db.Text // JSON
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  group     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([group])
+}
