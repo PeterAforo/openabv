@@ -1,6 +1,6 @@
-# OpenABV - Appointment Booking & Visitor Management System
+# VisitFlow - Smart Appointments. Secure Access.
 
-A production-ready web application for managing appointments, visitor check-ins, and walk-in approvals. Built with Next.js 15, TypeScript, PostgreSQL, and Prisma.
+Enterprise visitor management, appointment scheduling, access control, and real-time visitor approvals. Built with Next.js 16, TypeScript, PostgreSQL, and Prisma.
 
 ## Features
 
@@ -36,10 +36,11 @@ A production-ready web application for managing appointments, visitor check-ins,
 - **SaaS Subscription Plans** - Multi-tenant ready with plans, usage limits, feature flags
 - **Google Calendar Sync** - Create/update/cancel events via Google Calendar API
 - **ICS Calendar Invites** - Generate .ics files for Apple/iCloud/Outlook Calendar
+- **AI Reception Assistant** - OpenAI-powered chatbot for visitor Q&A, appointment guidance, and department routing
 
 ## Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
 - **Database:** PostgreSQL + Prisma ORM
 - **Auth:** Auth.js (NextAuth v5)
@@ -63,7 +64,7 @@ A production-ready web application for managing appointments, visitor check-ins,
 
 ```bash
 git clone <repo-url>
-cd OpenABV
+cd visitflow
 npm install
 ```
 
@@ -110,12 +111,12 @@ After running the seed command:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Super Admin | superadmin@openabv.com | password123 |
-| Admin | admin@openabv.com | password123 |
-| Security | security@openabv.com | password123 |
-| Receptionist | reception@openabv.com | password123 |
-| Staff | staff@openabv.com | password123 |
-| Dept Head | depthead@openabv.com | password123 |
+| Super Admin | superadmin@visitflow.io | password123 |
+| Admin | admin@visitflow.io | password123 |
+| Security | security@visitflow.io | password123 |
+| Receptionist | reception@visitflow.io | password123 |
+| Staff | staff@visitflow.io | password123 |
+| Dept Head | depthead@visitflow.io | password123 |
 
 ## Project Structure
 

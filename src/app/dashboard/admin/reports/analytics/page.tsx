@@ -78,7 +78,7 @@ export default function AnalyticsPage() {
       {/* KPI Cards */}
       <Row gutter={[12, 12]} style={{ marginBottom: 24 }}>
         <Col xs={12} sm={8} lg={4}>
-          <Card size="small"><Statistic title="Total Visitors" value={data.summary.totalVisitors} prefix={<TeamOutlined />} valueStyle={{ color: "#1677ff" }} /></Card>
+          <Card size="small"><Statistic title="Total Visitors" value={data.summary.totalVisitors} prefix={<TeamOutlined />} valueStyle={{ color: "#0A2540" }} /></Card>
         </Col>
         <Col xs={12} sm={8} lg={4}>
           <Card size="small"><Statistic title="Appointments" value={data.summary.appointments} prefix={<RiseOutlined />} valueStyle={{ color: "#52c41a" }} /></Card>
@@ -103,7 +103,7 @@ export default function AnalyticsPage() {
           {data.dailyTraffic.map((day) => (
             <div key={day.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
               <span style={{ fontSize: 12, fontWeight: 500 }}>{day.count}</span>
-              <div style={{ width: "100%", background: "#1677ff", borderRadius: "4px 4px 0 0", height: `${(day.count / maxTraffic) * 100}%`, minHeight: day.count > 0 ? 4 : 0, transition: "height 0.3s" }} />
+              <div style={{ width: "100%", background: "#0A2540", borderRadius: "4px 4px 0 0", height: `${(day.count / maxTraffic) * 100}%`, minHeight: day.count > 0 ? 4 : 0, transition: "height 0.3s" }} />
               <span style={{ fontSize: 11, color: "#8c8c8c" }}>{day.dayName}</span>
             </div>
           ))}

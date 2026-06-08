@@ -332,7 +332,7 @@ export function ChatWidget({ userId }: { userId: string }) {
         <Badge count={totalUnread > 9 ? "9+" : totalUnread} size="small" offset={[-4, 4]}>
           <button
             onClick={handleOpen}
-            style={{ position: "fixed", bottom: 24, right: 24, zIndex: 50, height: 56, width: 56, borderRadius: "50%", background: "#1677ff", color: "#fff", border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s" }}
+            style={{ position: "fixed", bottom: 24, right: 24, zIndex: 50, height: 56, width: 56, borderRadius: "50%", background: "#0A2540", color: "#fff", border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s" }}
           >
             <MessageOutlined style={{ fontSize: 24 }} />
           </button>
@@ -343,7 +343,7 @@ export function ChatWidget({ userId }: { userId: string }) {
       {isOpen && (
         <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 50, width: 380, height: 520, background: "#fff", border: "1px solid #f0f0f0", borderRadius: 12, boxShadow: "0 8px 24px rgba(0,0,0,0.15)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           {/* Header */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #f0f0f0", background: "#1677ff", color: "#fff" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #f0f0f0", background: "#0A2540", color: "#fff" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               {viewMode !== "list" && (
                 <button onClick={goBack} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 0 }}>
@@ -493,7 +493,7 @@ export function ChatWidget({ userId }: { userId: string }) {
                         <span style={{ fontSize: 10, color: "#999", fontWeight: 500 }}>{own ? "You" : msg.sender.firstName}</span>
                         <Tag color={roleTagColor[msg.sender.role] || "default"} style={{ fontSize: 8, margin: 0, lineHeight: "14px", padding: "0 3px" }}>{msg.sender.role.replace("_", " ")}</Tag>
                       </div>
-                      <div style={{ borderRadius: 8, padding: "4px 12px", maxWidth: "75%", fontSize: 14, background: own ? "#1677ff" : "#f5f5f5", color: own ? "#fff" : undefined }}>
+                      <div style={{ borderRadius: 8, padding: "4px 12px", maxWidth: "75%", fontSize: 14, background: own ? "#0A2540" : "#f5f5f5", color: own ? "#fff" : undefined }}>
                         {msg.message}
                       </div>
                       <span style={{ fontSize: 9, color: "#999", marginTop: 2 }}>{new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>

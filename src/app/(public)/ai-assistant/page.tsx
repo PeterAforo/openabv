@@ -70,10 +70,10 @@ export default function PublicAIAssistantPage() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-lg bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">OA</span>
+              <div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{ background: '#0A2540' }}>
+                <span style={{ color: '#00C48C' }} className="font-bold text-sm">VF</span>
               </div>
-              <span className="font-bold text-xl">OpenABV</span>
+              <span className="font-bold text-xl">VisitFlow</span>
             </Link>
             <Tag color="blue">AI Assistant</Tag>
           </div>
@@ -94,7 +94,7 @@ export default function PublicAIAssistantPage() {
         <div className="flex-1 overflow-y-auto" style={{ minHeight: 0 }}>
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 py-12">
-              <Avatar size={72} style={{ background: "#1677ff" }} icon={<RobotOutlined />} />
+              <Avatar size={72} style={{ background: "#0A2540" }} icon={<RobotOutlined />} />
               <Title level={3} style={{ margin: 0 }}>Hi! I&apos;m your AI Reception Assistant</Title>
               <Text type="secondary" style={{ textAlign: "center", maxWidth: 450 }}>
                 I can help you with booking appointments, finding departments, understanding visitor procedures, and answering common questions.
@@ -122,7 +122,7 @@ export default function PublicAIAssistantPage() {
                 >
                   <Avatar
                     size={36}
-                    style={{ background: msg.role === "user" ? "#52c41a" : "#1677ff", flexShrink: 0 }}
+                    style={{ background: msg.role === "user" ? "#52c41a" : "#0A2540", flexShrink: 0 }}
                     icon={msg.role === "user" ? <UserOutlined /> : <RobotOutlined />}
                   />
                   <div
@@ -148,7 +148,7 @@ export default function PublicAIAssistantPage() {
 
               {isLoading && (
                 <div className="flex gap-3">
-                  <Avatar size={36} style={{ background: "#1677ff", flexShrink: 0 }} icon={<RobotOutlined />} />
+                  <Avatar size={36} style={{ background: "#0A2540", flexShrink: 0 }} icon={<RobotOutlined />} />
                   <div style={{ padding: "10px 16px", borderRadius: 14, background: "#fff", border: "1px solid #f0f0f0", borderTopLeftRadius: 2 }}>
                     <Spin size="small" /> <Text type="secondary" style={{ marginLeft: 8 }}>Thinking...</Text>
                   </div>

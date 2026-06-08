@@ -14,13 +14,13 @@ async function getSMSConfig() {
     for (const s of settings) config[s.key] = s.value;
     return {
       apiKey: config.sms_api_key || process.env.MNOTIFY_API_KEY || "",
-      senderId: config.sms_sender_id || process.env.MNOTIFY_SENDER_ID || "OpenABV",
+      senderId: config.sms_sender_id || process.env.MNOTIFY_SENDER_ID || "VisitFlow",
       enabled: config.sms_enabled !== "false",
     };
   } catch {
     return {
       apiKey: process.env.MNOTIFY_API_KEY || "",
-      senderId: process.env.MNOTIFY_SENDER_ID || "OpenABV",
+      senderId: process.env.MNOTIFY_SENDER_ID || "VisitFlow",
       enabled: true,
     };
   }
@@ -63,7 +63,7 @@ export function appointmentBookedSMS(data: {
   time: string;
   recipientName: string;
 }): string {
-  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) with ${data.recipientName} on ${data.date} at ${data.time} has been submitted. You'll receive a confirmation shortly. - OpenABV`;
+  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) with ${data.recipientName} on ${data.date} at ${data.time} has been submitted. You'll receive a confirmation shortly. - VisitFlow`;
 }
 
 export function appointmentApprovedSMS(data: {
@@ -72,7 +72,7 @@ export function appointmentApprovedSMS(data: {
   date: string;
   time: string;
 }): string {
-  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) on ${data.date} at ${data.time} has been APPROVED. Please arrive on time with a valid ID. - OpenABV`;
+  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) on ${data.date} at ${data.time} has been APPROVED. Please arrive on time with a valid ID. - VisitFlow`;
 }
 
 export function appointmentDeclinedSMS(data: {
@@ -81,7 +81,7 @@ export function appointmentDeclinedSMS(data: {
   reason?: string;
 }): string {
   const r = data.reason ? ` Reason: ${data.reason}` : "";
-  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) has been declined.${r} Contact the office for more info. - OpenABV`;
+  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) has been declined.${r} Contact the office for more info. - VisitFlow`;
 }
 
 export function appointmentRescheduledSMS(data: {
@@ -90,7 +90,7 @@ export function appointmentRescheduledSMS(data: {
   newDate: string;
   newTime: string;
 }): string {
-  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) has been rescheduled to ${data.newDate} at ${data.newTime}. - OpenABV`;
+  return `Hi ${data.visitorName}, your appointment (${data.appointmentCode}) has been rescheduled to ${data.newDate} at ${data.newTime}. - VisitFlow`;
 }
 
 export function appointmentReminderSMS(data: {
@@ -99,7 +99,7 @@ export function appointmentReminderSMS(data: {
   date: string;
   time: string;
 }): string {
-  return `Reminder: Hi ${data.visitorName}, your appointment (${data.appointmentCode}) is tomorrow ${data.date} at ${data.time}. Please arrive on time with a valid ID. - OpenABV`;
+  return `Reminder: Hi ${data.visitorName}, your appointment (${data.appointmentCode}) is tomorrow ${data.date} at ${data.time}. Please arrive on time with a valid ID. - VisitFlow`;
 }
 
 // --- Walk-In SMS Templates ---
@@ -109,7 +109,7 @@ export function walkInAlertSMS(data: {
   visitorName: string;
   purpose: string;
 }): string {
-  return `${data.recipientName}, walk-in visitor ${data.visitorName} is here. Purpose: ${data.purpose}. Check your dashboard to respond. - OpenABV`;
+  return `${data.recipientName}, walk-in visitor ${data.visitorName} is here. Purpose: ${data.purpose}. Check your dashboard to respond. - VisitFlow`;
 }
 
 export function walkInDecisionSMS(data: {
@@ -126,7 +126,7 @@ export function walkInDecisionSMS(data: {
     ? `${data.recipientName} is not available at this time.`
     : `Your visit has been rescheduled.`;
   const n = data.note ? ` Note: ${data.note}` : "";
-  return `Hi ${data.visitorName}, ${d}${n} - OpenABV`;
+  return `Hi ${data.visitorName}, ${d}${n} - VisitFlow`;
 }
 
 // --- Check-In/Out SMS ---
@@ -136,11 +136,11 @@ export function visitorCheckedInSMS(data: {
   visitorName: string;
   purpose: string;
 }): string {
-  return `${data.recipientName}, your visitor ${data.visitorName} has checked in. Purpose: ${data.purpose}. - OpenABV`;
+  return `${data.recipientName}, your visitor ${data.visitorName} has checked in. Purpose: ${data.purpose}. - VisitFlow`;
 }
 
 export function visitorCheckedOutSMS(data: {
   visitorName: string;
 }): string {
-  return `${data.visitorName}, you have been checked out. Thank you for visiting! - OpenABV`;
+  return `${data.visitorName}, you have been checked out. Thank you for visiting! - VisitFlow`;
 }

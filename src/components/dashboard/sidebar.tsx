@@ -126,10 +126,10 @@ export function DashboardSidebar({ role }: SidebarProps) {
     <aside style={{ display: "none", position: "fixed", top: 0, bottom: 0, left: 0, width: 256, borderRight: "1px solid #f0f0f0", background: "#fff", zIndex: 10, flexDirection: "column" }} className="lg:!flex">
       <div style={{ height: 64, display: "flex", alignItems: "center", padding: "0 24px", borderBottom: "1px solid #f0f0f0" }}>
         <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ height: 32, width: 32, borderRadius: 8, background: "#1677ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: "#fff", fontWeight: "bold", fontSize: 14 }}>OA</span>
+          <div style={{ height: 32, width: 32, borderRadius: 8, background: "#0A2540", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "#00C48C", fontWeight: "bold", fontSize: 14 }}>VF</span>
           </div>
-          <span style={{ fontWeight: 600, fontSize: 18 }}>OpenABV</span>
+          <span style={{ fontWeight: 600, fontSize: 18 }}>VisitFlow</span>
         </Link>
       </div>
       <div style={{ flex: 1, overflowY: "auto" }}>

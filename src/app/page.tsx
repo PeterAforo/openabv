@@ -11,9 +11,9 @@ export default function Home() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">OA</span>
+              <span style={{ color: '#00C48C' }} className="font-bold text-sm">VF</span>
             </div>
-            <span className="font-bold text-xl">OpenABV</span>
+            <span className="font-bold text-xl">VisitFlow</span>
           </Link>
           <nav className="flex items-center gap-4">
             <Link href="/appointment-status" className="text-sm hover:underline">Check Status</Link>
@@ -28,11 +28,11 @@ export default function Home() {
       <section className="flex-1 flex items-center justify-center bg-gradient-to-b from-blue-50 to-background px-4 py-20">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Appointment Booking &<br />
-            <span className="text-primary">Visitor Management</span>
+            Smart Appointments.<br />
+            <span className="text-primary">Secure Access.</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Book appointments online, streamline visitor check-ins, and manage your front desk operations efficiently.
+            Enterprise visitor management, appointment scheduling, and access control — all in one intelligent platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/book-appointment" className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-lg text-lg font-medium">
@@ -108,12 +108,12 @@ export default function Home() {
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xs">OA</span>
+              <span style={{ color: '#00C48C' }} className="font-bold text-xs">VF</span>
             </div>
-            <span className="font-semibold">OpenABV</span>
+            <span className="font-semibold">VisitFlow</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Appointment Booking & Visitor Management System
+            Enterprise Visitor, Appointment & Access Management Platform
           </p>
         </div>
       </footer>

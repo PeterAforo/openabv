@@ -13,7 +13,7 @@ export function getOpenAI(): OpenAI {
   return openaiClient;
 }
 
-export const AI_SYSTEM_PROMPT = `You are the AI Reception Assistant for OpenABV — an Appointment Booking & Visitor Management System. You help visitors, staff, and security personnel with questions and tasks.
+export const AI_SYSTEM_PROMPT = `You are the AI Reception Assistant for VisitFlow — an Enterprise Visitor, Appointment & Access Management Platform. You help visitors, staff, and security personnel with questions and tasks.
 
 Your capabilities:
 1. **Appointment Help** — Guide visitors on how to book appointments, check status, or reschedule

@@ -101,7 +101,7 @@ export default function KioskPage() {
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #e6f4ff 0%, #f0f5ff 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <Card style={{ width: "100%", maxWidth: 480, boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
         <div style={{ textAlign: "center", marginBottom: 16 }}>
-          <QrcodeOutlined style={{ fontSize: 40, color: "#1677ff" }} />
+          <QrcodeOutlined style={{ fontSize: 40, color: "#0A2540" }} />
           <Title level={3} style={{ margin: "8px 0 0" }}>Visitor Self Check-In</Title>
           <Text type="secondary">Welcome! Please verify your appointment below.</Text>
         </div>

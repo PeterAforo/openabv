@@ -10,8 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "OpenABV - Appointment Booking & Visitor Management",
-  description: "Book appointments online, manage visitors, and streamline your front desk operations.",
+  title: "VisitFlow - Smart Appointments. Secure Access.",
+  description: "Enterprise visitor management, appointment scheduling, access control, visitor approvals, QR check-in, calendar integration, and real-time visitor tracking.",
+  keywords: ["visitor management", "appointment booking", "visitor check-in", "access control", "security management", "visitor tracking", "appointment scheduling", "enterprise SaaS"],
 };
 
 export default function RootLayout({

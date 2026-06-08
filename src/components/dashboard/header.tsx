@@ -89,7 +89,7 @@ export function DashboardHeader({ user, onMenuToggle }: HeaderProps) {
 
         <Dropdown menu={{ items: dropdownItems }} trigger={["click"]} placement="bottomRight">
           <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0, borderRadius: "50%" }}>
-            <Avatar size={36} src={user.image || undefined} icon={<UserOutlined />} style={{ background: "#1677ff" }}>{initials}</Avatar>
+            <Avatar size={36} src={user.image || undefined} icon={<UserOutlined />} style={{ background: "#0A2540" }}>{initials}</Avatar>
           </button>
         </Dropdown>
       </div>

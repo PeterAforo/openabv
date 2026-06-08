@@ -6,8 +6,12 @@ import { ConfigProvider, App as AntApp } from "antd";
 
 const theme = {
   token: {
-    colorPrimary: "#1677ff",
-    borderRadius: 8,
+    colorPrimary: "#0A2540",
+    colorSuccess: "#00C48C",
+    colorWarning: "#F5B700",
+    colorError: "#EF4444",
+    colorInfo: "#3B82F6",
+    borderRadius: 10,
     fontFamily: "Inter, system-ui, sans-serif",
   },
 };

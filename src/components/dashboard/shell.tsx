@@ -173,8 +173,8 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
     <>
       <div style={{ height: 64, display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start", padding: collapsed ? 0 : "0 24px", borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
         <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: token.colorPrimary, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 13 }}>OA</div>
-          {!collapsed && <span style={{ fontWeight: 600, fontSize: 18, color: token.colorText }}>OpenABV</span>}
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "#0A2540", display: "flex", alignItems: "center", justifyContent: "center", color: "#00C48C", fontWeight: 700, fontSize: 13 }}>VF</div>
+          {!collapsed && <span style={{ fontWeight: 600, fontSize: 18, color: token.colorText }}>VisitFlow</span>}
         </Link>
       </div>
       <Menu

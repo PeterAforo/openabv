@@ -29,7 +29,7 @@ const gatewayTabs: GatewayTab[] = [
     id: "general", label: "General", icon: <SettingOutlined />, group: "general",
     description: "General application settings",
     fields: [
-      { key: "app_name", label: "Application Name", type: "text", placeholder: "OpenABV" },
+      { key: "app_name", label: "Application Name", type: "text", placeholder: "VisitFlow" },
       { key: "app_url", label: "Application URL", type: "text", placeholder: "http://localhost:3000" },
       { key: "timezone", label: "Timezone", type: "text", placeholder: "Africa/Accra" },
       { key: "appointment_auto_approve", label: "Auto-Approve Appointments", type: "toggle", description: "Automatically approve new appointment requests" },
@@ -41,7 +41,7 @@ const gatewayTabs: GatewayTab[] = [
     fields: [
       { key: "sms_enabled", label: "Enable SMS Notifications", type: "toggle", description: "Send SMS via mNotify" },
       { key: "sms_api_key", label: "mNotify API Key", type: "password", placeholder: "Your mNotify API key" },
-      { key: "sms_sender_id", label: "Sender ID", type: "text", placeholder: "OpenABV", description: "Max 11 characters" },
+      { key: "sms_sender_id", label: "Sender ID", type: "text", placeholder: "VisitFlow", description: "Max 11 characters" },
     ],
   },
   {
@@ -53,7 +53,7 @@ const gatewayTabs: GatewayTab[] = [
       { key: "smtp_port", label: "SMTP Port", type: "number", placeholder: "587" },
       { key: "smtp_user", label: "SMTP Username", type: "text", placeholder: "noreply@example.com" },
       { key: "smtp_pass", label: "SMTP Password", type: "password", placeholder: "App password" },
-      { key: "email_from", label: "From Address", type: "text", placeholder: "noreply@openabv.com" },
+      { key: "email_from", label: "From Address", type: "text", placeholder: "noreply@visitflow.io" },
     ],
   },
   {

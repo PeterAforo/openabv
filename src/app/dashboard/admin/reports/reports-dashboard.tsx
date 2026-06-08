@@ -37,7 +37,7 @@ export function ReportsDashboard({ stats }: Props) {
           <Card size="small"><Statistic title="This Month" value={stats.monthlyAppointments} prefix={<CheckCircleOutlined />} /></Card>
         </Col>
         <Col xs={12} md={6}>
-          <Card size="small"><Statistic title="Currently Inside" value={stats.currentInside} prefix={<TeamOutlined />} valueStyle={{ color: "#1677ff" }} /></Card>
+          <Card size="small"><Statistic title="Currently Inside" value={stats.currentInside} prefix={<TeamOutlined />} valueStyle={{ color: "#0A2540" }} /></Card>
         </Col>
       </Row>
 

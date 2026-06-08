@@ -128,7 +128,7 @@ export default function AccessControlPage() {
           <Card size="small"><Statistic title="Active" value={devices.filter(d => d.isActive).length} valueStyle={{ color: "#52c41a" }} /></Card>
         </Col>
         <Col xs={8}>
-          <Card size="small"><Statistic title="With API" value={devices.filter(d => d.apiEndpoint).length} valueStyle={{ color: "#1677ff" }} /></Card>
+          <Card size="small"><Statistic title="With API" value={devices.filter(d => d.apiEndpoint).length} valueStyle={{ color: "#0A2540" }} /></Card>
         </Col>
       </Row>
 

@@ -96,7 +96,7 @@ export default function LiveChat({ walkInRequestId, visitorName, onClose, compac
                 <Text style={{ fontSize: 11 }} type="secondary">{own ? "You" : `${msg.sender.firstName} ${msg.sender.lastName}`}</Text>
                 <Tag color={roleTagColor[msg.sender.role] || "default"} style={{ fontSize: 10, lineHeight: "16px", margin: 0, padding: "0 4px" }}>{msg.sender.role.replace("_", " ")}</Tag>
               </div>
-              <div style={{ borderRadius: 8, padding: "6px 12px", maxWidth: "80%", fontSize: 14, background: own ? "#1677ff" : "#f5f5f5", color: own ? "#fff" : undefined }}>
+              <div style={{ borderRadius: 8, padding: "6px 12px", maxWidth: "80%", fontSize: 14, background: own ? "#0A2540" : "#f5f5f5", color: own ? "#fff" : undefined }}>
                 {msg.message}
               </div>
               <Text style={{ fontSize: 10, marginTop: 2 }} type="secondary">{new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</Text>

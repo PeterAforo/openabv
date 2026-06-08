@@ -33,7 +33,7 @@ const decisionTagColor: Record<string, string> = {
 const borderColors: Record<string, string> = {
   PENDING: "#faad14",
   APPROVED: "#52c41a",
-  WAIT: "#1677ff",
+  WAIT: "#0A2540",
   DECLINED: "#ff4d4f",
 };
 
@@ -113,7 +113,7 @@ export default function QueuePage() {
           <Card size="small"><Statistic title="Awaiting Response" value={pendingCount} valueStyle={{ color: "#faad14" }} /></Card>
         </Col>
         <Col xs={12} md={6}>
-          <Card size="small"><Statistic title="Asked to Wait" value={waitingCount} valueStyle={{ color: "#1677ff" }} /></Card>
+          <Card size="small"><Statistic title="Asked to Wait" value={waitingCount} valueStyle={{ color: "#0A2540" }} /></Card>
         </Col>
         <Col xs={12} md={6}>
           <Card size="small"><Statistic title="Approved Today" value={queue.filter((q) => q.decision === "APPROVED").length} valueStyle={{ color: "#52c41a" }} /></Card>

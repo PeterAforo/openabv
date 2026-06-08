@@ -123,10 +123,10 @@ export function MobileSidebar({ role, isOpen, onClose }: MobileSidebarProps) {
     <Drawer open={isOpen} onClose={onClose} placement="left" width={256} styles={{ body: { padding: 0 } }}
       title={
         <Link href="/dashboard" onClick={onClose} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ height: 32, width: 32, borderRadius: 8, background: "#1677ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: "#fff", fontWeight: "bold", fontSize: 14 }}>OA</span>
+          <div style={{ height: 32, width: 32, borderRadius: 8, background: "#0A2540", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "#00C48C", fontWeight: "bold", fontSize: 14 }}>VF</span>
           </div>
-          <span style={{ fontWeight: 600, fontSize: 18 }}>OpenABV</span>
+          <span style={{ fontWeight: 600, fontSize: 18 }}>VisitFlow</span>
         </Link>
       }
     >

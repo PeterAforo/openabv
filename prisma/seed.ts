@@ -48,10 +48,10 @@ async function main() {
   const hashedPassword = await bcryptjs.hash("password123", 12);
 
   await prisma.user.upsert({
-    where: { email: "superadmin@openabv.com" },
+    where: { email: "superadmin@visitflow.io" },
     update: {},
     create: {
-      email: "superadmin@openabv.com",
+      email: "superadmin@visitflow.io",
       password: hashedPassword,
       firstName: "Super",
       lastName: "Admin",
@@ -62,10 +62,10 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "admin@openabv.com" },
+    where: { email: "admin@visitflow.io" },
     update: {},
     create: {
-      email: "admin@openabv.com",
+      email: "admin@visitflow.io",
       password: hashedPassword,
       firstName: "System",
       lastName: "Administrator",
@@ -76,10 +76,10 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "security@openabv.com" },
+    where: { email: "security@visitflow.io" },
     update: {},
     create: {
-      email: "security@openabv.com",
+      email: "security@visitflow.io",
       password: hashedPassword,
       firstName: "John",
       lastName: "Security",
@@ -90,10 +90,10 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "reception@openabv.com" },
+    where: { email: "reception@visitflow.io" },
     update: {},
     create: {
-      email: "reception@openabv.com",
+      email: "reception@visitflow.io",
       password: hashedPassword,
       firstName: "Jane",
       lastName: "Reception",
@@ -104,10 +104,10 @@ async function main() {
   });
 
   const staffUser = await prisma.user.upsert({
-    where: { email: "staff@openabv.com" },
+    where: { email: "staff@visitflow.io" },
     update: {},
     create: {
-      email: "staff@openabv.com",
+      email: "staff@visitflow.io",
       password: hashedPassword,
       firstName: "Kwame",
       lastName: "Mensah",
@@ -119,10 +119,10 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "depthead@openabv.com" },
+    where: { email: "depthead@visitflow.io" },
     update: {},
     create: {
-      email: "depthead@openabv.com",
+      email: "depthead@visitflow.io",
       password: hashedPassword,
       firstName: "Ama",
       lastName: "Owusu",
@@ -147,8 +147,8 @@ async function main() {
 
   // Create system settings
   const settings = [
-    { key: "app_name", value: "OpenABV", group: "general" },
-    { key: "app_tagline", value: "Appointment Booking & Visitor Management", group: "general" },
+    { key: "app_name", value: "VisitFlow", group: "general" },
+    { key: "app_tagline", value: "Smart Appointments. Secure Access.", group: "general" },
     { key: "working_hours_start", value: "08:00", group: "schedule" },
     { key: "working_hours_end", value: "17:00", group: "schedule" },
     { key: "appointment_duration_minutes", value: "30", group: "schedule" },
@@ -307,7 +307,7 @@ async function main() {
     create: {
       name: "Demo Organization",
       slug: "demo-org",
-      primaryColor: "#1677ff",
+      primaryColor: "#0A2540",
     },
   });
 
@@ -315,12 +315,12 @@ async function main() {
 
   console.log("Database seeded successfully!");
   console.log("\nTest accounts:");
-  console.log("  Super Admin: superadmin@openabv.com / password123");
-  console.log("  Admin:       admin@openabv.com / password123");
-  console.log("  Security:    security@openabv.com / password123");
-  console.log("  Reception:   reception@openabv.com / password123");
-  console.log("  Staff:       staff@openabv.com / password123");
-  console.log("  Dept Head:   depthead@openabv.com / password123");
+  console.log("  Super Admin: superadmin@visitflow.io / password123");
+  console.log("  Admin:       admin@visitflow.io / password123");
+  console.log("  Security:    security@visitflow.io / password123");
+  console.log("  Reception:   reception@visitflow.io / password123");
+  console.log("  Staff:       staff@visitflow.io / password123");
+  console.log("  Dept Head:   depthead@visitflow.io / password123");
   console.log("\nPro features seeded:");
   console.log("  3 Meeting Rooms");
   console.log("  3 Approval Rules");

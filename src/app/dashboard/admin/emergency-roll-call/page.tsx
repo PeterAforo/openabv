@@ -143,7 +143,7 @@ export default function EmergencyRollCallPage() {
 
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={8}>
-          <Card size="small"><Statistic title="Total Inside" value={summary.total} prefix={<TeamOutlined />} valueStyle={{ color: "#1677ff" }} /></Card>
+          <Card size="small"><Statistic title="Total Inside" value={summary.total} prefix={<TeamOutlined />} valueStyle={{ color: "#0A2540" }} /></Card>
         </Col>
         <Col xs={8}>
           <Card size="small"><Statistic title="Accounted For" value={summary.accounted} prefix={<CheckCircleOutlined />} valueStyle={{ color: "#52c41a" }} /></Card>

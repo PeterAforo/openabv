@@ -64,7 +64,7 @@ export default function ProfilePage() {
 
       <Card style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <Avatar size={64} src={user.image || undefined} icon={<UserOutlined />} style={{ background: "#1677ff" }}>{initials}</Avatar>
+          <Avatar size={64} src={user.image || undefined} icon={<UserOutlined />} style={{ background: "#0A2540" }}>{initials}</Avatar>
           <div>
             <Title level={4} style={{ margin: 0 }}>{user.name}</Title>
             <Text type="secondary">{user.email}</Text>

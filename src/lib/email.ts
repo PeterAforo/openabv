@@ -24,7 +24,7 @@ async function getEmailConfig() {
       port: Number(config.smtp_port || process.env.SMTP_PORT) || 587,
       user: config.smtp_user || process.env.SMTP_USER || "",
       pass: config.smtp_pass || process.env.SMTP_PASS || "",
-      from: config.email_from || process.env.EMAIL_FROM || "noreply@openabv.com",
+      from: config.email_from || process.env.EMAIL_FROM || "noreply@visitflow.io",
       enabled: config.email_enabled !== "false",
     };
   } catch {
@@ -33,7 +33,7 @@ async function getEmailConfig() {
       port: Number(process.env.SMTP_PORT) || 587,
       user: process.env.SMTP_USER || "",
       pass: process.env.SMTP_PASS || "",
-      from: process.env.EMAIL_FROM || "noreply@openabv.com",
+      from: process.env.EMAIL_FROM || "noreply@visitflow.io",
       enabled: true,
     };
   }
@@ -84,9 +84,9 @@ export function appointmentConfirmationEmail(data: {
 }): string {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <div style="background: #1e40af; color: white; padding: 20px; text-align: center;">
-        <h1 style="margin: 0;">OpenABV</h1>
-        <p style="margin: 5px 0 0;">Appointment Booking System</p>
+      <div style="background: #0A2540; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0; color: #00C48C;">VisitFlow</h1>
+        <p style="margin: 5px 0 0;">Smart Appointments. Secure Access.</p>
       </div>
       <div style="padding: 30px; background: #f9fafb;">
         <h2>Appointment Confirmation</h2>
@@ -100,7 +100,7 @@ export function appointmentConfirmationEmail(data: {
           <p><strong>Purpose:</strong> ${data.purpose}</p>
         </div>
         <p>Please keep your reference code safe. You will need it when you arrive.</p>
-        <p style="color: #6b7280; font-size: 12px;">This is an automated message from OpenABV.</p>
+        <p style="color: #6b7280; font-size: 12px;">This is an automated message from VisitFlow.</p>
       </div>
     </div>
   `;

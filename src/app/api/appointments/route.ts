@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     if (recipient?.phone) {
       sendNotificationSMS(
         data.recipientId,
-        `New appointment request from ${data.firstName} ${data.lastName} on ${data.date} at ${data.startTime}. Check your dashboard. - OpenABV`
+        `New appointment request from ${data.firstName} ${data.lastName} on ${data.date} at ${data.startTime}. Check your dashboard. - VisitFlow`
       ).catch(() => {});
     }
 

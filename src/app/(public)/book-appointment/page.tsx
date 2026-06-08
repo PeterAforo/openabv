@@ -66,10 +66,10 @@ export default function BookAppointmentPage() {
       <div style={{ maxWidth: 700, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-            <div style={{ height: 40, width: 40, borderRadius: 12, background: "#1677ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "#fff", fontWeight: "bold" }}>OA</span>
+            <div style={{ height: 40, width: 40, borderRadius: 12, background: "#0A2540", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ color: "#00C48C", fontWeight: "bold" }}>VF</span>
             </div>
-            <span style={{ fontSize: 20, fontWeight: "bold" }}>OpenABV</span>
+            <span style={{ fontSize: 20, fontWeight: "bold" }}>VisitFlow</span>
           </Link>
           <Title level={2}>Book an Appointment</Title>
           <Text type="secondary">Fill in the form below to schedule your visit</Text>

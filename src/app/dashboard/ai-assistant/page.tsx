@@ -97,7 +97,7 @@ export default function AIAssistantPage() {
         <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
           {messages.length === 0 ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 16 }}>
-              <Avatar size={64} style={{ background: "#1677ff" }} icon={<RobotOutlined />} />
+              <Avatar size={64} style={{ background: "#0A2540" }} icon={<RobotOutlined />} />
               <Title level={4} style={{ margin: 0 }}>Welcome! How can I help?</Title>
               <Text type="secondary" style={{ textAlign: "center", maxWidth: 400 }}>
                 I can help you with appointment booking, department routing, visitor procedures, and general inquiries.
@@ -130,7 +130,7 @@ export default function AIAssistantPage() {
                 >
                   <Avatar
                     size={32}
-                    style={{ background: msg.role === "user" ? "#52c41a" : "#1677ff", flexShrink: 0 }}
+                    style={{ background: msg.role === "user" ? "#52c41a" : "#0A2540", flexShrink: 0 }}
                     icon={msg.role === "user" ? <UserOutlined /> : <RobotOutlined />}
                   />
                   <div
@@ -155,7 +155,7 @@ export default function AIAssistantPage() {
 
               {isLoading && (
                 <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
-                  <Avatar size={32} style={{ background: "#1677ff", flexShrink: 0 }} icon={<RobotOutlined />} />
+                  <Avatar size={32} style={{ background: "#0A2540", flexShrink: 0 }} icon={<RobotOutlined />} />
                   <div style={{ padding: "10px 14px", borderRadius: 12, background: "#f5f5f5", borderTopLeftRadius: 2 }}>
                     <Spin size="small" /> <Text type="secondary" style={{ marginLeft: 8 }}>Thinking...</Text>
                   </div>

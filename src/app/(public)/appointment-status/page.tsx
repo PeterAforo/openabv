@@ -63,8 +63,8 @@ function AppointmentStatusContent() {
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none", marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: "#1677ff", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700 }}>OA</div>
-            <span style={{ fontSize: 20, fontWeight: 700 }}>OpenABV</span>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: "#0A2540", display: "flex", alignItems: "center", justifyContent: "center", color: "#00C48C", fontWeight: 700 }}>VF</div>
+            <span style={{ fontSize: 20, fontWeight: 700 }}>VisitFlow</span>
           </Link>
           <Title level={2} style={{ margin: "8px 0 0" }}>Check Appointment Status</Title>
           <Text type="secondary">Enter your reference code to check status</Text>
@@ -100,7 +100,7 @@ function AppointmentStatusContent() {
 
         <p style={{ textAlign: "center", marginTop: 24, color: "#8c8c8c", fontSize: 14 }}>
           Need to book an appointment?{" "}
-          <Link href="/book-appointment" style={{ color: "#1677ff" }}>Book here</Link>
+          <Link href="/book-appointment" style={{ color: "#0A2540" }}>Book here</Link>
         </p>
       </div>
     </div>
