@@ -4,6 +4,7 @@ A production-ready web application for managing appointments, visitor check-ins,
 
 ## Features
 
+### Core
 - **Public Appointment Booking** - Visitors book online, receive reference codes & QR codes
 - **Security Dashboard** - Lookup appointments, check-in visitors, register walk-ins
 - **Staff Dashboard** - Approve/decline/reschedule appointments and walk-in requests
@@ -14,6 +15,27 @@ A production-ready web application for managing appointments, visitor check-ins,
 - **Notifications** - Email (Nodemailer), SMS (mNotify), and in-app notifications
 - **Role-Based Access Control** - 6 roles with granular permissions
 - **Audit Logging** - Track all important actions
+
+### Pro Features
+- **QR Digital Pass** - Auto-generate QR codes for approved appointments, scan at security desk, expiry enforcement
+- **Visitor Photo Capture** - Camera-based photo capture during check-in, displayed on badges and roll call
+- **ID Verification** - Capture ID type, masked ID number, optional document upload
+- **Blacklist / Watchlist** - Risk-level visitor alerts, auto-block critical matches
+- **Visitor Badge Printing** - Printable badges with photo, QR code, host, department, and expiry
+- **Emergency Roll Call** - Live list of all visitors on-site, mark as accounted for, export-ready
+- **Multi-Branch Support** - Branch management, branch-scoped staff, security, and reports
+- **Self Check-in Kiosk** - Tablet-friendly kiosk mode with phone/code/QR lookup, security approval
+- **Smart Approval Rules** - Auto-approve trusted visitors, block outside hours, daily visit limits
+- **Meeting Room Booking** - Room management with double-booking prevention, calendar view
+- **Reports & Analytics** - Visitor traffic, department volume, staff frequency, no-show rate, wait time
+- **Document Attachments** - Upload ID docs, work permits, delivery notes with MIME/size validation
+- **Contractor & Vendor Management** - Track access expiry, safety induction, permits
+- **Access Control Integration** - API-ready for turnstiles/smart doors, grant/revoke endpoints, device logs
+- **Data Privacy & Consent** - Consent recording/revocation, data retention policies, auto-cleanup
+- **SLA & Waiting Time Tracking** - Track arrival-to-response time, department SLA reports
+- **SaaS Subscription Plans** - Multi-tenant ready with plans, usage limits, feature flags
+- **Google Calendar Sync** - Create/update/cancel events via Google Calendar API
+- **ICS Calendar Invites** - Generate .ics files for Apple/iCloud/Outlook Calendar
 
 ## Tech Stack
 
@@ -113,7 +135,19 @@ src/
 │       ├── walkins/       # Walk-in management
 │       ├── chat/          # Real-time chat
 │       ├── notifications/ # Notification management
-│       ├── calendar/      # ICS generation
+│       ├── calendar/      # Google Calendar + ICS generation
+│       ├── qr/            # QR scan endpoint
+│       ├── badges/        # Visitor badge generation
+│       ├── rooms/         # Meeting room booking
+│       ├── watchlist/     # Blacklist/watchlist management
+│       ├── emergency/     # Emergency roll call
+│       ├── kiosk/         # Self check-in kiosk
+│       ├── documents/     # Document attachments
+│       ├── access-control/# Access control devices
+│       ├── privacy/       # Consent & data retention
+│       ├── approval-rules/# Smart approval rules
+│       ├── subscriptions/ # SaaS subscription plans
+│       ├── reports/       # Analytics & reports
 │       ├── admin/         # Admin-only endpoints
 │       └── public/        # Public data endpoints
 ├── components/

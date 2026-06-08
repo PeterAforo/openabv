@@ -22,6 +22,11 @@ import {
   ClockCircleOutlined,
   FileTextOutlined,
   OrderedListOutlined,
+  ThunderboltOutlined,
+  ApiOutlined,
+  LockOutlined,
+  ToolOutlined,
+  CrownOutlined,
 } from "@ant-design/icons";
 
 type NavItem = { title: string; href: string; icon: React.ReactNode };
@@ -39,6 +44,12 @@ const adminNav: NavItem[] = [
   { title: "Live Chat", href: "/dashboard/chat", icon: <MessageOutlined /> },
   { title: "Visitor Queue", href: "/dashboard/queue", icon: <OrderedListOutlined /> },
   { title: "Audit Logs", href: "/dashboard/admin/audit-logs", icon: <FileTextOutlined /> },
+  { title: "Approval Rules", href: "/dashboard/admin/approval-rules", icon: <ThunderboltOutlined /> },
+  { title: "Documents", href: "/dashboard/admin/documents", icon: <FileTextOutlined /> },
+  { title: "Access Control", href: "/dashboard/admin/access-control", icon: <ApiOutlined /> },
+  { title: "Contractors", href: "/dashboard/admin/contractors", icon: <ToolOutlined /> },
+  { title: "Privacy", href: "/dashboard/admin/privacy", icon: <LockOutlined /> },
+  { title: "Subscriptions", href: "/dashboard/admin/subscriptions", icon: <CrownOutlined /> },
   { title: "Settings", href: "/dashboard/admin/settings", icon: <SettingOutlined /> },
 ];
 

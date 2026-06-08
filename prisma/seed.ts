@@ -166,6 +166,153 @@ async function main() {
     });
   }
 
+  // Create meeting rooms
+  await prisma.meetingRoom.upsert({
+    where: { id: "room-board-1" },
+    update: {},
+    create: {
+      id: "room-board-1",
+      name: "Board Room A",
+      branchId: mainBranch.id,
+      floor: "3rd Floor",
+      capacity: 12,
+      amenities: JSON.stringify(["projector", "whiteboard", "video_conferencing"]),
+    },
+  });
+
+  await prisma.meetingRoom.upsert({
+    where: { id: "room-conf-1" },
+    update: {},
+    create: {
+      id: "room-conf-1",
+      name: "Conference Room B",
+      branchId: mainBranch.id,
+      floor: "2nd Floor",
+      capacity: 6,
+      amenities: JSON.stringify(["whiteboard", "tv_screen"]),
+    },
+  });
+
+  await prisma.meetingRoom.upsert({
+    where: { id: "room-small-1" },
+    update: {},
+    create: {
+      id: "room-small-1",
+      name: "Meeting Pod C",
+      branchId: mainBranch.id,
+      floor: "1st Floor",
+      capacity: 4,
+      amenities: JSON.stringify(["whiteboard"]),
+    },
+  });
+
+  // Create approval rules
+  const approvalRules = [
+    {
+      name: "Auto-approve VIPs",
+      description: "Automatically approve all VIP visitor appointments",
+      conditions: JSON.stringify({ visitorType: ["VIP"], trustedVisitor: true }),
+      action: "auto_approve",
+      priority: 10,
+    },
+    {
+      name: "Block outside hours",
+      description: "Block appointments outside 8am-5pm",
+      conditions: JSON.stringify({ blockOutsideHours: true, timeRange: { start: "08:00", end: "17:00" } }),
+      action: "block",
+      priority: 20,
+    },
+    {
+      name: "Limit daily visits",
+      description: "Cap at 15 visits per staff member per day",
+      conditions: JSON.stringify({ maxDailyVisits: 15 }),
+      action: "block",
+      priority: 5,
+    },
+  ];
+
+  for (const rule of approvalRules) {
+    const existing = await prisma.approvalRule.findFirst({ where: { name: rule.name } });
+    if (!existing) {
+      await prisma.approvalRule.create({ data: rule });
+    }
+  }
+
+  // Create subscription plans
+  const subPlans = [
+    {
+      name: "Free",
+      description: "For small offices getting started",
+      price: 0,
+      currency: "GHS",
+      interval: "monthly",
+      maxUsers: 3,
+      maxBranches: 1,
+      maxVisitors: 50,
+      maxRooms: 1,
+      features: JSON.stringify(["appointments", "walkins", "visitor_log"]),
+    },
+    {
+      name: "Professional",
+      description: "For growing organizations",
+      price: 199,
+      currency: "GHS",
+      interval: "monthly",
+      maxUsers: 15,
+      maxBranches: 3,
+      maxVisitors: 500,
+      maxRooms: 5,
+      features: JSON.stringify(["appointments", "walkins", "visitor_log", "qr_pass", "watchlist", "analytics", "calendar_sync", "badge_printing"]),
+    },
+    {
+      name: "Enterprise",
+      description: "For large institutions with advanced needs",
+      price: 499,
+      currency: "GHS",
+      interval: "monthly",
+      maxUsers: 100,
+      maxBranches: 10,
+      maxVisitors: 5000,
+      maxRooms: 20,
+      features: JSON.stringify(["appointments", "walkins", "visitor_log", "qr_pass", "watchlist", "analytics", "calendar_sync", "badge_printing", "access_control", "kiosk", "contractor_mgmt", "data_retention", "sla_tracking", "api_access"]),
+    },
+  ];
+
+  for (const plan of subPlans) {
+    const existing = await prisma.subscriptionPlan.findFirst({ where: { name: plan.name } });
+    if (!existing) {
+      await prisma.subscriptionPlan.create({ data: plan });
+    }
+  }
+
+  // Create data retention policies
+  const retentionPolicies = [
+    { entityType: "visitor_log", retentionDays: 365, action: "anonymize" },
+    { entityType: "documents", retentionDays: 180, action: "delete" },
+    { entityType: "visitor_photo", retentionDays: 90, action: "delete" },
+  ];
+
+  for (const policy of retentionPolicies) {
+    await prisma.dataRetentionPolicy.upsert({
+      where: { entityType: policy.entityType },
+      update: {},
+      create: policy,
+    });
+  }
+
+  // Create a demo tenant
+  const tenant = await prisma.tenant.upsert({
+    where: { slug: "demo-org" },
+    update: {},
+    create: {
+      name: "Demo Organization",
+      slug: "demo-org",
+      primaryColor: "#1677ff",
+    },
+  });
+
+  console.log(`Demo tenant created: ${tenant.name}`);
+
   console.log("Database seeded successfully!");
   console.log("\nTest accounts:");
   console.log("  Super Admin: superadmin@openabv.com / password123");
@@ -174,6 +321,12 @@ async function main() {
   console.log("  Reception:   reception@openabv.com / password123");
   console.log("  Staff:       staff@openabv.com / password123");
   console.log("  Dept Head:   depthead@openabv.com / password123");
+  console.log("\nPro features seeded:");
+  console.log("  3 Meeting Rooms");
+  console.log("  3 Approval Rules");
+  console.log("  3 Subscription Plans (Free, Professional, Enterprise)");
+  console.log("  3 Data Retention Policies");
+  console.log("  1 Demo Tenant");
 }
 
 main()

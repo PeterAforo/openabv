@@ -10,10 +10,25 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
+  const types = searchParams.get("types");
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "50");
 
   try {
+    // If types param is provided, return Visitor records (for contractor/vendor page)
+    if (types) {
+      const typeList = types.split(",").map(t => t.trim());
+      const visitors = await prisma.visitor.findMany({
+        where: { visitorType: { in: typeList as never[] } },
+        include: {
+          documents: { select: { id: true, type: true, fileName: true, expiresAt: true } },
+          _count: { select: { appointments: true, visitorLogs: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      });
+      return NextResponse.json(visitors);
+    }
+
     const where: Record<string, unknown> = {};
     if (status && status !== "all") where.status = status;
 
