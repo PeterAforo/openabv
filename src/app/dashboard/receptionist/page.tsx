@@ -1,8 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { KPICard } from "@/components/dashboard/kpi-card";
-import { CalendarOutlined, ClockCircleOutlined, TeamOutlined, UserSwitchOutlined } from "@ant-design/icons";
+import { ReceptionistDashboardView } from "./receptionist-dashboard-view";
 
 export default async function ReceptionistDashboardPage() {
   const session = await auth();
@@ -23,18 +22,11 @@ export default async function ReceptionistDashboardPage() {
   ]);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Receptionist Dashboard</h1>
-        <p className="text-muted-foreground">Manage appointments and visitor check-ins</p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KPICard title="Currently Inside" value={currentVisitors} icon={<TeamOutlined />} />
-        <KPICard title="Today's Appointments" value={todayAppointments} icon={<CalendarOutlined />} />
-        <KPICard title="Today's Check-Ins" value={todayCheckins} icon={<UserSwitchOutlined />} />
-        <KPICard title="Pending Walk-Ins" value={pendingWalkins} icon={<ClockCircleOutlined />} />
-      </div>
-    </div>
+    <ReceptionistDashboardView
+      currentVisitors={currentVisitors}
+      todayAppointments={todayAppointments}
+      todayCheckins={todayCheckins}
+      pendingWalkins={pendingWalkins}
+    />
   );
 }

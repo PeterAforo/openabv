@@ -1,5 +1,6 @@
 "use client";
 
+import "antd/dist/reset.css";
 import { SessionProvider } from "next-auth/react";
 import { ConfigProvider, App as AntApp } from "antd";
 
