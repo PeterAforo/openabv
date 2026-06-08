@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Employee Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-container": "#00714f",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "background": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#b28400",
+                        "on-secondary-fixed": "#002114",
+                        "on-secondary-fixed-variant": "#005138",
+                        "error-container": "#ffdad6",
+                        "primary": "#000f22",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary-fixed": "#001c37",
+                        "tertiary-container": "#312200",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#768dad",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "on-background": "#191c1e",
+                        "tertiary": "#160d00",
+                        "on-surface": "#191c1e",
+                        "tertiary-fixed": "#ffdea0",
+                        "primary-fixed": "#d2e4ff",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "primary-container": "#0a2540",
+                        "outline": "#74777e",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#60f9bd",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "inverse-primary": "#b0c8eb",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "secondary": "#006c4b",
+                        "on-surface-variant": "#43474d",
+                        "secondary-fixed": "#63fcc0",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#314865",
+                        "surface-container-high": "#e6e8ea",
+                        "outline-variant": "#c4c6ce",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#49607e",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed-variant": "#5c4300"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "10px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "sidebar_width": "260px",
+                        "container_max_width": "1440px",
+                        "gutter": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-sidebar-item {
+            border-left: 4px solid #63fcc0;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Fixed Side Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-primary-container flex flex-col py-xl z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-primary/60">Enterprise Suite</p>
+</div>
+<nav class="flex-1 space-y-base overflow-y-auto hide-scrollbar">
+<!-- Navigation Items Mapping from JSON -->
+<a class="flex items-center gap-md bg-white/10 text-on-primary border-l-4 border-secondary-fixed px-md py-sm transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Visitors</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-md text-label-md">Watchlist</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="login">login</span>
+<span class="font-label-md text-label-md">Check-in</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span class="font-label-md text-label-md">Locations</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-lg border-t border-white/10">
+<button class="w-full bg-secondary text-on-secondary py-sm rounded-xl font-title-md flex items-center justify-center gap-xs active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Add New Visitor
+            </button>
+<div class="mt-lg space-y-base">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-xs hover:text-on-primary" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-xs hover:text-on-primary" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-lg sticky top-0 z-40">
+<div class="flex items-center gap-lg">
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-xl pr-md py-xs bg-surface-container-low border border-outline-variant rounded-full text-body-md focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" placeholder="Search visitors or schedules..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-secondary font-bold border-b-2 border-secondary pb-2 font-label-md text-label-md" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Security</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-error-container text-on-error-container px-md py-xs rounded-xl font-label-md text-label-md hover:bg-error hover:text-on-error transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="emergency">emergency</span>
+                    Emergency Lockdown
+                </button>
+<div class="flex items-center gap-xs">
+<button class="p-xs rounded-full hover:bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-xs rounded-full hover:bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a male enterprise administrator in a clean office setting, soft natural lighting, high-end corporate photography style with a shallow depth of field, neutral color palette emphasizing professional trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOSvq_t9OD_eN40WH9f6jcTBqy-90BCj_ifUOcl0f1Iq6MeNnQ5qnDKtVsLz3KspCs1L3Fov-gZltY7LNd12E4PEwCArUL4N82CmB3-H5ryoMIrV8xu0tJ9N_egA61T79PLAuYgDDHpPXlYvZZZxfJBM18wFhrDL8cxt-alikNQz4dEHs8KfLOB_SKd-ovKZvXBWsS1JVaAt0lcFwS5HxipRadvJ69h9oySLyTX_QRe1IVJ94231irq9bYyQFbiXGuL6kkyfgxCf4"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-lg max-w-[1440px] mx-auto w-full">
+<!-- Hero / Greeting Section -->
+<section class="mb-xl flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-xs">Welcome back, Sarah</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg">You have 4 visitors scheduled for today across 2 locations.</p>
+</div>
+<button class="bg-secondary text-on-secondary px-lg py-sm rounded-xl font-title-md flex items-center gap-sm shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 active:translate-y-0">
+<span class="material-symbols-outlined" data-icon="calendar_add_on">calendar_add_on</span>
+                    Schedule New Visit
+                </button>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Summary Stats (Asymmetric Cards) -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-3 gap-md">
+<div class="col-span-1 bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary bg-secondary/10 w-fit p-xs rounded-lg" data-icon="groups">groups</span>
+<div class="mt-md">
+<p class="text-display-lg font-display-lg text-primary">12</p>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Total Expected</p>
+</div>
+</div>
+<div class="col-span-1 bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-tertiary-fixed-dim bg-tertiary-fixed/10 w-fit p-xs rounded-lg" data-icon="pending_actions">pending_actions</span>
+<div class="mt-md">
+<p class="text-display-lg font-display-lg text-primary">03</p>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Pending NDA</p>
+</div>
+</div>
+<div class="col-span-1 bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-on-secondary-container bg-secondary-container/10 w-fit p-xs rounded-lg" data-icon="how_to_reg">how_to_reg</span>
+<div class="mt-md">
+<p class="text-display-lg font-display-lg text-primary">08</p>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Pre-Registered</p>
+</div>
+</div>
+</div>
+<!-- Quick Action / Spotlight Card -->
+<div class="col-span-12 lg:col-span-4 bg-primary-container text-on-primary rounded-xl p-lg relative overflow-hidden group">
+
+<div class="relative z-10">
+<h3 class="font-title-lg text-title-lg mb-sm">Instant Invitation</h3>
+<p class="font-body-md text-body-md text-on-primary/80 mb-lg">Need to register someone on the fly? Generate a secure link to send via email or text.</p>
+<button class="w-full bg-white text-primary-container font-title-md py-sm rounded-xl hover:bg-secondary-fixed transition-colors">
+                            Copy Link
+                        </button>
+</div>
+</div>
+<!-- Main Table Section (Upcoming Visitors) -->
+<div class="col-span-12 lg:col-span-9 bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-primary">My Upcoming Visitors</h3>
+<div class="flex gap-xs">
+<button class="px-sm py-xs bg-surface-container text-on-surface-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-highest">Today</button>
+<button class="px-sm py-xs text-on-surface-variant rounded-lg font-label-md text-label-md hover:bg-surface-container">This Week</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-lg py-sm font-label-md text-label-md text-primary uppercase">Visitor Name</th>
+<th class="px-lg py-sm font-label-md text-label-md text-primary uppercase">Date &amp; Time</th>
+<th class="px-lg py-sm font-label-md text-label-md text-primary uppercase">Purpose</th>
+<th class="px-lg py-sm font-label-md text-label-md text-primary uppercase">Status</th>
+<th class="px-lg py-sm font-label-md text-label-md text-primary uppercase">NDA</th>
+<th class="px-lg py-sm"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-bright transition-colors group cursor-pointer">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="h-10 w-10 rounded-full bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed font-bold">JD</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight">Julianna Duarte</p>
+<p class="text-caption font-caption text-on-surface-variant">Acme Corp</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<p class="font-body-md text-body-md text-primary">Today, Oct 12</p>
+<p class="text-caption font-caption text-on-surface-variant">10:30 AM — 12:00 PM</p>
+</td>
+<td class="px-lg py-md">
+<span class="px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-caption font-bold">Client Meeting</span>
+</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-on-secondary-container bg-secondary-container/20 px-sm py-1 rounded-full text-caption font-bold uppercase w-fit">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                                            Checked In
+                                        </span>
+</td>
+<td class="px-lg py-md text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-lg py-md text-right">
+<button class="p-xs text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors group cursor-pointer">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="h-10 w-10 rounded-full bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed font-bold">MK</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight">Marcus Knight</p>
+<p class="text-caption font-caption text-on-surface-variant">Independent Contractor</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<p class="font-body-md text-body-md text-primary">Today, Oct 12</p>
+<p class="text-caption font-caption text-on-surface-variant">2:00 PM — 3:00 PM</p>
+</td>
+<td class="px-lg py-md">
+<span class="px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-caption font-bold">Maintenance</span>
+</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-primary-container bg-primary-fixed/20 px-sm py-1 rounded-full text-caption font-bold uppercase w-fit">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                                            Pre-Registered
+                                        </span>
+</td>
+<td class="px-lg py-md text-error">
+<span class="material-symbols-outlined" data-icon="pending">pending</span>
+</td>
+<td class="px-lg py-md text-right">
+<button class="p-xs text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors group cursor-pointer">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="h-10 w-10 rounded-full bg-outline-variant flex items-center justify-center text-on-surface-variant font-bold">EM</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight">Elena Moretti</p>
+<p class="text-caption font-caption text-on-surface-variant">Global Tech Labs</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<p class="font-body-md text-body-md text-primary">Tomorrow, Oct 13</p>
+<p class="text-caption font-caption text-on-surface-variant">09:00 AM — 11:00 AM</p>
+</td>
+<td class="px-lg py-md">
+<span class="px-sm py-1 bg-surface-container text-on-surface-variant rounded-full text-caption font-bold">Interview</span>
+</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-primary-container bg-primary-fixed/20 px-sm py-1 rounded-full text-caption font-bold uppercase w-fit">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                                            Pre-Registered
+                                        </span>
+</td>
+<td class="px-lg py-md text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-lg py-md text-right">
+<button class="p-xs text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-md bg-surface-container-lowest text-center">
+<button class="text-secondary font-title-md hover:underline">View All Upcoming Visits</button>
+</div>
+</div>
+<!-- Right Sidebar Inside Grid (Details Quick View) -->
+<div class="col-span-12 lg:col-span-3 space-y-lg">
+<!-- Location Access Card -->
+<div class="bg-white border border-outline-variant rounded-xl p-md">
+<h4 class="font-title-md text-title-md text-primary mb-md">Active Passes</h4>
+<div class="relative h-32 rounded-lg overflow-hidden mb-md">
+<img class="w-full h-full object-cover" data-alt="Ultra-modern corporate office lobby with glass walls and minimalist furniture, soft blue and gray lighting, architectural photography style, clean lines and premium atmosphere reflecting a secure high-tech facility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX8335nzaiRkwxi9Zi_zakDGcvSpPLwmtVc1ComwQTryIFaCvqzGmzYD3tE8qAWGjF6tw-N3h2uLCV_oRPkkra67Olkgg9pKknI3qOSpyj3ZKtmlipEGugQYZBhex6zuBzl_9kpr77YveL6VTyijlJATclWrWMAE_ed9a9R3mMGHdwEO3DrXaPcgVlzJy-l02K34ZmOuZE02Sn4iSx_5rZP9aS2PpRUn_ASYnLBoxpnznXh8V_bbj0INIUuVfQDJuiNvLovF5V_yk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 to-transparent flex items-end p-sm">
+<p class="text-white font-label-md">Main Corporate HQ - Sector 4</p>
+</div>
+</div>
+<div class="flex justify-between items-center text-caption font-caption text-on-surface-variant">
+<span>Visitors Allowed: 15</span>
+<span>Remaining: 7</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full mt-xs">
+<div class="bg-secondary h-full rounded-full w-[54%]"></div>
+</div>
+</div>
+<!-- Notification Log -->
+<div class="bg-white border border-outline-variant rounded-xl p-md">
+<div class="flex justify-between items-center mb-md">
+<h4 class="font-title-md text-title-md text-primary">Activity</h4>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="tune">tune</span>
+</div>
+<div class="space-y-md">
+<div class="flex gap-sm">
+<div class="w-2 h-2 rounded-full bg-secondary mt-1.5 shrink-0"></div>
+<div>
+<p class="text-body-md font-body-md text-primary">Julianna Duarte arrived at Main Lobby.</p>
+<p class="text-caption font-caption text-on-surface-variant">2 mins ago</p>
+</div>
+</div>
+<div class="flex gap-sm">
+<div class="w-2 h-2 rounded-full bg-outline mt-1.5 shrink-0"></div>
+<div>
+<p class="text-body-md font-body-md text-primary">NDA signed by Marcus Knight.</p>
+<p class="text-caption font-caption text-on-surface-variant">1 hour ago</p>
+</div>
+</div>
+<div class="flex gap-sm">
+<div class="w-2 h-2 rounded-full bg-outline mt-1.5 shrink-0"></div>
+<div>
+<p class="text-body-md font-body-md text-primary">Registration confirmed: Elena Moretti.</p>
+<p class="text-caption font-caption text-on-surface-variant">3 hours ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for Quick Schedule (Contextual) -->
+<button class="fixed bottom-lg right-lg w-14 h-14 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-transform md:hidden">
+<span class="material-symbols-outlined text-[32px]" data-icon="add">add</span>
+</button>
+<script>
+        // Simple micro-interaction for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Future expansion: Open details side-panel
+                console.log('Row clicked - Open Details');
+            });
+        });
+    </script>
+</body></html>

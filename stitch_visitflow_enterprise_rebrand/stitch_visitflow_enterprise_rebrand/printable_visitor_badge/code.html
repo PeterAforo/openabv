@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<title>VisitFlow - Visitor Badge Template</title>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#261a00",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-error": "#ffffff",
+                        "tertiary": "#160d00",
+                        "on-secondary-fixed": "#002114",
+                        "on-secondary-container": "#00714f",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#63fcc0",
+                        "primary-container": "#0a2540",
+                        "inverse-surface": "#2d3133",
+                        "surface-dim": "#d8dadc",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#ffdea0",
+                        "on-surface": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-container": "#312200",
+                        "secondary-container": "#60f9bd",
+                        "primary": "#000f22",
+                        "outline-variant": "#c4c6ce",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#768dad",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#005138",
+                        "surface-container": "#eceef0",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#43474d",
+                        "surface-tint": "#49607e",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001c37",
+                        "on-primary-fixed-variant": "#314865",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#b28400",
+                        "inverse-primary": "#b0c8eb",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "background": "#f7f9fb",
+                        "secondary": "#006c4b",
+                        "inverse-on-surface": "#eff1f3",
+                        "outline": "#74777e",
+                        "on-background": "#191c1e",
+                        "primary-fixed": "#d2e4ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar_width": "260px",
+                        "md": "16px",
+                        "container_max_width": "1440px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "title-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @media print {
+            body { background: white; }
+            .no-print { display: none; }
+            .badge-card { border: 1px solid #E5E7EB !important; box-shadow: none !important; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .badge-card {
+            width: 384px; /* Approx 4 inches @ 96dpi */
+            height: 528px; /* Approx 5.5 inches for extra detail */
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen flex items-center justify-center p-lg">
+<!-- Control Panel (UI Only) -->
+<div class="fixed top-0 left-0 right-0 p-md bg-white border-b border-outline-variant flex justify-between items-center z-50 no-print">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary" data-icon="print">print</span>
+<h1 class="font-title-lg text-title-lg text-primary">Badge Preview Mode</h1>
+</div>
+<div class="flex gap-sm">
+<button class="bg-secondary text-on-secondary px-lg py-sm rounded-lg font-title-md flex items-center gap-xs hover:opacity-90 transition-opacity" onclick="window.print()">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                Print Badge
+            </button>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-title-md hover:opacity-90 transition-opacity">
+                Edit Details
+            </button>
+</div>
+</div>
+<!-- Main Content Canvas -->
+<main class="mt-xl flex flex-col items-center">
+<!-- The Badge Template -->
+<div class="badge-card bg-white border border-outline-variant rounded-xl shadow-lg flex flex-col overflow-hidden relative"><div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none opacity-5" aria-hidden="true">
+    <div class="grid grid-cols-3 gap-xl rotate-[-25deg] scale-150">
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size: 48px;">security</span>
+            <span class="font-bold text-primary text-[32px]">VisitFlow</span>
+        </div>
+    </div>
+</div>
+<!-- Top Branding Section -->
+<header class="bg-primary-container p-lg flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-secondary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<span class="font-title-lg text-title-lg font-bold text-on-primary">VisitFlow</span>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-md py-xs rounded-full font-label-md uppercase tracking-wider font-bold">
+                    VISITOR
+                </div>
+</header>
+<!-- Main Info Section -->
+<div class="flex-1 p-lg flex flex-col">
+<!-- Photo & Basic Identity -->
+<div class="flex gap-lg items-start mb-lg">
+<!-- Visitor Photo Placeholder -->
+<div class="w-32 h-40 bg-surface-container rounded-lg border border-outline-variant overflow-hidden flex-shrink-0 relative">
+<img alt="Visitor" class="w-full h-full object-cover" data-alt="A professional studio portrait of a mid-40s man with a friendly expression, wearing a clean business-casual shirt. The lighting is bright and even, characteristic of an enterprise corporate environment. The background is a soft, neutral gray that complements the light-mode UI design. The overall aesthetic is sharp, clean, and highly professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpNSdG_m0K4P4tu-QGNXEqNhCOxVd4mYmcIxZu2gCRLTvwRU3M243Q6ZoiBl2tTfZK0yEfoB_A-Cj12u-xvpGQrphW9jHHmLBmKq4zuhkoj-UrOQVwOmt6e1SXT_39P-5GU5vFdKzU9q_AF2r9GT_wiQnaCLn7WWWpO-P6q58pe254INYfMdYTSmceKr-0SI0c7iCZUjwaq4e3oH89SMy8HD_5sUP-vT6Czf4jhKe5tD-QXi75Sq4VzIHYhlGF8FIT3F6oIuV40tU">
+<div class="absolute bottom-0 left-0 right-0 bg-primary/60 text-white text-[10px] py-1 text-center font-label-md">
+                            VERIFIED ID
+                        </div>
+</div>
+<!-- Primary Text Info -->
+<div class="flex flex-col gap-sm">
+<div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Visitor Name</span>
+<h2 class="font-headline-md text-headline-md text-primary leading-tight">Jonathan Doe</h2>
+</div>
+<div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Organization</span>
+<p class="font-title-md text-title-md text-on-surface">Global Tech Corp</p>
+</div>
+<div class="mt-base">
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Date of Issue</span>
+<p class="font-body-md text-body-md text-on-surface">Oct 24, 2024 • 09:15 AM</p>
+</div>
+</div>
+</div>
+<!-- Secondary Metadata Grid -->
+<div class="grid grid-cols-2 gap-md border-t border-b border-outline-variant py-md mb-lg">
+<div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Host</span>
+<p class="font-body-md text-body-md font-semibold text-primary">Sarah Williams</p>
+</div>
+<div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Department</span>
+<p class="font-body-md text-body-md font-semibold text-primary">Product Design</p>
+</div>
+<div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Access Level</span>
+<p class="font-body-md text-body-md font-semibold text-secondary">Level 2 - General</p>
+</div>
+<div>
+<span class="font-label-md text-on-surface-variant uppercase tracking-tighter">Location</span>
+<p class="font-body-md text-body-md font-semibold text-primary">HQ - North Wing</p>
+</div>
+</div>
+<!-- Expiration & QR Code -->
+<div class="flex justify-between items-end mt-auto">
+<div class="flex flex-col">
+<div class="mb-sm p-sm bg-error-container/30 border border-error rounded-lg">
+<span class="font-label-md text-error uppercase tracking-tighter font-bold text-[10px]">Expires</span>
+<p class="font-title-md text-title-md text-error font-extrabold text-headline-md">Oct 24, 2024 • 06:00 PM</p>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="font-caption text-caption">VisitFlow Enterprise Suite</span>
+</div>
+</div>
+<!-- Security QR Code -->
+<div class="p-base bg-white border border-outline rounded flex items-center justify-center">
+<div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center rounded">
+<!-- Visual placeholder for QR -->
+<div class="w-20 h-20 relative opacity-80">
+<span class="material-symbols-outlined text-primary scale-[2.5]" data-icon="qr_code_2">qr_code_2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Security Disclaimer -->
+<footer class="bg-surface-container-low p-md border-t border-outline-variant">
+<p class="font-caption text-caption text-on-surface-variant text-center leading-normal">
+                    This badge is non-transferable and must be visible at all times while on premises. 
+                    Please return to security desk upon departure. VisitFlow Access System ID: VF-9823-XQ.
+                </p>
+</footer>
+</div>
+<!-- Secondary Note for User -->
+<p class="mt-lg text-on-surface-variant font-body-md max-w-sm text-center no-print">
+<span class="font-bold text-primary">Pro Tip:</span> Print on standard 3" x 4" cardstock for optimal fit in transparent security lanyards.
+        </p>
+</main>
+<!-- Shared Footer Component Logic (Adapted for context) -->
+<div class="fixed bottom-0 left-0 right-0 p-sm text-center no-print opacity-50">
+<p class="font-caption text-caption text-on-surface-variant">
+            © 2024 VisitFlow. Smart Appointments. Secure Access.
+        </p>
+</div>
+<script>
+        // Simple micro-interaction for the print button hover
+        const printBtn = document.querySelector('button[onclick="window.print()"]');
+        if(printBtn) {
+            printBtn.addEventListener('mouseenter', () => {
+                printBtn.classList.add('scale-105');
+            });
+            printBtn.addEventListener('mouseleave', () => {
+                printBtn.classList.remove('scale-105');
+            });
+        }
+    </script>
+
+
+
+
+</body></html>

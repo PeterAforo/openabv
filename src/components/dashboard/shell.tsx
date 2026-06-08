@@ -266,7 +266,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
         placement="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        width={260}
+        size="default"
         styles={{ body: { padding: 0 }, wrapper: {} }}
         rootClassName="vf-mobile-drawer"
       >

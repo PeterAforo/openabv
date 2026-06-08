@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Check-in Success</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-background": "#191c1e",
+                    "primary": "#000f22",
+                    "secondary-container": "#60f9bd",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary-container": "#768dad",
+                    "outline": "#74777e",
+                    "surface-dim": "#d8dadc",
+                    "background": "#f7f9fb",
+                    "surface-container": "#eceef0",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary-fixed": "#001c37",
+                    "surface-bright": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "secondary-fixed": "#63fcc0",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "tertiary": "#160d00",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-surface-variant": "#43474d",
+                    "surface": "#f7f9fb",
+                    "tertiary-container": "#312200",
+                    "on-secondary-container": "#00714f",
+                    "primary-container": "#0a2540",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#261a00",
+                    "secondary": "#006c4b",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "surface-tint": "#49607e",
+                    "inverse-primary": "#b0c8eb",
+                    "on-secondary-fixed": "#002114",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c4c6ce",
+                    "tertiary-fixed": "#ffdea0",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#3fdfa5",
+                    "primary-fixed": "#d2e4ff",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#005138",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#b28400",
+                    "tertiary-fixed-dim": "#fbbc0e",
+                    "primary-fixed-dim": "#b0c8eb",
+                    "on-primary-fixed-variant": "#314865"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "xs": "8px",
+                    "md": "16px",
+                    "container_max_width": "1440px",
+                    "sm": "12px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "base": "4px",
+                    "sidebar_width": "260px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "caption": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+            overflow: hidden;
+        }
+
+        .success-checkmark {
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .badge-print-simulation {
+            animation: slideDown 2s ease-in-out infinite;
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+
+        .timer-bar {
+            animation: shrinkWidth 15s linear forwards;
+        }
+
+        @keyframes shrinkWidth {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-on-background">
+<!-- Top Navigation Suppression: Linear/Transactional Flow -->
+<!-- The Shell Visibility & Relevance filter suppresses global nav for the Success screen -->
+<main class="flex-grow flex items-center justify-center p-gutter">
+<div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-12 gap-lg items-center">
+<!-- Left Side: Success Message & Animation -->
+<div class="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left space-y-xl">
+<div class="success-checkmark w-24 h-24 bg-secondary rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-on-secondary text-[48px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="space-y-md">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">You're all set!</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">
+                        Your host has been notified. They will be with you shortly. Please collect your visitor badge below.
+                    </p>
+</div>
+<!-- Printer Instruction Component -->
+<div class="w-full max-w-sm p-lg bg-surface-container-low rounded-xl border border-outline-variant flex items-center gap-md">
+<div class="relative w-12 h-16 bg-primary-container rounded-sm overflow-hidden flex flex-col justify-end p-1">
+<div class="w-full h-1 bg-secondary-container rounded-full mb-1"></div>
+<div class="badge-print-simulation w-full h-8 bg-surface-container-lowest rounded-sm"></div>
+<span class="material-symbols-outlined text-on-primary-container text-xs absolute top-1 left-1/2 -translate-x-1/2">print</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Your badge is printing below</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Estimated time: 5 seconds</p>
+</div>
+</div>
+</div>
+<!-- Right Side: Check-in Summary Card -->
+<div class="md:col-span-5">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-lg bg-surface-container-low border-b border-outline-variant">
+<h2 class="font-title-lg text-title-lg text-primary">Visitor Summary</h2>
+</div>
+<div class="p-lg space-y-lg">
+<div class="flex items-center gap-md">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-secondary bg-surface-container-high">
+<img alt="Visitor Portrait" class="w-full h-full object-crop" data-alt="A professional close-up headshot of a friendly business visitor in a well-lit office lobby. The lighting is soft and natural, reflecting the premium and secure institutional atmosphere of the VisitFlow enterprise suite. The overall aesthetic is clean and modern, with a shallow depth of field that emphasizes the person's welcoming expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDIEhsVd3_c3eF-cH87z5-GtU8bXAqOHCx8GkxynlmAcsLw38vx4I9ADzfG2_j4S6KkgdYghHBKciHromxW2iHhHD1n-dZU63WtSfvoyZB0ozy_p1nTTJjSfMuLT-JU_pYT6di36MhtBEIEZ7P5Hq9Ap8r8ECDZHhwe60l5i24yQj6rkowoPUae2ex1cCfWAOIx7fnKS_dIz_GO_TYiUIeER8UCpy7X87-9arlL62sPtOGQqyAvxEY38YNY-mLu3RFZsxY7IATPoc"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Visitor Name</p>
+<p class="font-title-md text-title-md text-primary">Jonathan Miller</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Host</p>
+<div class="flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-secondary text-sm">person</span>
+<p class="font-body-md text-body-md text-primary">Sarah Chen</p>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Room</p>
+<div class="flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-secondary text-sm">meeting_room</span>
+<p class="font-body-md text-body-md text-primary">Aurora Hall 402</p>
+</div>
+</div>
+</div>
+<div class="pt-md border-t border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant">Visit Purpose</p>
+<p class="font-body-md text-body-md text-primary mt-1">Quarterly Product Review</p>
+</div>
+<div class="bg-secondary/10 p-md rounded-lg flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<p class="font-label-md text-label-md text-secondary font-bold">IDENTITY VERIFIED</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Area / Auto-reset Indicator -->
+<footer class="p-gutter flex flex-col items-center">
+<div class="max-w-4xl w-full">
+<div class="flex justify-between items-center mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary-container rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">rocket_launch</span>
+</div>
+<span class="font-title-md text-title-md font-extrabold text-primary">VisitFlow</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Returning to Welcome Screen in <span id="countdown">15</span>s</p>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="timer-bar h-full bg-secondary"></div>
+</div>
+<div class="mt-lg flex justify-center">
+<button class="flex items-center gap-xs font-label-md text-label-md text-primary hover:text-secondary transition-colors cursor-pointer group" onclick="window.location.reload()">
+<span class="material-symbols-outlined text-sm group-hover:rotate-180 transition-transform duration-500">refresh</span>
+                    Start New Check-In
+                </button>
+</div>
+</div>
+</footer>
+<script>
+        // Automatic Reset Logic
+        let secondsLeft = 15;
+        const countdownEl = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            secondsLeft--;
+            countdownEl.textContent = secondsLeft;
+            
+            if (secondsLeft <= 0) {
+                clearInterval(timer);
+                // Simulate return to welcome screen
+                document.body.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-screen bg-primary-container text-on-primary">
+                        <div class="animate-pulse flex flex-col items-center">
+                            <span class="material-symbols-outlined text-[64px] mb-4">sync</span>
+                            <h2 class="font-headline-md text-headline-md">Resetting Kiosk...</h2>
+                        </div>
+                    </div>
+                `;
+                setTimeout(() => {
+                    location.reload(); // In real app, redirect to /welcome
+                }, 1000);
+            }
+        }, 1000);
+
+        // Interaction for the "Badge" simulation
+        document.querySelector('.w-full.max-w-sm').addEventListener('click', () => {
+            alert('Printing visitor credentials...');
+        });
+    </script>
+</body></html>

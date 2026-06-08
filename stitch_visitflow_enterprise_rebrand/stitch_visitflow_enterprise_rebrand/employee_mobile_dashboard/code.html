@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Host Sentinel - Employee Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#3fdfa5",
+                    "surface-container-low": "#f2f4f6",
+                    "on-surface": "#191c1e",
+                    "primary-container": "#0a2540",
+                    "on-primary-container": "#768dad",
+                    "tertiary-container": "#312200",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-primary-fixed": "#001c37",
+                    "on-tertiary-container": "#b28400",
+                    "surface": "#f7f9fb",
+                    "inverse-primary": "#b0c8eb",
+                    "on-secondary-container": "#00714f",
+                    "outline": "#74777e",
+                    "tertiary-fixed-dim": "#fbbc0e",
+                    "primary-fixed-dim": "#b0c8eb",
+                    "surface-container": "#eceef0",
+                    "on-secondary-fixed-variant": "#005138",
+                    "background": "#f7f9fb",
+                    "secondary-container": "#60f9bd",
+                    "on-secondary-fixed": "#002114",
+                    "secondary": "#006c4b",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#d2e4ff",
+                    "surface-bright": "#f7f9fb",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface-dim": "#d8dadc",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-primary-fixed-variant": "#314865",
+                    "surface-variant": "#e0e3e5",
+                    "on-background": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#c4c6ce",
+                    "primary": "#000f22",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#49607e",
+                    "on-surface-variant": "#43474d",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdea0",
+                    "secondary-fixed": "#63fcc0",
+                    "inverse-surface": "#2d3133",
+                    "tertiary": "#160d00",
+                    "on-tertiary-fixed": "#261a00",
+                    "surface-container-high": "#e6e8ea",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container_max_width": "1440px",
+                    "xs": "8px",
+                    "xl": "32px",
+                    "sidebar_width": "260px",
+                    "sm": "12px",
+                    "base": "4px",
+                    "md": "16px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-md": ["Inter"]
+            },
+            "fontSize": {
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .status-pill {
+            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 9999px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E5E7EB;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex justify-between items-center px-md h-16">
+<div class="flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary-container">Host Sentinel</h1>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a diverse corporate employee in a brightly lit, modern office environment. The person is smiling confidently, wearing professional business attire. The photography style is high-end corporate portraiture with a shallow depth of field, highlighting crisp details against a soft, blurred background of glass partitions and emerald green office plants." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7WpJLPmrS1lrCGrjHrcoN0TmhmRQC9cZyXi9zzk8wdCw1lF2CEh5uVsmXoz63MG_kRJmF5g4-yCQ5DYTLsQXUs3-D7h1UafwHWhZ9vZoE860sJqvCYxTDCStUiSEsaW3Vozwr9IvaKJGckbi7kv9FwvNG7jNVy9ET4Hfm1fczYWO4ddQ4kY49426McEdIw8Z3UIgg7FUTvthACRkv9VLdZUNwEXmLAoCe8zvnAOnVuJgHZCwBolyggj7KxKE1h2N0hSJj5WXte2g"/>
+</div>
+</header>
+<main class="mt-20 px-md space-y-lg">
+<!-- Welcome Section -->
+<section class="space-y-base">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Good morning, Alex</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">You have 3 visitors scheduled for today.</p>
+</section>
+<!-- Quick Action: Register Guest -->
+<button class="w-full bg-primary-container text-white py-lg rounded-xl flex items-center justify-center gap-sm active:scale-95 transition-transform shadow-md">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+<span class="font-title-md text-title-md">Register Guest</span>
+</button>
+<!-- My Upcoming Visitors -->
+<section class="space-y-md">
+<div class="flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-primary">Upcoming Visitors</h3>
+<button class="text-secondary font-label-md text-label-md">View All</button>
+</div>
+<div class="space-y-sm">
+<!-- Visitor Card 1 -->
+<div class="glass-card p-md rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Sarah Jenkins</p>
+<p class="font-body-md text-body-md text-on-surface-variant">10:30 AM • Tech Partners</p>
+</div>
+</div>
+<span class="status-pill bg-secondary-container/20 text-on-secondary-container">Arrived</span>
+</div>
+<!-- Visitor Card 2 -->
+<div class="glass-card p-md rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Michael Chen</p>
+<p class="font-body-md text-body-md text-on-surface-variant">1:45 PM • Global Logistics</p>
+</div>
+</div>
+<span class="status-pill bg-surface-container-highest text-on-surface-variant">Expected</span>
+</div>
+<!-- Visitor Card 3 -->
+<div class="glass-card p-md rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Elena Rodriguez</p>
+<p class="font-body-md text-body-md text-on-surface-variant">4:00 PM • Freelance</p>
+</div>
+</div>
+<span class="status-pill bg-surface-container-highest text-on-surface-variant">Expected</span>
+</div>
+</div>
+</section>
+<!-- Recent Activity Feed (Asymmetric Bento-ish layout) -->
+<section class="space-y-md">
+<h3 class="font-title-lg text-title-lg text-primary">Recent Activity</h3>
+<div class="grid grid-cols-1 gap-sm">
+<div class="glass-card p-md rounded-xl border-l-4 border-secondary">
+<div class="flex justify-between mb-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">09:12 AM</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<p class="font-body-md text-body-md text-primary"><span class="font-bold">Sarah Jenkins</span> successfully checked in at Main Reception.</p>
+</div>
+<div class="glass-card p-md rounded-xl">
+<div class="flex justify-between mb-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Yesterday, 05:30 PM</span>
+<span class="material-symbols-outlined text-outline text-sm" data-icon="logout">logout</span>
+</div>
+<p class="font-body-md text-body-md text-primary"><span class="font-bold">John Doe</span> checked out from North Wing.</p>
+</div>
+</div>
+</section>
+<!-- Visual Asset Placeholder (Atmospheric) -->
+<div class="relative w-full h-48 rounded-xl overflow-hidden shadow-sm">
+<img alt="Modern Office Lobby" class="w-full h-full object-cover" data-alt="A wide-angle, cinematic view of a sleek, ultra-modern corporate lobby at golden hour. The space features polished marble floors that reflect soft, warm light from floor-to-ceiling windows. Minimalist architectural lines, emerald-colored glass panels, and lush indoor vertical gardens create a professional yet serene atmosphere. The color palette is dominated by deep blues, crisp whites, and vibrant green accents, perfectly aligning with an institutional trust and premium security aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZxyt8b2qRHz3eYhuiFCVh2IuwUbgNRjtpBal9qnO3fDQXsHyBa_MlyxPVpgNjSiBQBNGILqWVG7s0o_kK3X5Jc363Kba9i0PYiPx3uYvAdYLicq_wMo0wLp7I6s7LsrDF-s7XzvmJ3xe9_gm0SRhawhQmt-nGpLaACUd0h_ywuPh1yQNkqmNdaj53k3NC9Ap5GCxsVyVESLBJ9SYylmcd0Pg9NGI-FasjllGqFnjN6kvdim2tJBYlCzn0fq0zqQZH-kYHvHBlFiE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent flex items-end p-md">
+<p class="text-white font-title-md text-title-md">Security Tip: Always verify photo IDs during guest arrival.</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface border-t border-outline-variant flex justify-around items-center px-lg pb-safe">
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 scale-95 transition-transform active:scale-90">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-all px-4 py-1 rounded-full active:scale-90">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Visitors</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-all px-4 py-1 rounded-full active:scale-90">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s ease';
+            });
+            card.addEventListener('touchend', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

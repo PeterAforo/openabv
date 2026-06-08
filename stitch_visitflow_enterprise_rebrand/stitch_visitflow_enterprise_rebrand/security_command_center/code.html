@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Security Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+<!-- Insert Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#001c37",
+                      "surface-tint": "#49607e",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "background": "#f7f9fb",
+                      "surface": "#f7f9fb",
+                      "tertiary-fixed-dim": "#fbbc0e",
+                      "secondary": "#006c4b",
+                      "inverse-surface": "#2d3133",
+                      "on-primary-container": "#768dad",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b0c8eb",
+                      "error-container": "#ffdad6",
+                      "primary": "#000f22",
+                      "primary-fixed": "#d2e4ff",
+                      "surface-container-low": "#f2f4f6",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#43474d",
+                      "primary-fixed-dim": "#b0c8eb",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-container": "#b28400",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c4c6ce",
+                      "surface-container": "#eceef0",
+                      "outline": "#74777e",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#63fcc0",
+                      "primary-container": "#0a2540",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d8dadc",
+                      "on-secondary-fixed": "#002114",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdea0",
+                      "surface-bright": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "on-primary-fixed-variant": "#314865",
+                      "secondary-fixed-dim": "#3fdfa5",
+                      "on-background": "#191c1e",
+                      "tertiary-container": "#312200",
+                      "secondary-container": "#60f9bd",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-container": "#00714f",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary": "#160d00",
+                      "on-tertiary-fixed": "#261a00",
+                      "surface-variant": "#e0e3e5",
+                      "on-secondary-fixed-variant": "#005138"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar_width": "260px",
+                      "lg": "24px",
+                      "sm": "12px",
+                      "base": "4px",
+                      "md": "16px",
+                      "container_max_width": "1440px",
+                      "gutter": "24px",
+                      "xs": "8px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "title-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "caption": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background overflow-hidden">
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar_width bg-primary-container flex flex-col py-lg border-r border-outline-variant z-50">
+<div class="px-md mb-xl flex items-center gap-3">
+<div class="w-10 h-10 bg-secondary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h1 class="font-title-lg text-title-lg font-bold text-on-primary">VisitFlow</h1>
+<p class="text-[10px] text-on-primary-container/60 tracking-widest uppercase">Enterprise Suite</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-secondary bg-on-primary/10 text-on-primary font-bold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors hover:bg-on-primary/5" href="#">
+<span class="material-symbols-outlined">group</span>
+                Visitors
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors hover:bg-on-primary/5" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                Appointments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors hover:bg-on-primary/5" href="#">
+<span class="material-symbols-outlined">location_on</span>
+                Locations
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors hover:bg-on-primary/5" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors hover:bg-on-primary/5" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto px-4 py-3 space-y-1 border-t border-on-primary/10">
+<button class="w-full bg-secondary text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 mb-lg hover:brightness-110 transition-all active:scale-95 shadow-lg shadow-secondary/20">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                Check In Visitor
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/70 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- MAIN WRAPPER -->
+<div class="ml-sidebar_width flex flex-col h-screen overflow-hidden">
+<!-- TOP NAV BAR -->
+<header class="h-16 px-lg bg-surface border-b border-outline-variant flex justify-between items-center sticky top-0 z-40 shadow-sm">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-md">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary font-body-md" placeholder="Search Visitors by name, ID, or company..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-md cursor-pointer hover:bg-outline-variant/30 transition-colors">
+<span class="material-symbols-outlined text-sm">business</span>
+                    Main HQ - Branch A
+                    <span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full relative transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right">
+<p class="font-label-md text-primary font-bold">Officer Jenkins</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Security Lead</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-secondary object-cover group-hover:ring-4 group-hover:ring-secondary/20 transition-all" data-alt="A portrait of a professional male security officer in a dark blue uniform, looking focused and calm. He is positioned in a modern office lobby with sleek glass walls and warm interior lighting. The overall style is sharp, cinematic, and professional, reflecting high-security standards and enterprise trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHAn8kMzT6nJ3f98uEFxaVl-lRrKIw8qRCw7s_le7GljvAksbt-v3QxU35B-K1BHetqTHEu5B--pm25ZR2TeWj_UpKdGBtrQEIPV8UNgQNB3VZKCe3cPuxC0W58vyOssQHZQPpOdcxubzvCjdNgIXlyZ5-8g-iApsqMTpnNKkp9JVspyFiPvobvAzaUQS_D_PrZaZidcHncklR-OzhNWb0qF5jZvYSWUKIlQWp8NV2UzwJGMFM4mXH_dkw_g9Q1gTyHkCUZ1R9egw"/>
+</div>
+</div>
+</header>
+<!-- DASHBOARD CONTENT -->
+<main class="flex-1 overflow-y-auto p-lg custom-scrollbar">
+<div class="max-w-container_max_width mx-auto space-y-lg">
+<!-- HEADER AREA -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Security Command Center</h2>
+<p class="text-on-surface-variant font-body-md flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary status-pulse"></span>
+                            System Live: Monitoring 4 active entry points
+                        </p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 text-on-surface-variant font-label-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">print</span>
+                            Badge Print Queue
+                        </button>
+<button class="px-4 py-2 bg-primary text-white font-label-md rounded-lg hover:bg-primary-container transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">ios_share</span>
+                            Export Logs
+                        </button>
+</div>
+</div>
+<!-- QUICK ACTIONS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<button class="bg-white border border-outline-variant p-lg rounded-xl flex items-center gap-4 hover:shadow-lg hover:border-secondary transition-all group text-left">
+<div class="w-14 h-14 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl">qr_code_scanner</span>
+</div>
+<div>
+<p class="font-title-md text-primary">Scan QR Code</p>
+<p class="text-on-surface-variant font-caption">Validate mobile visitor passes</p>
+</div>
+</button>
+<button class="bg-white border border-outline-variant p-lg rounded-xl flex items-center gap-4 hover:shadow-lg hover:border-secondary transition-all group text-left">
+<div class="w-14 h-14 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl">person_add</span>
+</div>
+<div>
+<p class="font-title-md text-primary">Register Walk-in</p>
+<p class="text-on-surface-variant font-caption">Onboard unscheduled visitors</p>
+</div>
+</button>
+<button class="bg-error-container/20 border border-error/20 p-lg rounded-xl flex items-center gap-4 hover:shadow-lg hover:bg-error-container/40 transition-all group text-left">
+<div class="w-14 h-14 bg-error text-white rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">emergency</span>
+</div>
+<div>
+<p class="font-title-md text-error">Emergency Roll Call</p>
+<p class="text-on-surface-variant font-caption">Initiate facility evacuation log</p>
+</div>
+</button>
+</div>
+<!-- KPI STATS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="bg-white border border-outline-variant rounded-xl p-md">
+<p class="text-on-surface-variant font-label-md mb-1">Active Visitors</p>
+<div class="flex items-center justify-between">
+<span class="text-3xl font-bold text-primary">124</span>
+<span class="text-secondary text-sm font-bold flex items-center">+12% ↑</span>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-md">
+<p class="text-on-surface-variant font-label-md mb-1">Expected Today</p>
+<div class="flex items-center justify-between">
+<span class="text-3xl font-bold text-primary">482</span>
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white object-cover" data-alt="Close up face of a professional businessman in a grey suit, smiling slightly against a white background. Soft high-key lighting, corporate headshot style, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIUs8ZVCyDnjhfkChX-TUWn-cR8KSvm24WNfqndZxZ9XmnL8HufPGrr9JEAMiahMthlhvAqJhddu_qrH-Mzk3IOaCUfXfBS79cN4qvpONV4wQM1PCtj5gNSkZ5b4roCk8u9ntYen6wyUacU9jyr3pzWLhw43KLDoo8NyvBLsRq9yfVt5A-eGpRYMlQf5L1B9ahxkYuiThQJM0UGSp-uSqtvAzrWi7fmHhFm5phe1xB-hoZhGxX82qPKhrbnFSRPCBzTMGxs5qp5ZU"/>
+<img class="w-6 h-6 rounded-full border-2 border-white object-cover" data-alt="Portrait of a young professional woman with glasses, smiling warmly. Studio lighting, soft pastel blue background, high quality portrait photography with a friendly, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVIP1pvXZqKmBuj8j6bpnePTEEN2EPLMxYXW2weAGHHluUxCjLLS7cahVbfQb1UK4gA19t-oDFfDh1ruQZlOmJt3mNpitXOMDxeKDiRRTkSU0ZUqQhbuaNuuo3-3DgexJTVJja9OZ5fb9gIVyQ9rYAy_6Jex14XBiG4o1lMe1zkJqvWqDgA0xNelS80cST8d09AYRy9Rrjdj2UoE_YOXDAay6mW36XO6ESqexcPTfdMJZYcea6JaG5wDfOmv8MX2UNKNsEBs8HsZU"/>
+<div class="w-6 h-6 rounded-full bg-outline-variant border-2 border-white flex items-center justify-center text-[8px] font-bold">+50</div>
+</div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-md">
+<p class="text-on-surface-variant font-label-md mb-1">Pending Approvals</p>
+<div class="flex items-center justify-between">
+<span class="text-3xl font-bold text-tertiary-fixed-dim">08</span>
+<span class="material-symbols-outlined text-tertiary-fixed-dim">pending_actions</span>
+</div>
+</div>
+<div class="bg-error text-white rounded-xl p-md border border-error shadow-lg shadow-error/20">
+<p class="text-white/80 font-label-md mb-1">Security Alerts</p>
+<div class="flex items-center justify-between">
+<span class="text-3xl font-bold">02</span>
+<span class="material-symbols-outlined status-pulse">warning</span>
+</div>
+</div>
+</div>
+<!-- MAIN GRID: QUEUE & ALERTS -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg h-full">
+<!-- VISITOR CHECK-IN QUEUE -->
+<div class="lg:col-span-2 flex flex-col bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low/50">
+<h3 class="font-title-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">list_alt</span>
+                                Visitor Check-in Queue
+                            </h3>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-md rounded-full">8 Waiting</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low/30 border-b border-outline-variant">
+<tr>
+<th class="px-md py-3 text-on-surface-variant font-label-md uppercase tracking-wider">Visitor</th>
+<th class="px-md py-3 text-on-surface-variant font-label-md uppercase tracking-wider">Host</th>
+<th class="px-md py-3 text-on-surface-variant font-label-md uppercase tracking-wider">Purpose</th>
+<th class="px-md py-3 text-on-surface-variant font-label-md uppercase tracking-wider">Wait Time</th>
+<th class="px-md py-3 text-on-surface-variant font-label-md uppercase tracking-wider text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-background transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary text-xs flex items-center justify-center font-bold">JD</div>
+<div>
+<p class="font-bold text-primary">Jane Doe</p>
+<p class="text-[10px] text-on-surface-variant">TechCorp Global</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-md text-on-surface-variant">Marcus Reed</td>
+<td class="px-md py-4">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[10px] font-bold rounded uppercase">Interview</span>
+</td>
+<td class="px-md py-4 font-bold text-secondary">04:12</td>
+<td class="px-md py-4 text-right">
+<button class="bg-secondary text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:brightness-110 active:scale-95 transition-all">
+                                                Verify &amp; Check In
+                                            </button>
+</td>
+</tr>
+<tr class="hover:bg-background transition-colors">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary text-xs flex items-center justify-center font-bold">SK</div>
+<div>
+<p class="font-bold text-primary">Samuel Knight</p>
+<p class="text-[10px] text-on-surface-variant">Arasaka Logistics</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-md text-on-surface-variant">Sarah Chen</td>
+<td class="px-md py-4">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[10px] font-bold rounded uppercase">Maintenance</span>
+</td>
+<td class="px-md py-4 font-bold text-tertiary-fixed-dim">08:45</td>
+<td class="px-md py-4 text-right">
+<button class="bg-secondary text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:brightness-110 active:scale-95 transition-all">
+                                                Verify &amp; Check In
+                                            </button>
+</td>
+</tr>
+<tr class="hover:bg-background transition-colors">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary text-xs flex items-center justify-center font-bold">LB</div>
+<div>
+<p class="font-bold text-primary">Liam Baker</p>
+<p class="text-[10px] text-on-surface-variant">Independent</p>
+</div>
+</div>
+</td>
+<td class="px-md py-4 text-body-md text-on-surface-variant">David Ortiz</td>
+<td class="px-md py-4">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[10px] font-bold rounded uppercase">Delivery</span>
+</td>
+<td class="px-md py-4 font-bold text-on-surface-variant">02:30</td>
+<td class="px-md py-4 text-right">
+<button class="bg-secondary text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:brightness-110 active:scale-95 transition-all">
+                                                Verify &amp; Check In
+                                            </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-auto p-md bg-surface-container-low/30 border-t border-outline-variant text-center">
+<button class="text-secondary font-label-md hover:underline">View Full Queue (5 more)</button>
+</div>
+</div>
+<!-- WATCHLIST & LOGS SIDEBAR -->
+<div class="space-y-lg">
+<!-- ACTIVE WATCHLIST ALERTS -->
+<div class="bg-white border border-error p-0 rounded-xl overflow-hidden shadow-lg shadow-error/10">
+<div class="bg-error text-white p-3 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">gpp_maybe</span>
+<h3 class="font-title-md uppercase tracking-wider text-xs">Watchlist Alerts</h3>
+</div>
+<div class="p-4 space-y-4">
+<div class="bg-error-container/40 p-3 rounded-lg border-l-4 border-error">
+<div class="flex justify-between items-start mb-2">
+<p class="font-bold text-error text-sm">Potential Match: ID #3321</p>
+<span class="text-[10px] text-on-error-container font-bold">CRITICAL</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-3">Individual matching 'Roger Vance' (Banned Entity) detected at Gate C.</p>
+<div class="flex gap-2">
+<button class="flex-1 py-1.5 bg-error text-white rounded text-[10px] font-bold uppercase tracking-tight">Escalate</button>
+<button class="flex-1 py-1.5 border border-outline-variant rounded text-[10px] font-bold uppercase tracking-tight">Dismiss</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RECENT ACTIVITY LOG -->
+<div class="bg-white border border-outline-variant rounded-xl flex flex-col shadow-sm max-h-[400px]">
+<div class="p-md border-b border-outline-variant">
+<h3 class="font-title-md text-primary">Recent Activity</h3>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-4 custom-scrollbar">
+<div class="flex gap-3 relative">
+<div class="absolute left-[11px] top-6 bottom-0 w-[1px] bg-outline-variant"></div>
+<div class="w-6 h-6 rounded-full bg-secondary text-white flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[14px]">login</span>
+</div>
+<div class="pb-4">
+<p class="text-sm font-bold text-primary">Robert Miller <span class="font-normal text-on-surface-variant">checked in</span></p>
+<p class="text-[10px] text-on-surface-variant">10:42 AM • Lobby 1 • Host: Sales</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="absolute left-[11px] top-6 bottom-0 w-[1px] bg-outline-variant"></div>
+<div class="w-6 h-6 rounded-full bg-on-surface-variant text-white flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[14px]">logout</span>
+</div>
+<div class="pb-4">
+<p class="text-sm font-bold text-primary">Alice Cooper <span class="font-normal text-on-surface-variant">checked out</span></p>
+<p class="text-[10px] text-on-surface-variant">10:38 AM • Main Exit</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="absolute left-[11px] top-6 bottom-0 w-[1px] bg-outline-variant"></div>
+<div class="w-6 h-6 rounded-full bg-secondary text-white flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[14px]">login</span>
+</div>
+<div class="pb-4">
+<p class="text-sm font-bold text-primary">Marta Lopez <span class="font-normal text-on-surface-variant">checked in</span></p>
+<p class="text-[10px] text-on-surface-variant">10:35 AM • Loading Dock</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="w-6 h-6 rounded-full bg-secondary text-white flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[14px]">login</span>
+</div>
+<div class="pb-4">
+<p class="text-sm font-bold text-primary">Kevin Smith <span class="font-normal text-on-surface-variant">checked in</span></p>
+<p class="text-[10px] text-on-surface-variant">10:30 AM • Lobby 2</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- FOOTER -->
+<footer class="mt-xl py-lg border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex items-center gap-4">
+<span class="font-title-md text-primary font-bold">VisitFlow</span>
+<p class="text-caption text-on-surface-variant">© 2024 VisitFlow. Smart Appointments. Secure Access.</p>
+</div>
+<div class="flex gap-md">
+<a class="text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Security Compliance</a>
+<a class="text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</footer>
+</div>
+</main>
+</div>
+<!-- MOBILE OVERLAY SUPPRESSION -->
+<div class="md:hidden fixed inset-0 bg-primary z-[100] flex flex-col items-center justify-center p-xl text-center text-white">
+<span class="material-symbols-outlined text-6xl mb-lg">desktop_access_disabled</span>
+<h1 class="text-headline-lg-mobile mb-md">Desktop Optimized</h1>
+<p class="text-body-lg text-white/70">The Security Command Center requires a wider display for mission-critical monitoring. Please switch to a tablet or desktop device.</p>
+<button class="mt-xl px-lg py-md bg-secondary text-white font-bold rounded-lg">Return to Home</button>
+</div>
+<script>
+        // Micro-interaction: Update timestamp live
+        const updateStatus = () => {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            // This could be used to update any live elements if needed
+        };
+        setInterval(updateStatus, 60000);
+
+        // Simple tab hover state
+        const navItems = document.querySelectorAll('nav a');
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if(!item.classList.contains('border-secondary')) {
+                    item.classList.add('bg-on-primary/5');
+                }
+            });
+            item.addEventListener('mouseleave', () => {
+                if(!item.classList.contains('border-secondary')) {
+                    item.classList.remove('bg-on-primary/5');
+                }
+            });
+        });
+    </script>
+</body></html>

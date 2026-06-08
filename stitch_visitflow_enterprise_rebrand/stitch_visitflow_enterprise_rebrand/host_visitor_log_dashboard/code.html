@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Host Sentinel - Visitor Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#63fcc0",
+                        "primary-container": "#0a2540",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "on-secondary-fixed": "#002114",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-tertiary-container": "#b28400",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#768dad",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#160d00",
+                        "surface-container": "#eceef0",
+                        "on-surface-variant": "#43474d",
+                        "surface-dim": "#d8dadc",
+                        "outline": "#74777e",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-fixed": "#001c37",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "primary": "#000f22",
+                        "tertiary-container": "#312200",
+                        "on-background": "#191c1e",
+                        "inverse-primary": "#b0c8eb",
+                        "secondary": "#006c4b",
+                        "primary-fixed": "#d2e4ff",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "surface-tint": "#49607e",
+                        "on-tertiary-fixed": "#261a00",
+                        "secondary-container": "#60f9bd",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#00714f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#005138",
+                        "on-primary-fixed-variant": "#314865",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed": "#ffdea0",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c4c6ce",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "background": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar_width": "260px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "container_max_width": "1440px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "caption": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .active-tab-indicator {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-surface fixed top-0 w-full z-50 border-b border-outline-variant flex justify-between items-center px-md h-16">
+<div class="flex items-center gap-xs">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:opacity-80">
+                menu
+            </button>
+<h1 class="font-title-lg text-title-lg text-primary">My Visitors</h1>
+</div>
+<div class="flex items-center">
+<img alt="Host Profile" class="w-10 h-10 rounded-full border border-outline-variant object-cover active:opacity-80 transition-opacity" data-alt="A professional headshot of a corporate host in his late 30s wearing a crisp navy blazer. The lighting is bright and clean with a soft-focus office background that aligns with a high-end enterprise aesthetic. The color palette is dominated by professional blues and clean whites, reflecting a secure and trustworthy corporate persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqSsQpQEs_m2czg6HRmJ-3gmvGFgDWCBue_AXobj-huSki-J8zQw0Oh34sjUYcdgFUdUxMVzDs6enIYTf_Xn73sH6UdQZKbvLYMCxUG8CODZfCMqpuTIAFxaSn7z4muqysWquTwXLKEuTYUiz88N15OCxqsy1y12mBrTJ_A0NaTbLTw2VwOfcTOUiBp0l_6CqJr-1toxPwjZPOfv9ziw9nVnmDnB13LH9jEh_y6IcTRpnRzTSMqRVLNVpGRTf5Bv0DchG_dLhCMC0"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 pb-24 px-md max-w-screen-md mx-auto min-h-screen">
+<!-- Welcome Section -->
+<section class="mb-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage your campus visitors for today.</p>
+</section>
+<!-- Active Now Section (Bento Style) -->
+<section class="mb-xl">
+<div class="flex justify-between items-end mb-sm">
+<h3 class="font-title-md text-title-md text-primary">Active Now</h3>
+<span class="font-label-md text-label-md text-secondary font-bold">1 VISITOR</span>
+</div>
+<!-- High-end Card for Active Visitor -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<img alt="Jonathan Miller" class="w-14 h-14 rounded-full object-cover" data-alt="Close up portrait of a male professional visitor with a friendly smile, photographed in a bright, modern corporate atrium. The lighting is natural and airy, maintaining the clean light-mode aesthetic of the app. The image conveys institutional trust and a high-end SaaS feel through its crisp clarity and professional composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPcaPAFaPPEsFaNM52zimqQJC3E2qXwZ8uesargnxFw511P9n6W7QA46EBXEtJcXRfeOnmHLe-i_QWGwlP0MqntGjXABDe1SPawwV_zLGlSSmL5YaUveMxfvJICBdHDIoTPJNCUKwajjs34iz93cyMLekNlqeVtKPeuxnSYuVOMFLcOj2S33_VRHNee-WNWU6HrUd86-aFZTuK3dRlP6h74Ljsvsm6i66tPz1OrbP01rPgrDE8MMB7pTbNq_zSj1_zjGLtWJBfOk8"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-secondary-fixed border-2 border-surface-container-lowest rounded-full"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-title-md text-title-md text-primary">Jonathan Miller</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Arrived 10:45 AM • Room 402</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container font-label-md text-[10px] px-2 py-0.5 rounded-full uppercase font-bold tracking-wider">Checked In</span>
+</div>
+</div>
+</div>
+<div class="mt-md flex gap-sm">
+<button class="flex-1 bg-primary text-on-primary py-2 px-4 rounded-lg font-label-md text-label-md flex items-center justify-center gap-xs active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">message</span>
+                        Message
+                    </button>
+<button class="flex-1 border border-outline-variant text-primary py-2 px-4 rounded-lg font-label-md text-label-md flex items-center justify-center gap-xs hover:bg-surface-container transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+                        Check Out
+                    </button>
+</div>
+</div>
+</section>
+<!-- Upcoming Today Section -->
+<section class="mb-lg">
+<div class="flex justify-between items-end mb-sm">
+<h3 class="font-title-md text-title-md text-primary">Upcoming Today</h3>
+<span class="font-label-md text-label-md text-on-surface-variant">2 SCHEDULED</span>
+</div>
+<!-- List Layout for Upcoming -->
+<div class="space-y-sm">
+<!-- Sarah Chen -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center justify-between group active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-title-md">
+                            SC
+                        </div>
+<div>
+<p class="font-title-md text-title-md text-primary">Sarah Chen</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">schedule</span>
+<p class="font-body-md text-body-md text-on-surface-variant">3:00 PM</p>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="block bg-surface-container-highest text-on-surface-variant font-label-md text-[10px] px-2 py-0.5 rounded-full uppercase font-bold mb-1">Expected</span>
+<button class="material-symbols-outlined text-outline">more_vert</button>
+</div>
+</div>
+<!-- Mike Ross -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center justify-between group active:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<img alt="Mike Ross" class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a young male professional visitor in a modern, brightly lit office environment. He is wearing a light gray sweater, suggesting a casual but professional business setting. The image is clean and minimalist, following the enterprise visual guidelines with a soft daylight glow and professional color balance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUZw84yp77G6LlGN_kYHy_ihZ0WI-L2nJqbbytiFzHIMJud1gWAQLLnIALBysfyyFCa3UqcH6lzw4zEdC5kXKePau0zwwcHEpzCT0wNZkw-YdvItfMnsF_yGjjS84GrBSiCAoCfK_Fp7tqr0bn1tX2hBuY3SKNMG5LeUKwEYFvzcNRtMP-EGN55dgxW-a-M7pQKDnlPKQH3efp_5rZRfFZq843lZRPdPf0-rIvvPb41XPm0l2A-eFSVRCnwe057TKHR9GpFClmX9g"/>
+<div>
+<p class="font-title-md text-title-md text-primary">Mike Ross</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">schedule</span>
+<p class="font-body-md text-body-md text-on-surface-variant">4:30 PM</p>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="block bg-surface-container-highest text-on-surface-variant font-label-md text-[10px] px-2 py-0.5 rounded-full uppercase font-bold mb-1">Expected</span>
+<button class="material-symbols-outlined text-outline">more_vert</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Stats / Ghost Cards -->
+<div class="grid grid-cols-2 gap-sm mt-lg">
+<div class="p-md bg-surface-container rounded-xl">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Total Daily</p>
+<p class="font-headline-md text-headline-md text-primary">12</p>
+</div>
+<div class="p-md bg-surface-container rounded-xl">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Pending</p>
+<p class="font-headline-md text-headline-md text-primary">0</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface fixed bottom-0 w-full z-50 h-20 border-t border-outline-variant flex justify-around items-center px-lg pb-safe">
+<!-- Visitors (Active) -->
+<a class="flex flex-col items-center justify-center gap-1 group" href="#">
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1 active-tab-indicator scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">Visitors</span>
+</a>
+<!-- Alerts -->
+<a class="flex flex-col items-center justify-center gap-1 group active:scale-90 transition-transform" href="#">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest rounded-full px-5 py-1 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Alerts</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center gap-1 group active:scale-90 transition-transform" href="#">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest rounded-full px-5 py-1 transition-all">
+<span class="material-symbols-outlined">settings</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for card hover/tap
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.classList.add('scale-[0.98]');
+            });
+            card.addEventListener('touchend', () => {
+                card.classList.remove('scale-[0.98]');
+            });
+        });
+
+        // Dynamic date injection
+        const dateEl = document.querySelector('header h1');
+        // Not changing header text as per rules, but could add subtext if allowed.
+    </script>
+</body></html>

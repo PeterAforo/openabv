@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Add to Watchlist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006c4b",
+                      "outline-variant": "#c4c6ce",
+                      "on-background": "#191c1e",
+                      "surface-container-highest": "#e0e3e5",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#49607e",
+                      "on-primary-fixed-variant": "#314865",
+                      "on-primary-container": "#768dad",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#0a2540",
+                      "primary": "#000f22",
+                      "on-primary-fixed": "#001c37",
+                      "on-primary": "#ffffff",
+                      "surface": "#f7f9fb",
+                      "on-secondary-container": "#00714f",
+                      "outline": "#74777e",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "secondary-fixed": "#63fcc0",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed": "#ffdea0",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "on-secondary-fixed-variant": "#005138",
+                      "primary-fixed-dim": "#b0c8eb",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-surface-variant": "#43474d",
+                      "surface-container": "#eceef0",
+                      "background": "#f7f9fb",
+                      "inverse-surface": "#2d3133",
+                      "secondary-container": "#60f9bd",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#002114",
+                      "on-surface": "#191c1e",
+                      "surface-dim": "#d8dadc",
+                      "tertiary-container": "#312200",
+                      "primary-fixed": "#d2e4ff",
+                      "secondary-fixed-dim": "#3fdfa5",
+                      "inverse-primary": "#b0c8eb",
+                      "tertiary": "#160d00",
+                      "tertiary-fixed-dim": "#fbbc0e",
+                      "on-error": "#ffffff",
+                      "on-tertiary-container": "#b28400",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-container-high": "#e6e8ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "8px",
+                      "base": "4px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "container_max_width": "1440px",
+                      "sidebar_width": "260px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "caption": ["Inter"],
+                      "body-md": ["Inter"],
+                      "title-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "title-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-primary-container dark:bg-primary-container flex flex-col py-xl z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-primary/60">Enterprise Suite</p>
+</div>
+<nav class="flex-1 space-y-base">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Visitors</span>
+</a>
+<a class="flex items-center gap-md bg-white/10 text-on-primary border-l-4 border-secondary-fixed px-md py-sm transition-colors" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-label-md text-label-md">Watchlist</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">login</span>
+<span class="font-label-md text-label-md">Check-in</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-md text-label-md">Locations</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-md space-y-base">
+<button class="w-full bg-secondary text-white py-sm rounded-lg font-title-md text-title-md flex items-center justify-center gap-xs active:scale-95 duration-150">
+<span class="material-symbols-outlined">add</span>
+<span>Add New Visitor</span>
+</button>
+<div class="pt-xl space-y-base">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] flex-1 flex flex-col min-h-screen">
+<!-- Top Bar -->
+<header class="h-16 flex justify-between items-center px-lg border-b border-outline-variant bg-surface sticky top-0 z-40">
+<div class="flex items-center gap-lg">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-xl pr-md py-xs bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md w-64 focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="Search security logs..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-lg items-center">
+<a class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-secondary transition-colors" href="#">Analytics</a>
+<a class="text-secondary font-bold border-b-2 border-secondary pb-2 font-label-md text-label-md transition-colors" href="#">Security</a>
+<a class="text-on-surface-variant font-medium font-label-md text-label-md hover:text-secondary transition-colors" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="px-md py-xs bg-error text-white rounded-lg font-label-md text-label-md font-bold active:scale-95 duration-150">
+                    Emergency Lockdown
+                </button>
+<button class="p-xs hover:bg-surface-variant rounded-full transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTW6hslve2dynO-pEvr5ix0BgnytphV_f_nOEhmEKwbj9mJAfe0YZ8zWIP669NV87PIaXFGJtkFfrjYNJwhP8e4MC0CSFzNRg0HEuUXKtQtU6gTb4_OZZ_Xbu6GpSGA_dscNFlNohWAfxePkm1VWJbgd_VdyCgQ3H5yWPj4gyVTya6WFE1vRaWNeicvUjp3_J725g_SACAeM2pMdZMwA_wuYyMOXZZLDIXMPu_R4pRcaDLqIGJpPyZnYC4DwACwOUcrPgJvHFs9Ro"/>
+</div>
+</div>
+</header>
+<!-- Focused Task Area: Add to Watchlist -->
+<div class="flex-1 p-lg max-w-container_max_width mx-auto w-full">
+<div class="mb-lg flex items-center justify-between">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Security Watchlist Registry</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Enroll an individual into the enterprise-wide alert system.</p>
+</div>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" onclick="window.history.back()">
+<span class="material-symbols-outlined">arrow_back</span>
+<span>Back to List</span>
+</button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Main Form Section -->
+<div class="lg:col-span-8 space-y-lg">
+<div class="bg-white rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-title-lg text-title-lg text-primary mb-md border-b border-outline-variant pb-sm">Subject Identity</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary-container">Full Legal Name</label>
+<input class="w-full px-md py-sm bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-body-md" placeholder="e.g. Jonathan Vance" type="text"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary-container">ID / Document Number</label>
+<input class="w-full px-md py-sm bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-body-md" placeholder="e.g. PAS-99203841" type="text"/>
+</div>
+<div class="md:col-span-2 space-y-xs">
+<label class="font-label-md text-label-md text-primary-container">Primary Reason for Alert</label>
+<input class="w-full px-md py-sm bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-body-md" placeholder="Specify the core violation or security concern" type="text"/>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-title-lg text-title-lg text-primary mb-md border-b border-outline-variant pb-sm">Incident History &amp; Context</h3>
+<div class="space-y-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary-container">Detailed Narrative</label>
+<textarea class="w-full px-md py-sm bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-body-md resize-none" placeholder="Document specific dates, times, and actions that led to this watchlist inclusion..." rows="6"></textarea>
+</div>
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border border-dashed border-outline">
+<div class="flex items-center gap-md">
+<div class="p-xs bg-white rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-secondary">attach_file</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary font-bold">Attach Evidence</p>
+<p class="font-caption text-caption text-on-surface-variant">CCTV stills, incident reports, or statements (Max 10MB)</p>
+</div>
+</div>
+<button class="px-md py-xs bg-white border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface transition-colors">Browse Files</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Action & Status Column -->
+<div class="lg:col-span-4 space-y-lg">
+<!-- Photo Upload -->
+<div class="bg-white rounded-xl border border-outline-variant p-lg shadow-sm overflow-hidden text-center">
+<h3 class="font-label-md text-label-md text-primary-container mb-md text-left">Biometric Identification</h3>
+<div class="relative group cursor-pointer mb-md">
+<div class="w-full aspect-square bg-surface-container-low rounded-xl border-2 border-dashed border-outline flex flex-col items-center justify-center overflow-hidden group-hover:border-secondary transition-colors">
+<img class="hidden w-full h-full object-cover" data-alt="A professional security identification photograph of a neutral subject used as a placeholder in a high-end corporate visitor management interface. The lighting is sterile and direct, typical of a government or corporate ID office, with a clean light grey background that emphasizes the subject. The overall aesthetic is serious, authoritative, and minimalist, fitting the institutional security theme of the VisitFlow application." id="previewImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAckIMg7feAv9m_rtezBJ0_akrRqIctXdzjW3kDDf0UM6uFtzqX-OTrSB6q80mSXZ8uMTihZe0rRa-16MsHjAjq2moIZUdrANgS-f1yUn2366KnmvoVFMGZVuJIGMZLdwSHgltGp5MZT_FWFp6yFD4ljn74oiH7NOpgoudS5VjyDCcvYOBVNi8URWHja_TbIJjdphREC0N3ZPrXm4XukgtsnvHKnNXe_NKDjA0zVd7Xox4HrHTa2WkLDlfdEI4djS6fBUsA7sBLEUY"/>
+<div class="flex flex-col items-center" id="uploadPlaceholder">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant mb-xs">add_a_photo</span>
+<p class="font-label-md text-label-md text-on-surface-variant">Upload Subject Photo</p>
+</div>
+</div>
+<div class="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white rounded-xl">
+<span class="font-label-md text-label-md font-bold">Replace Image</span>
+</div>
+</div>
+<p class="font-caption text-caption text-on-surface-variant">High-resolution front-facing portraits are preferred for facial recognition synchronization.</p>
+</div>
+<!-- Risk Level Selection -->
+<div class="bg-white rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-label-md text-label-md text-primary-container mb-md">Risk Classification</h3>
+<div class="space-y-sm" id="riskSelection">
+<label class="flex items-center gap-md p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface transition-all active:scale-[0.98]">
+<input class="text-secondary focus:ring-secondary" name="risk" type="radio"/>
+<div>
+<p class="font-label-md text-label-md font-bold text-primary">Low Risk</p>
+<p class="font-caption text-caption text-on-surface-variant">Monitor movement within secure zones.</p>
+</div>
+</label>
+<label class="flex items-center gap-md p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface transition-all active:scale-[0.98]">
+<input class="text-secondary focus:ring-secondary" name="risk" type="radio"/>
+<div>
+<p class="font-label-md text-label-md font-bold text-primary">Medium Risk</p>
+<p class="font-caption text-caption text-on-surface-variant">Requires security escort at all times.</p>
+</div>
+</label>
+<label class="flex items-center gap-md p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface transition-all active:scale-[0.98]">
+<input class="text-secondary focus:ring-secondary" name="risk" type="radio"/>
+<div>
+<p class="font-label-md text-label-md font-bold text-primary">High Risk</p>
+<p class="font-caption text-caption text-on-surface-variant">Immediate alert on perimeter breach.</p>
+</div>
+</label>
+<label class="flex items-center gap-md p-sm border-2 border-error/50 bg-error/5 rounded-lg cursor-pointer hover:bg-error/10 transition-all active:scale-[0.98]">
+<input checked="" class="text-error focus:ring-error" name="risk" type="radio"/>
+<div>
+<p class="font-label-md text-label-md font-bold text-error">Blacklisted</p>
+<p class="font-caption text-caption text-error">Strict denial of entry. Notify law enforcement.</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Final Action -->
+<div class="space-y-md">
+<button class="w-full bg-primary-container text-white py-md rounded-lg font-title-md text-title-md font-bold shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center justify-center gap-md">
+<span class="material-symbols-outlined">how_to_reg</span>
+                            Save to Registry
+                        </button>
+<p class="text-center font-caption text-caption text-on-surface-variant">Entry will be synchronized across all 14 site locations immediately upon saving.</p>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-auto p-lg border-t border-outline-variant bg-white">
+<div class="max-w-container_max_width mx-auto flex justify-between items-center">
+<p class="font-caption text-caption text-on-surface-variant">© 2024 VisitFlow Security Systems. Enterprise Tier License.</p>
+<div class="flex gap-lg">
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary underline" href="#">Compliance Protocols</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary underline" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Simple micro-interaction for risk selection
+        document.querySelectorAll('#riskSelection label').forEach(label => {
+            label.addEventListener('click', function() {
+                document.querySelectorAll('#riskSelection label').forEach(l => {
+                    l.classList.remove('bg-surface', 'border-secondary', 'border-2');
+                    l.classList.add('border-outline-variant');
+                });
+                if(!this.classList.contains('border-error/50')) {
+                    this.classList.add('bg-surface', 'border-secondary', 'border-2');
+                    this.classList.remove('border-outline-variant');
+                }
+            });
+        });
+
+        // Trigger file input or handle photo upload placeholder (Simulation)
+        document.getElementById('uploadPlaceholder').parentElement.addEventListener('click', () => {
+            const preview = document.getElementById('previewImage');
+            const placeholder = document.getElementById('uploadPlaceholder');
+            // Toggle for demonstration
+            if(preview.classList.contains('hidden')) {
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                preview.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        });
+    </script>
+</body></html>

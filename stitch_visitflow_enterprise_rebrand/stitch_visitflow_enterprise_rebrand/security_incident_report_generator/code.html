@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Incident Report Generator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "surface-container-low": "#f2f4f6",
+                        "on-surface": "#191c1e",
+                        "primary-container": "#0a2540",
+                        "on-primary-container": "#768dad",
+                        "tertiary-container": "#312200",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-primary-fixed": "#001c37",
+                        "on-tertiary-container": "#b28400",
+                        "surface": "#f7f9fb",
+                        "inverse-primary": "#b0c8eb",
+                        "on-secondary-container": "#00714f",
+                        "outline": "#74777e",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#005138",
+                        "background": "#f7f9fb",
+                        "secondary-container": "#60f9bd",
+                        "on-secondary-fixed": "#002114",
+                        "secondary": "#006c4b",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#d2e4ff",
+                        "surface-bright": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-dim": "#d8dadc",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-fixed-variant": "#314865",
+                        "surface-variant": "#e0e3e5",
+                        "on-background": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c4c6ce",
+                        "primary": "#000f22",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#49607e",
+                        "on-surface-variant": "#43474d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#ffdea0",
+                        "secondary-fixed": "#63fcc0",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#160d00",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface-container-high": "#e6e8ea",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "10px",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container_max_width": "1440px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "sidebar_width": "260px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "md": "16px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+        .glass-header { backdrop-filter: blur(8px); background-color: rgba(255, 255, 255, 0.8); }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-primary-container flex flex-col py-xl z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-primary-container opacity-80 uppercase tracking-wider">Enterprise Suite</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Visitors -->
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Visitors</span>
+</a>
+<!-- Watchlist -->
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-md text-label-md">Watchlist</span>
+</a>
+<!-- Reports (Active) -->
+<a class="flex items-center gap-md bg-white/10 text-on-primary border-l-4 border-secondary-fixed px-md py-sm" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<!-- Locations -->
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span class="font-label-md text-label-md">Locations</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-md pt-xl space-y-1">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- MAIN CONTENT -->
+<main class="ml-[260px] min-h-screen pb-xl">
+<!-- TOP APP BAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant z-40 px-lg flex justify-between items-center">
+<div class="flex items-center gap-xl">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none w-64 transition-all" placeholder="Search incidents..." type="text"/>
+</div>
+<nav class="flex gap-lg">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Analytics</a>
+<a class="text-secondary font-bold border-b-2 border-secondary pb-2 font-label-md text-label-md" href="#">Security</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-error text-on-error px-md py-2 rounded-lg font-label-md text-label-md font-bold active:scale-95 transition-transform">
+                    Emergency Lockdown
+                </button>
+<div class="h-8 w-px bg-outline-variant"></div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img alt="User Avatar" class="h-8 w-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO9-CqLg6UHPBJnbX0QVcGWzzKLfcr7gDkMb43cGS5DNtob2pj8_BGdLSfEgYtscB_Q6qfBQftyASNSe-xyLzqoEemsRQjaoJaulewlGjEahdrTdvZyVDAW-TOEJRbds-VFNUOoYQrkmxCbNT7LJW7CA8sA4-EOxWdB4p830mCYr6t9jQW_lfPElDhEhJUPZdV0Cb0znDrlcO6CR6Qv4O2_UVojJB-3p9wE7oQHhHeHsMdIYJA7Vl8AQAL8ByjlEyU9Nuq1CyW1Eo"/>
+</div>
+</header>
+<!-- CANVAS -->
+<div class="mt-16 p-lg max-w-[1440px] mx-auto">
+<div class="flex items-end justify-between mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Incident Report Generator</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Document security events with forensic precision for institutional record.</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-2 border border-primary text-primary px-lg py-2.5 rounded-lg font-title-md text-title-md hover:bg-primary/5 transition-all active:scale-98">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+                        Export as PDF
+                    </button>
+<button class="bg-secondary text-on-secondary px-lg py-2.5 rounded-lg font-title-md text-title-md font-bold shadow-sm hover:opacity-90 active:scale-98 transition-all">
+                        Generate Formal Report
+                    </button>
+</div>
+</div>
+<!-- ASYMMETRIC GRID LAYOUT -->
+<div class="grid grid-cols-12 gap-lg items-start">
+<!-- PRIMARY FORM AREA (Col 1-8) -->
+<div class="col-span-8 space-y-lg">
+<!-- SECTION: CORE DETAILS -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex items-center gap-2 border-b border-outline-variant pb-md mb-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="assignment">assignment</span>
+<h3 class="font-title-lg text-title-lg text-primary">Primary Documentation</h3>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div class="col-span-2">
+<label class="block font-label-md text-label-md text-primary mb-2">Incident Type</label>
+<select class="w-full bg-white border border-outline-variant rounded-lg px-md py-2.5 font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none appearance-none">
+<option>Unauthorised Access</option>
+<option>Physical Altercation</option>
+<option>Property Damage</option>
+<option>Theft / Missing Property</option>
+<option>Medical Emergency</option>
+<option>Suspicious Activity</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-2">Date of Incident</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-md py-2 font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none" type="date"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-2">Time of Incident</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-md py-2 font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none" type="time"/>
+</div>
+<div class="col-span-2">
+<label class="block font-label-md text-label-md text-primary mb-2">Specific Location</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-md py-2.5 font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none" placeholder="e.g. North Wing, Level 3, Room 402" type="text"/>
+</div>
+</div>
+</div>
+<!-- SECTION: NARRATIVE -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex items-center gap-2 border-b border-outline-variant pb-md mb-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+<h3 class="font-title-lg text-title-lg text-primary">Event Narrative</h3>
+</div>
+<label class="block font-label-md text-label-md text-primary mb-2">Detailed Sequence of Events</label>
+<textarea class="w-full bg-white border border-outline-variant rounded-lg p-md font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/10 outline-none resize-none" placeholder="Provide a chronological account of the incident including observations, actions taken, and witness statements..." rows="10"></textarea>
+<div class="mt-md flex justify-between items-center text-on-surface-variant">
+<span class="font-label-md text-label-md">Auto-saved 2m ago</span>
+<div class="flex gap-xs">
+<button class="p-1 hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-sm" data-icon="format_bold">format_bold</span></button>
+<button class="p-1 hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-sm" data-icon="format_italic">format_italic</span></button>
+<button class="p-1 hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-sm" data-icon="format_list_bulleted">format_list_bulleted</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECONDARY SIDEBAR (Col 9-12) -->
+<div class="col-span-4 space-y-lg">
+<!-- SECTION: INVOLVED PARTIES -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex items-center justify-between border-b border-outline-variant pb-md mb-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="group">group</span>
+<h3 class="font-title-lg text-title-lg text-primary">Involved Parties</h3>
+</div>
+<button class="text-secondary hover:bg-secondary-container/20 p-1 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</button>
+</div>
+<div class="space-y-md">
+<!-- Party Item -->
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg bg-surface">
+<div class="flex items-center gap-3">
+<img alt="John Doe" class="h-10 w-10 rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPT_aXYhlGHEi_lfQbOt52Z7zqvN5a6l2fdWl7caks7HpLJIzGobFMO7ZpcpBdtAgI_PD5KN0Myik39lbfih0gADpvFHC7SJgc-aynFfQDpuuKHOzU8eoX4nRcrY3cCzktHZ0hRK0C5IuXt3sab9wPX3jYAozcMRVFvV08ckzphct17GWquJRWnd946w5SPyoW6rV6gHsCFbD5n_A-3tu4Bdt0EQtcsnVCEdRimfFLJq0eILXM3JKpcve0jC23-lFRZ7OL4tP5xH0"/>
+<div>
+<p class="font-title-md text-title-md text-primary">John Doe</p>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-error/10 text-error rounded-full">Watchlist Match</span>
+</div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-outline-variant rounded-lg text-on-surface-variant hover:border-secondary hover:text-secondary transition-all font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+                                Link from Watchlist
+                            </button>
+</div>
+</div>
+<!-- SECTION: EVIDENCE UPLOAD -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex items-center gap-2 border-b border-outline-variant pb-md mb-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="attachment">attachment</span>
+<h3 class="font-title-lg text-title-lg text-primary">Evidence &amp; Media</h3>
+</div>
+<div class="space-y-md">
+<!-- CCTV Clip Preview Card -->
+<div class="relative group aspect-video rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover grayscale" data-alt="A high-angle surveillance camera viewpoint of a dimly lit corporate hallway at night. The lighting is cold and clinical, casting long shadows against the polished linoleum floors. A red digital timestamp is visible in the bottom corner of the frame. The overall atmosphere is tense, secure, and professional, reflecting a high-security monitoring environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjrt2Gs_frd-zDun29B94-ErSxji4fibtpcT-AXWfOkWCfOs4oa5x8hlojS9sES85rC_w5lyfGsVRuNBy0wq3kmqT0ENqPHxrHxXGugIcTkipSFTf9pYjKLqlDs4A7p0e1p7maVQgPpcjevMBicPSbdQqvrQLKkiCwpioU-KSPaOK8xzSgStwqSvKObZ9BMGiCKOJupN-SpYEFdT-jUdwpnJSrqkHAG3etR7YrrkOKlCFvzLu6ErQ9gZz5ym8xTOCvd3uvfkiF1do"/>
+<div class="absolute inset-0 bg-primary/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="play_circle">play_circle</span>
+</div>
+<div class="absolute bottom-2 left-2 flex gap-1">
+<span class="bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full">CCTV_Cam_04</span>
+<span class="bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full">02:14:22</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="aspect-square bg-surface border border-outline-variant rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A sharp, detailed photograph of a damaged electronic keypad lock on a heavy industrial door. Scuff marks and visible tampering are evident around the metal casing. The lighting is focused and direct, highlighting the physical damage for investigative purposes. The shot is framed to capture forensic details in a clean, professional security report style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgw863DajPZmXDsdMo92vK6jIQ2OHKBkSDMXFSc_SogED8s6dtrQv2HN4MDwshD81HoX1P80Uff6fFp5r__x5B0euRYPu4sgPXOjEk4da3PMZvylt7ZH_VKhd50vqBf1vtW28Ay7gYVQVu0aunTe7dcUyTveUmcC-bsOmNExHS1f0k2yLaiE5dNid1c-efp0CCMbdL4acrIDqdpsj2d5PVM7lnN36wprjMAwqjjwZT2XSGIM4A6FN8SmGEW-bhs8iB20SuqmWEhs0"/>
+</div>
+<div class="aspect-square bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high cursor-pointer transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] font-bold mt-1">ADD PHOTO</span>
+</div>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-lg text-center">
+<span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="cloud_upload">cloud_upload</span>
+<p class="font-label-md text-label-md text-on-surface-variant mt-2">Drag files or <span class="text-secondary font-bold">browse</span></p>
+<p class="text-[10px] text-outline mt-1">PDF, MP4, JPEG (Max 100MB)</p>
+</div>
+</div>
+</div>
+<!-- SECTION: NOTIFICATION LIST -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-sm">
+<div class="flex items-center gap-2 border-b border-outline-variant pb-md mb-md">
+<span class="material-symbols-outlined text-secondary" data-icon="notifications_active">notifications_active</span>
+<h3 class="font-title-lg text-title-lg text-primary">Protocol Routing</h3>
+</div>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface">Notify Site Manager</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-secondary focus:ring-secondary w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface">Route to Compliance Office</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface">External Police Notification</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FLOATING ACTION: CONFIRMATION OVERLAY (Simulated Micro-interaction) -->
+<div class="fixed bottom-lg right-lg bg-primary text-white px-lg py-md rounded-xl shadow-xl flex items-center gap-md transform translate-y-32 opacity-0 transition-all duration-500 z-[100]" id="save-toast">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle">check_circle</span>
+<div class="pr-lg">
+<p class="font-title-md text-title-md leading-none">Draft Secured</p>
+<p class="text-[11px] opacity-70 mt-1">Encryption: AES-256 Enabled</p>
+</div>
+</div>
+<script>
+        // Micro-interaction for the primary action button
+        const reportBtn = document.querySelector('button.bg-secondary');
+        const toast = document.getElementById('save-toast');
+
+        reportBtn.addEventListener('click', () => {
+            reportBtn.classList.add('scale-95');
+            setTimeout(() => {
+                reportBtn.classList.remove('scale-95');
+                toast.classList.remove('translate-y-32', 'opacity-0');
+                
+                setTimeout(() => {
+                    toast.classList.add('translate-y-32', 'opacity-0');
+                }, 4000);
+            }, 150);
+        });
+
+        // Simulating some input glow behavior
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.boxShadow = '0 0 0 2px rgba(0, 108, 75, 0.1)';
+            });
+            input.addEventListener('blur', () => {
+                input.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body></html>

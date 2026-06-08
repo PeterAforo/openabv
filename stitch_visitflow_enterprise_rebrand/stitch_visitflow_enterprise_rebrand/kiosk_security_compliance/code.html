@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Security &amp; Compliance - VisitFlow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-pad {
+            background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error": "#ffffff",
+                      "on-background": "#191c1e",
+                      "primary": "#000f22",
+                      "secondary-container": "#60f9bd",
+                      "surface-container-low": "#f2f4f6",
+                      "on-primary-container": "#768dad",
+                      "outline": "#74777e",
+                      "surface-dim": "#d8dadc",
+                      "background": "#f7f9fb",
+                      "surface-container": "#eceef0",
+                      "surface-container-high": "#e6e8ea",
+                      "on-primary-fixed": "#001c37",
+                      "surface-bright": "#f7f9fb",
+                      "inverse-surface": "#2d3133",
+                      "secondary-fixed": "#63fcc0",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "tertiary": "#160d00",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-surface-variant": "#43474d",
+                      "surface": "#f7f9fb",
+                      "tertiary-container": "#312200",
+                      "on-secondary-container": "#00714f",
+                      "primary-container": "#0a2540",
+                      "on-surface": "#191c1e",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#261a00",
+                      "secondary": "#006c4b",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#e0e3e5",
+                      "surface-tint": "#49607e",
+                      "inverse-primary": "#b0c8eb",
+                      "on-secondary-fixed": "#002114",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c4c6ce",
+                      "tertiary-fixed": "#ffdea0",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#3fdfa5",
+                      "primary-fixed": "#d2e4ff",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed-variant": "#005138",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#b28400",
+                      "tertiary-fixed-dim": "#fbbc0e",
+                      "primary-fixed-dim": "#b0c8eb",
+                      "on-primary-fixed-variant": "#314865"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "xs": "8px",
+                      "md": "16px",
+                      "container_max_width": "1440px",
+                      "sm": "12px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "base": "4px",
+                      "sidebar_width": "260px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "caption": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-md": ["Inter"],
+                      "title-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-surface sticky top-0 z-40 flex justify-between items-center h-16 px-lg border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary-container rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm">security</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">VisitFlow</h1>
+</div>
+<div class="flex items-center gap-md">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Safety Compliance</p>
+<p class="font-title-md text-title-md text-primary">Kiosk Terminal 04</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">terminal</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center justify-center py-xl px-gutter max-w-container_max_width mx-auto w-full">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg w-full max-w-6xl">
+<!-- Left Side: NDA and Legal Text -->
+<div class="lg:col-span-8 flex flex-col gap-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm flex flex-col h-[600px]">
+<div class="mb-md pb-md border-b border-outline-variant flex justify-between items-center">
+<div>
+<h2 class="font-title-lg text-title-lg text-primary">Non-Disclosure Agreement &amp; Safety Briefing</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Please review the following legal documents carefully.</p>
+</div>
+<span class="bg-secondary/10 text-secondary px-sm py-1 rounded-full font-label-md text-label-md font-bold">REQUIRED</span>
+</div>
+<div class="flex-grow overflow-y-auto pr-md space-y-md text-on-surface">
+<section>
+<h3 class="font-title-md text-title-md text-primary mb-xs">1. Confidentiality Agreement</h3>
+<p class="font-body-md text-body-md leading-relaxed">
+                                By entering the premises of VisitFlow Enterprise Suite, I agree to maintain the strict confidentiality of all proprietary information, trade secrets, and internal processes I may observe or learn during my visit. I acknowledge that unauthorized disclosure of such information could cause irreparable harm to the company and its partners.
+                            </p>
+</section>
+<section>
+<h3 class="font-title-md text-title-md text-primary mb-xs">2. Safety and Hazard Protocols</h3>
+<p class="font-body-md text-body-md leading-relaxed">
+                                I have read and understood the facility safety protocols, including emergency evacuation routes and the requirement to wear designated personal protective equipment (PPE) in restricted zones. I agree to follow all instructions provided by my host and safety personnel at all times.
+                            </p>
+<ul class="list-disc ml-lg mt-xs font-body-md space-y-1">
+<li>No photography or video recording in restricted areas.</li>
+<li>Stay within designated visitor pathways.</li>
+<li>Report any spills or hazards to staff immediately.</li>
+</ul>
+</section>
+<section>
+<h3 class="font-title-md text-title-md text-primary mb-xs">3. Liability Waiver</h3>
+<p class="font-body-md text-body-md leading-relaxed text-on-surface-variant italic">
+                                I hereby release VisitFlow and its affiliates from any and all liability for personal injury or property damage sustained while on the premises, except where such injury or damage results from gross negligence or willful misconduct by the company.
+                            </p>
+</section>
+<div class="p-md bg-surface-container-low rounded-lg border border-outline-variant/50">
+<p class="font-caption text-caption text-on-surface-variant">
+                                Document ID: VF-SEC-NDA-2024-001 • Revision Date: Oct 12, 2024
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Capture & Interaction -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<!-- Camera Preview Box -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm">
+<h3 class="font-label-md text-label-md text-on-primary-container mb-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">photo_camera</span> PHOTO CAPTURE
+                    </h3>
+<div class="aspect-video bg-primary-container rounded-lg overflow-hidden relative group cursor-pointer border-2 border-dashed border-outline-variant hover:border-secondary transition-colors">
+<img alt="Camera Preview" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A high-resolution, professional portrait of a woman looking directly into a camera lens, framed in a modern security terminal style. The lighting is bright and even, mimicking a well-lit corporate lobby with soft blue and white highlights. She is smiling professionally, conveying a sense of corporate compliance and trust. The visual style is clean, sharp, and modern, fitting an enterprise software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnyRTCOddnO61NdwJExpBAf793K-G0stYb2tfJqgF8PZWx2wK1S6fF2pqNPp98GBAWWnVlIsHU0WN-JLNyTi4SnHOw9y9GHJSM22XcsURUA9VAaDO2fP9aiWv5-HyiPg81bQ7MC4dCxXGr9sXwkNGRhjnLgfIlOFNUQvvRgcTbMNNkRyqi203d5ttLwa-7wdmw_ynduw6F0szl9wpldgw4p0zKBjBQmBJm-TmnudioCJ2QkIA28-6XU_eO7skpsgmDfeY57_uBa4A"/>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-white bg-primary-container/20">
+<div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mb-xs shadow-lg">
+<span class="material-symbols-outlined text-white">refresh</span>
+</div>
+<span class="font-label-md text-label-md bg-black/40 px-sm py-1 rounded-full backdrop-blur-sm">Retake Photo</span>
+</div>
+</div>
+</div>
+<!-- Signature Pad -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm flex flex-col flex-grow">
+<h3 class="font-label-md text-label-md text-on-primary-container mb-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">draw</span> SIGNATURE REQUIRED
+                    </h3>
+<div class="signature-pad flex-grow bg-surface-container-low rounded-lg border border-outline-variant relative min-h-[200px] flex items-center justify-center">
+<!-- Simulated signature -->
+<svg class="w-4/5 h-1/2 opacity-20 pointer-events-none" viewbox="0 0 200 100">
+<path class="text-primary" d="M10,80 C30,20 60,90 90,40 S140,80 180,20" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+<div class="absolute bottom-xs right-xs">
+<button class="text-on-surface-variant hover:text-error transition-colors flex items-center gap-1 font-label-md text-label-md">
+<span class="material-symbols-outlined text-sm">delete</span> Clear
+                            </button>
+</div>
+<p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-on-surface-variant/30 font-display-lg text-[24px] pointer-events-none select-none">Sign Here</p>
+</div>
+<div class="mt-md space-y-md">
+<label class="flex items-start gap-sm cursor-pointer group">
+<input class="mt-1 w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary cursor-pointer" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">
+                                I confirm that all information provided is accurate and I accept the terms outlined.
+                            </span>
+</label>
+<button class="w-full py-4 bg-secondary text-white rounded-lg font-title-md text-title-md flex items-center justify-center gap-md hover:brightness-110 active:scale-[0.98] transition-all shadow-md">
+<span>Accept &amp; Sign</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant py-md mt-auto">
+<div class="max-w-container_max_width mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">verified_user</span>
+<p class="font-caption text-caption text-on-surface-variant">© 2024 VisitFlow. Smart Appointments. Secure Access.</p>
+</div>
+<div class="flex items-center gap-lg">
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Security Compliance</a>
+<button class="bg-white border border-outline-variant rounded px-sm py-1 font-label-md text-label-md text-primary flex items-center gap-1 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">help</span> Support
+                </button>
+</div>
+</div>
+</footer>
+<!-- Atmosphere/Interaction Script -->
+<script>
+        // Simple micro-interaction for the signature pad
+        const sigPad = document.querySelector('.signature-pad');
+        sigPad.addEventListener('mousedown', () => {
+            sigPad.classList.add('ring-2', 'ring-secondary/30');
+        });
+        window.addEventListener('mouseup', () => {
+            sigPad.classList.remove('ring-2', 'ring-secondary/30');
+        });
+
+        // Toggle checkbox on label click (browser default does this, but keeping logic clean)
+        const checkAction = document.querySelector('input[type="checkbox"]');
+        const primaryBtn = document.querySelector('button.bg-secondary');
+        
+        primaryBtn.style.opacity = "0.5";
+        primaryBtn.style.pointerEvents = "none";
+
+        checkAction.addEventListener('change', (e) => {
+            if(e.target.checked) {
+                primaryBtn.style.opacity = "1";
+                primaryBtn.style.pointerEvents = "auto";
+            } else {
+                primaryBtn.style.opacity = "0.5";
+                primaryBtn.style.pointerEvents = "none";
+            }
+        });
+    </script>
+</body></html>

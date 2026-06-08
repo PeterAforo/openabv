@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow Security - QR Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanning-laser {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3fdfa5, transparent);
+            box-shadow: 0 0 15px 2px #3fdfa5;
+            animation: scan 3s ease-in-out infinite;
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+        .viewfinder-corner {
+            width: 40px;
+            height: 40px;
+            border-color: #3fdfa5;
+            position: absolute;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#fbbc0e",
+                      "on-secondary-fixed": "#002114",
+                      "surface-dim": "#d8dadc",
+                      "primary-fixed": "#d2e4ff",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#b0c8eb",
+                      "surface-container-low": "#f2f4f6",
+                      "outline-variant": "#c4c6ce",
+                      "primary": "#000f22",
+                      "on-secondary-fixed-variant": "#005138",
+                      "surface-container-high": "#e6e8ea",
+                      "secondary-fixed": "#63fcc0",
+                      "on-primary-fixed-variant": "#314865",
+                      "inverse-surface": "#2d3133",
+                      "on-surface-variant": "#43474d",
+                      "outline": "#74777e",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-surface": "#191c1e",
+                      "on-tertiary-fixed": "#261a00",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-container": "#b28400",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "secondary": "#006c4b",
+                      "tertiary-fixed": "#ffdea0",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "on-primary-container": "#768dad",
+                      "tertiary": "#160d00",
+                      "surface-tint": "#49607e",
+                      "inverse-primary": "#b0c8eb",
+                      "background": "#f7f9fb",
+                      "secondary-fixed-dim": "#3fdfa5",
+                      "primary-container": "#0a2540",
+                      "surface-bright": "#f7f9fb",
+                      "on-background": "#191c1e",
+                      "error-container": "#ffdad6",
+                      "tertiary-container": "#312200",
+                      "surface-container": "#eceef0",
+                      "secondary-container": "#60f9bd",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-secondary-container": "#00714f",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#e0e3e5",
+                      "surface": "#f7f9fb",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#001c37"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "sm": "12px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "container_max_width": "1440px",
+                      "xs": "8px",
+                      "sidebar_width": "260px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "title-md": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "caption": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background overflow-hidden h-screen flex flex-col">
+<!-- TopNavBar Mapping -->
+<header class="docked full-width top-0 sticky z-40 bg-surface dark:bg-surface-container border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-extrabold text-primary">VisitFlow</span>
+<div class="h-6 w-[1px] bg-outline-variant mx-sm"></div>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-x-1" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-md text-label-md">Back to Command Center</span>
+</button>
+</div>
+<div class="flex items-center gap-lg">
+<div class="hidden md:flex items-center gap-sm px-md py-xs bg-surface-container rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-secondary" data-icon="location_on">location_on</span>
+<span class="font-label-md text-label-md font-semibold text-primary">North Gate Entrance</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:opacity-70" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:opacity-70" data-icon="help">help</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline">
+<img alt="User Profile" data-alt="A professional headshot of a security supervisor in a modern uniform. The lighting is crisp and high-contrast, emphasizing a secure and institutional environment. The background is a slightly blurred office setting with deep navy and cool gray tones, maintaining the premium corporate aesthetic of the enterprise suite." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ6v4KFove3qatz1R3vvWuA4DC9lsKS9PMa8eSmhSixe1H58BPmTRJ6mPdOWytsEmZSH2ImXWt7saPyYrsKuSE-GT7RflK3TuuvJavXFo_jKTOWhjdLCr7_zyutfdhxlj0L-a7XkEg8WZXrtRr3dtU1ZzdJ1cR1HXrYBpt6y6O4fq0gD7A6Vh5SPnrbZ4bERjj_mSCpdFa-venw3fjFzAFd8bFFFJ-SUGRzQLiCgAU4U0AhHv7CIsh9e2Yt7e4jv-yXKQE3FbOKHQ"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+<!-- Left: Scanning Area -->
+<div class="flex-1 p-lg flex flex-col items-center justify-center relative bg-primary-container">
+<!-- Viewfinder Container -->
+<div class="w-full max-w-2xl aspect-square md:aspect-video bg-black rounded-xl overflow-hidden relative border-4 border-primary shadow-2xl">
+<!-- Mock Camera Feed -->
+<div class="absolute inset-0 opacity-40">
+<img class="w-full h-full object-cover" data-alt="A POV shot through a high-definition security camera focusing on a modern reception desk and glass entryway. The scene is bathed in cool blue and navy corporate lighting with vibrant emerald accents. The perspective creates an immersive scanning experience within a clean, minimalist architectural space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkXnu84g9LB8V6wGJnh91K961I1PJP8mqpa0luch7b3LtM87HYRqIqCgrXcPPVpLh0-M5gf3qnr88K1RRHWa0dF7N7luczZvWQ_RfbPmLw9YxgLocRJGgVudYLUNXQEsK4pNClitPIwffdPkeZPuLre_yVQ8QlMRWYktsnEQjOj5TlgnM-B1jieEHkjuJFBHKERGCxneu94a_l1QluysyPwz9naWZA0u7m8FjIJpkBu4HjRc3QpKd3B7ICQf9jcw_FQqr4lZf6lEQ"/>
+</div>
+<!-- Scanner UI Overlay -->
+<div class="absolute inset-0 flex items-center justify-center p-xl">
+<div class="w-64 h-64 relative">
+<!-- Corners -->
+<div class="viewfinder-corner top-0 left-0 border-t-4 border-l-4"></div>
+<div class="viewfinder-corner top-0 right-0 border-t-4 border-r-4"></div>
+<div class="viewfinder-corner bottom-0 left-0 border-b-4 border-l-4"></div>
+<div class="viewfinder-corner bottom-0 right-0 border-b-4 border-r-4"></div>
+<!-- Laser Animation -->
+<div class="scanning-laser absolute left-0 right-0"></div>
+<!-- Guide Text -->
+<div class="absolute -bottom-16 left-1/2 -translate-x-1/2 whitespace-nowrap text-on-primary bg-black/50 px-md py-xs rounded-full font-label-md text-label-md uppercase tracking-widest">
+                            Align QR Code Within Frame
+                        </div>
+</div>
+</div>
+</div>
+<!-- Manual Fallback -->
+<div class="mt-xl w-full max-w-md">
+<label class="block font-label-md text-label-md text-on-primary-container mb-xs px-1">MANUAL CODE ENTRY</label>
+<div class="flex gap-sm">
+<div class="relative flex-1">
+<input class="w-full bg-surface text-primary border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-secondary-fixed focus:border-secondary outline-none transition-all font-title-md" placeholder="Enter alphanumeric code..." type="text"/>
+<span class="absolute right-md top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="keyboard">keyboard</span>
+</div>
+<button class="bg-secondary hover:bg-on-secondary-container text-on-primary px-lg py-sm rounded-lg font-title-md transition-colors shadow-md active:scale-95">
+                        Verify
+                    </button>
+</div>
+</div>
+</div>
+<!-- Right: Scan Results Panel -->
+<aside class="w-full md:w-[400px] bg-surface-container-low border-l border-outline-variant flex flex-col p-lg">
+<div class="flex items-center justify-between mb-lg">
+<h2 class="font-title-lg text-title-lg text-primary">Scan Results</h2>
+<span class="px-sm py-xs bg-error/10 text-error rounded-full font-label-md text-label-md font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                    Live Processing
+                </span>
+</div>
+<!-- Success State (Populated on scan) -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm transition-all duration-500 opacity-100 translate-y-0" id="result-card">
+<div class="relative aspect-square w-full rounded-lg overflow-hidden mb-md border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a male corporate executive in a charcoal suit, captured in a bright, modern office with floor-to-ceiling windows. The lighting is natural and sophisticated, using a clean color palette of whites and soft grays to denote a trusted visitor. The style is crisp and corporate." id="visitor-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI8kEUSLE8aN-xaf3k6eajQp0X5_LH1Na8abW1PA4YbgePHmOIc8SkNcCRvBP7qj7S9tpbPSBSw7YC5I6NaLaXYvzvKC3q6b-vHM9B7orq_ZwWjJAFpGFhG427nl1-WvNeMg-D-HGgFRS22LWLqwFJdmkUG7_6L_YTWbJxyAzw_8Kcz5jVZv6GxE3jHzhkpxfYI0E3PUkx8Uvz3yLyVPjJmMBWRF9ZwAfcRCWRXYBZ0EV8o_HM5AWYiq64dps4s8K0H7NMrPTsMxU"/>
+<div class="absolute top-sm right-sm">
+<span class="bg-secondary-container text-on-secondary-container px-sm py-1 rounded-full font-label-md text-label-md font-bold uppercase shadow-sm">
+                            Approved
+                        </span>
+</div>
+</div>
+<div class="space-y-md">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-tighter">Visitor Name</p>
+<h3 class="font-headline-md text-headline-md text-primary" id="visitor-name">Julian Montgomery</h3>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-tighter">Host</p>
+<p class="font-title-md text-title-md text-primary">Sarah Chen</p>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-tighter">Dept</p>
+<p class="font-title-md text-title-md text-primary">Operations</p>
+</div>
+</div>
+<div class="p-sm bg-surface-container-high rounded-lg flex items-center justify-between border border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<div>
+<p class="font-caption text-caption text-on-surface-variant">Appointment Time</p>
+<p class="font-title-md text-title-md text-primary">10:30 AM (Today)</p>
+</div>
+</div>
+<span class="text-secondary font-bold font-label-md">ON TIME</span>
+</div>
+<div class="pt-md flex gap-sm">
+<button class="flex-1 bg-secondary text-on-primary py-sm rounded-lg font-title-md flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                            Confirm Arrival
+                        </button>
+<button class="w-12 h-12 flex items-center justify-center border border-outline text-on-surface-variant rounded-lg hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Shown when idle) -->
+<div class="hidden flex-1 flex flex-col items-center justify-center text-center p-xl opacity-50" id="idle-state">
+<span class="material-symbols-outlined text-[64px] mb-md text-outline" data-icon="qr_code_scanner">qr_code_scanner</span>
+<h4 class="font-title-lg text-title-lg text-on-surface-variant">Waiting for Scan</h4>
+<p class="font-body-md text-body-md text-outline mt-sm">Point camera at a visitor's digital or printed QR pass to see details.</p>
+</div>
+<div class="mt-auto pt-lg">
+<div class="bg-primary-container text-on-primary p-md rounded-xl">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-secondary-fixed-dim" data-icon="security">security</span>
+<p class="font-label-md text-label-md font-bold uppercase">Officer Briefing</p>
+</div>
+<p class="font-caption text-caption text-on-primary-container leading-relaxed">
+                        Verify physical ID for all contractors. Report any scan anomalies immediately to supervisor. Today's security level: <span class="text-secondary-fixed">ALPHA-1</span>.
+                    </p>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer Mapping -->
+<footer class="bg-surface-container-low border-t border-outline-variant flex flex-col md:flex-row justify-between items-center px-lg py-sm gap-md">
+<p class="font-caption text-caption text-on-surface-variant">© 2024 VisitFlow. Smart Appointments. Secure Access.</p>
+<div class="flex gap-lg">
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Security Compliance</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Emergency Protocol</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</footer>
+<script>
+        // Simple interaction simulation for demonstration
+        const resultCard = document.getElementById('result-card');
+        const idleState = document.getElementById('idle-state');
+        
+        // Randomly simulate a scan every 10 seconds for visual variety
+        function simulateScan() {
+            // Optional: Logic to flip between idle and result states could go here
+            // For now, we show the result as the primary focus requested.
+        }
+
+        // Add touch feedback to primary buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.classList.add('opacity-70');
+            });
+            btn.addEventListener('touchend', () => {
+                btn.classList.remove('opacity-70');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Security Watchlist Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#63fcc0",
+                      "primary-container": "#0a2540",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d8dadc",
+                      "on-secondary-fixed": "#002114",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#ffdea0",
+                      "surface-bright": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "on-primary-fixed-variant": "#314865",
+                      "secondary-fixed-dim": "#3fdfa5",
+                      "on-background": "#191c1e",
+                      "tertiary-container": "#312200",
+                      "secondary-container": "#60f9bd",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-secondary-container": "#00714f",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary": "#160d00",
+                      "on-tertiary-fixed": "#261a00",
+                      "surface-variant": "#e0e3e5",
+                      "on-secondary-fixed-variant": "#005138",
+                      "on-primary-fixed": "#001c37",
+                      "surface-tint": "#49607e",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "background": "#f7f9fb",
+                      "surface": "#f7f9fb",
+                      "tertiary-fixed-dim": "#fbbc0e",
+                      "secondary": "#006c4b",
+                      "inverse-surface": "#2d3133",
+                      "on-primary-container": "#768dad",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b0c8eb",
+                      "error-container": "#ffdad6",
+                      "primary": "#000f22",
+                      "primary-fixed": "#d2e4ff",
+                      "surface-container-low": "#f2f4f6",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#43474d",
+                      "primary-fixed-dim": "#b0c8eb",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-container": "#b28400",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c4c6ce",
+                      "surface-container": "#eceef0",
+                      "outline": "#74777e",
+                      "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "10px",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container_max_width": "1440px",
+                      "base": "4px",
+                      "md": "16px",
+                      "xs": "8px",
+                      "xl": "32px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "sidebar_width": "260px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "title-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "caption": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-primary-container flex flex-col py-xl z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-primary/60">Enterprise Suite</p>
+</div>
+<nav class="flex-1 space-y-xs">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Visitors</span>
+</a>
+<!-- Active Tab: Watchlist -->
+<a class="flex items-center gap-md bg-white/10 text-on-primary border-l-4 border-secondary-fixed px-md py-sm scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-md text-label-md">Watchlist</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined">login</span>
+<span class="font-label-md text-label-md">Check-in</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-md text-label-md">Locations</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-lg space-y-xs">
+<button class="w-full flex items-center justify-center gap-xs bg-secondary-fixed text-on-secondary-fixed font-title-md text-title-md py-sm rounded-xl hover:opacity-90 transition-all active:scale-95 mb-lg">
+<span class="material-symbols-outlined">add</span>
+<span>Add New Visitor</span>
+</button>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="h-16 bg-surface border-b border-outline-variant px-lg flex justify-between items-center shrink-0">
+<div class="flex items-center gap-lg">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-xl w-64 focus:ring-2 focus:ring-secondary-fixed focus:border-secondary-fixed transition-all text-body-md" placeholder="Search watchlist entries..." type="text"/>
+</div>
+<div class="flex gap-md border-l border-outline-variant pl-lg">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Analytics</a>
+<a class="text-secondary font-bold border-b-2 border-secondary pb-2 font-label-md text-label-md" href="#">Security</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Logs</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-error text-on-error px-md py-2 rounded-lg font-title-md text-title-md hover:bg-error/90 active:scale-95 transition-all flex items-center gap-xs shadow-lg shadow-error/20">
+<span class="material-symbols-outlined">report</span>
+                    Emergency Lockdown
+                </button>
+<div class="flex items-center gap-xs border-l border-outline-variant pl-md">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden ml-xs border-2 border-outline-variant">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a security director in a modern enterprise environment. He is wearing a dark navy blue suit with a subtle pattern and a crisp white shirt. The background is a slightly blurred office setting with high-key lighting and a sophisticated, institutional atmosphere. The overall mood is authoritative, trustworthy, and focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmEa02npFYsWP6e-U5pzg2r53S8gxFtFP4007fMUuInVSlrZz_Q0F-Ays1G3ppc8m8RHbVHUrBBXLQrsW2Od5tqsEjIQm3BwncUMI7p0J6D5zcm3T9kFSUzyxqGvbPYpeUNk1xC13lNMnxrvEcUkKTQmreXl42ew9mQB3AhyJZbwlycGj08dUsNdFQGFT3TK7sS2UoWxIEVrp2fyo7xt3N_PkSB8gzq0ZNgPbMcRvVEHHp1td2E57UcG-RMcpbBiSy_6fwg8mc3XA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 overflow-auto p-lg bg-surface-bright custom-grid">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-1">Watchlist &amp; Blacklist Management</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Monitor and manage access restrictions for security-sensitive individuals across all facilities.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-md py-sm bg-surface-container-highest border border-outline rounded-xl font-title-md text-title-md hover:bg-surface-container transition-all">
+                        Export Report
+                    </button>
+<button class="px-md py-sm bg-primary text-on-primary rounded-xl font-title-md text-title-md flex items-center gap-xs hover:shadow-xl hover:-translate-y-0.5 transition-all">
+<span class="material-symbols-outlined">person_add</span>
+                        Add to Watchlist
+                    </button>
+</div>
+</div>
+<!-- Dashboard Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-xl">
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined">block</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Blacklisted</p>
+<p class="text-headline-md font-headline-md text-primary">42</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">visibility</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Active Watchlist</p>
+<p class="text-headline-md font-headline-md text-primary">128</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Cleared Alerts</p>
+<p class="text-headline-md font-headline-md text-primary">12</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant">Incident History</p>
+<p class="text-headline-md font-headline-md text-primary">304</p>
+</div>
+</div>
+</div>
+<div class="flex gap-gutter h-[calc(100vh-320px)]">
+<!-- Data Table Section -->
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="p-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-title-md text-title-md text-primary">Security Registry</h3>
+<div class="flex gap-xs">
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-sm">sort</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-low z-10 border-b border-outline-variant">
+<tr>
+<th class="px-md py-sm font-label-md text-label-md text-primary uppercase">Name</th>
+<th class="px-md py-sm font-label-md text-label-md text-primary uppercase text-center">Status</th>
+<th class="px-md py-sm font-label-md text-label-md text-primary uppercase">Reason for Alert</th>
+<th class="px-md py-sm font-label-md text-label-md text-primary uppercase text-center">Severity</th>
+<th class="px-md py-sm font-label-md text-label-md text-primary uppercase">Last Seen</th>
+<th class="px-md py-sm font-label-md text-label-md text-primary uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Table Row 1 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer group" onclick="document.getElementById('detailPanel').classList.remove('translate-x-full')">
+<td class="px-md py-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0">
+<img alt="Visitor photo" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="A clinical ID photograph of a person with a neutral expression, framed as a security profile picture. The lighting is harsh and direct, typical of a corporate security booth. The background is a solid grey wall. The image maintains a high-quality, professional standard suitable for an enterprise security platform's database." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0lRSyFA3ba8ZNSEnxYgHDV7676NRdqceAk5waU96Tls6_By0b3QvvYcc6_YGjVsULVy6bdRhkYdW5T3k7QBAk3AAXlyes9ps2D6dMMLn9_zg2oDSz6-9HXKRISjb1ZWq3roV3EiXlU0FFzmsknoMbTNaUepKjSYzn9HRztujK3ShDH9RFgpVCTwTGavok1QlQK2O2rjPkAnkNSnARnx_v6X3i2WNHHLNIjyQs4avpM2O9NMWwR0UzhwaPyIXunjXmJCyahoeewIA"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Jonathan Vance</p>
+<p class="text-label-md text-on-surface-variant font-label-md">ID: VF-9821</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-block px-3 py-1 bg-error/10 text-error font-bold text-[10px] tracking-wider uppercase rounded-full border border-error/20">Blacklisted</span>
+</td>
+<td class="px-md py-md">
+<p class="text-body-md text-on-surface-variant max-w-[200px] truncate">Previous aggressive behavior towards staff</p>
+</td>
+<td class="px-md py-md text-center">
+<div class="flex items-center justify-center gap-1 text-error">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-label-md font-bold uppercase">High</span>
+</div>
+</td>
+<td class="px-md py-md">
+<p class="text-body-md text-on-surface">Oct 24, 2023</p>
+<p class="text-caption text-on-surface-variant">North Lobby Ent.</p>
+</td>
+<td class="px-md py-md text-right">
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer" onclick="document.getElementById('detailPanel').classList.remove('translate-x-full')">
+<td class="px-md py-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0">
+<img alt="Visitor photo" class="w-full h-full object-cover" data-alt="A surveillance-style portrait of a woman looking away from the camera, used for a security watchlist. The lighting is slightly underexposed, giving it an authentic security-camera aesthetic. The background is a blurry hallway. The image is crisp and clear, presented in a corporate security UI context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdsKpugxCRpNLQxf5S76vgvFHwFImLq14wwazPsIwAiH4ELj2sQufgGBlI5vizQ0CrvFtBTyZyJeDO3h1XLZSZ1VBigMs_WqFoppKcTpuck5VUVmotfY-VsyU0YaZjXGBLCrXxbwBW0Wb4ufEvAdwwEpA9uDu4LgzRBm0KR9IFQsqX3iwppktxE3ITjECRHVTyZB1mClWbhb2PkhS9N_HZimHID3v6720fkdcEttnEv9IW39VOOLf8sy_xSiQo1SBWoCQ2UkEXgTI"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Sarah Miller</p>
+<p class="text-label-md text-on-surface-variant font-label-md">ID: VF-1102</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-block px-3 py-1 bg-tertiary-fixed text-on-tertiary-container font-bold text-[10px] tracking-wider uppercase rounded-full border border-tertiary-fixed-dim">Watchlist</span>
+</td>
+<td class="px-md py-md">
+<p class="text-body-md text-on-surface-variant max-w-[200px] truncate">Unauthorised access attempt (Server Room)</p>
+</td>
+<td class="px-md py-md text-center">
+<div class="flex items-center justify-center gap-1 text-tertiary-container">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="text-label-md font-bold uppercase">Medium</span>
+</div>
+</td>
+<td class="px-md py-md">
+<p class="text-body-md text-on-surface">Nov 12, 2023</p>
+<p class="text-caption text-on-surface-variant">Employee Dock B</p>
+</td>
+<td class="px-md py-md text-right">
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-surface-bright transition-colors cursor-pointer" onclick="document.getElementById('detailPanel').classList.remove('translate-x-full')">
+<td class="px-md py-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg overflow-hidden shrink-0">
+<img alt="Visitor photo" class="w-full h-full object-cover" data-alt="A front-facing security database photo of a man in a plain white t-shirt. The photo has the clinical, high-clarity feel of a passport or corporate security badge photo. The background is a clean, neutral white. The lighting is balanced and professional, maintaining the high-end institutional visual style of the application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTPPfME3jKdb1NXlzlZECJLQSHbV8ockd1ngH-iilDP4-xX4s9gWtNXXdYAUblUt3tE0mhy0185SYt4wInWRG6y0lwABScSXicNhWQsQEO0b532jPsgZEP7DmXTGQ3dU2A0LcF3c2qFRBx1nTBHaa0OfA-VrdIJOK_Q_rw6SToQEvH6R_zdmhfahuCFLZEfItB5Zmy71XR8nEfx8MnJgqXTZQ1KnnFgPbAeOu26oyTHnYobxi_mtFB7-wMN0AN6dGSAu-ncFlV_vo"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Marcus Thorne</p>
+<p class="text-label-md text-on-surface-variant font-label-md">ID: VF-4432</p>
+</div>
+</div>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-block px-3 py-1 bg-tertiary-fixed text-on-tertiary-container font-bold text-[10px] tracking-wider uppercase rounded-full border border-tertiary-fixed-dim">Watchlist</span>
+</td>
+<td class="px-md py-md">
+<p class="text-body-md text-on-surface-variant max-w-[200px] truncate">Documented tailgating incident</p>
+</td>
+<td class="px-md py-md text-center">
+<div class="flex items-center justify-center gap-1 text-on-secondary-container">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="text-label-md font-bold uppercase">Low</span>
+</div>
+</td>
+<td class="px-md py-md">
+<p class="text-body-md text-on-surface">Oct 02, 2023</p>
+<p class="text-caption text-on-surface-variant">Main Plaza Gate</p>
+</td>
+<td class="px-md py-md text-right">
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<p class="font-label-md text-label-md text-on-surface-variant">Showing 3 of 170 entries</p>
+<div class="flex gap-xs">
+<button class="px-3 py-1 rounded border border-outline-variant bg-surface disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 rounded border border-secondary bg-secondary-container text-on-secondary-container">1</button>
+<button class="px-3 py-1 rounded border border-outline-variant bg-surface">2</button>
+<button class="px-3 py-1 rounded border border-outline-variant bg-surface">Next</button>
+</div>
+</div>
+</div>
+<!-- Detail Panel (Fixed/Modal Hybrid) -->
+<div class="w-[400px] bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col translate-x-full transition-transform duration-300 ease-in-out absolute right-lg top-[320px] bottom-lg z-20 shadow-2xl md:relative md:translate-x-0 md:top-0 md:bottom-0 md:right-0" id="detailPanel">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-primary-container text-on-primary rounded-t-xl">
+<h3 class="font-title-md text-title-md">Threat Profile</h3>
+<button class="md:hidden w-8 h-8 flex items-center justify-center" onclick="document.getElementById('detailPanel').classList.add('translate-x-full')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-auto p-md">
+<!-- Profile Header -->
+<div class="flex flex-col items-center mb-lg">
+<div class="w-32 h-32 rounded-2xl overflow-hidden border-4 border-error mb-md shadow-lg">
+<img alt="Detail Profile Photo" class="w-full h-full object-cover grayscale" data-alt="A high-resolution security mugshot portrait of a middle-aged male subject with a stern expression. He is photographed from the chest up against a plain, industrial grey background. The lighting is bright and flat, emphasizing facial features for identification. The overall aesthetic is strictly professional, clean, and clinical, reflecting an enterprise-grade security database profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_mjC7KCB6IKIoE1vEDUjnaBeDbWOP2BuV_1nB7Wx0M7YuwgC1SiK8ereZ9nqgEMlh8Phi7NpSFrWoAzahP2JFEHlLAr88J8DfXGbSocDTb_9AzW1slF_qPDr0lF266jpmNf-w07wmJu36-asFU-z3X45hw0rJsbHwJd3Ul3v8UXHOQtOAxtt1GRiZ1uh95s9RFnblyqn9elwN87WAtirNGzow80EN8UX1TaEHUeg5bwFMcv1nZfd3epO9NlNvLRiGpTQEiiJu8Xs"/>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary">Jonathan Vance</h4>
+<div class="flex gap-xs mt-xs">
+<span class="px-2 py-0.5 bg-error/10 text-error rounded font-bold text-[10px] tracking-wide uppercase border border-error/20">Blacklisted</span>
+<span class="px-2 py-0.5 bg-error text-on-error rounded font-bold text-[10px] tracking-wide uppercase">High Risk</span>
+</div>
+</div>
+<!-- Info Grid -->
+<div class="space-y-md">
+<div class="grid grid-cols-2 gap-md">
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+<p class="text-caption font-label-md text-on-surface-variant uppercase">ID Number</p>
+<p class="font-title-md text-primary">VF-9821-X</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+<p class="text-caption font-label-md text-on-surface-variant uppercase">Citizenship</p>
+<p class="font-title-md text-primary">United States</p>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+<p class="text-caption font-label-md text-on-surface-variant uppercase">Primary Reason</p>
+<p class="text-body-md text-primary mt-1">Aggressive confrontation with executive staff on Oct 24th. Trespassed from campus grounds indefinitely. Attempted re-entry via service dock on Nov 2nd.</p>
+</div>
+<!-- Incident History Timeline -->
+<div>
+<h5 class="font-title-md text-title-md text-primary mb-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">history</span>
+                                    Incident History
+                                </h5>
+<div class="space-y-sm border-l-2 border-outline-variant ml-2 pl-4">
+<div class="relative">
+<div class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-error ring-4 ring-surface-container-lowest"></div>
+<p class="text-label-md font-bold text-primary">Nov 02, 2023 - 08:45 AM</p>
+<p class="text-body-md text-on-surface-variant">Attempted breach: Loading Dock 4. Denied entry by physical security.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-error ring-4 ring-surface-container-lowest"></div>
+<p class="text-label-md font-bold text-primary">Oct 24, 2023 - 02:15 PM</p>
+<p class="text-body-md text-on-surface-variant">Assault: Verbal harassment and physical intimidation of receptionist. Police involved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant bg-surface-container-low flex flex-col gap-xs">
+<button class="w-full py-sm bg-error text-on-error rounded-xl font-bold flex items-center justify-center gap-xs hover:bg-error/90 transition-all">
+<span class="material-symbols-outlined">warning</span>
+                            Flag Local Authorities
+                        </button>
+<button class="w-full py-sm bg-surface text-primary border border-outline-variant rounded-xl font-bold flex items-center justify-center gap-xs hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">edit</span>
+                            Update Profile
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Interactive script for detail panel simulation -->
+<script>
+        // Simple micro-interaction for rows
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('click', () => {
+                // Remove active classes from all rows
+                rows.forEach(r => r.classList.remove('bg-secondary-fixed/5', 'border-l-4', 'border-secondary-fixed'));
+                // Add active state to clicked row
+                row.classList.add('bg-secondary-fixed/5', 'border-l-4', 'border-secondary-fixed');
+            });
+        });
+
+        // Auto-close detail panel on Esc
+        window.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') {
+                document.getElementById('detailPanel').classList.add('translate-x-full');
+            }
+        });
+    </script>
+</body></html>

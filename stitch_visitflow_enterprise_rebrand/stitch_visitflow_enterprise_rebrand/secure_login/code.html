@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Secure Enterprise Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c4c6ce",
+                    "surface-bright": "#f7f9fb",
+                    "primary": "#000f22",
+                    "outline": "#74777e",
+                    "on-tertiary": "#ffffff",
+                    "background": "#f7f9fb",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-dim": "#d8dadc",
+                    "on-primary-fixed-variant": "#314865",
+                    "on-secondary-fixed": "#002114",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-fixed-dim": "#b0c8eb",
+                    "tertiary": "#160d00",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "secondary-fixed": "#63fcc0",
+                    "secondary-fixed-dim": "#3fdfa5",
+                    "surface": "#f7f9fb",
+                    "surface-tint": "#49607e",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#60f9bd",
+                    "primary-container": "#0a2540",
+                    "inverse-primary": "#b0c8eb",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "tertiary-fixed": "#ffdea0",
+                    "on-secondary-fixed-variant": "#005138",
+                    "on-tertiary-fixed": "#261a00",
+                    "inverse-surface": "#2d3133",
+                    "primary-fixed": "#d2e4ff",
+                    "on-secondary-container": "#00714f",
+                    "tertiary-container": "#312200",
+                    "on-primary-fixed": "#001c37",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-tertiary-container": "#b28400",
+                    "tertiary-fixed-dim": "#fbbc0e",
+                    "on-background": "#191c1e",
+                    "on-primary-container": "#768dad",
+                    "surface-container": "#eceef0",
+                    "secondary": "#006c4b",
+                    "on-surface": "#191c1e",
+                    "on-surface-variant": "#43474d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "10px",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "sidebar_width": "260px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "xs": "8px",
+                    "sm": "12px",
+                    "container_max_width": "1440px",
+                    "gutter": "24px",
+                    "xl": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .login-gradient {
+            background: linear-gradient(135deg, #0a2540 0%, #000f22 100%);
+        }
+        .input-focus-glow:focus {
+            outline: none;
+            border-color: #006c4b;
+            box-shadow: 0 0 0 2px rgba(0, 108, 75, 0.2);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen">
+<main class="flex min-h-screen w-full">
+<!-- Left Panel: Brand Experience -->
+<section class="hidden lg:flex flex-col w-1/2 login-gradient p-xl relative overflow-hidden justify-between">
+<!-- Decorative Elements -->
+<div class="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
+<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full border border-secondary-fixed/30"></div>
+<div class="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full border border-secondary-fixed/10"></div>
+</div>
+<!-- Logo & Header -->
+<div class="z-10 flex items-center gap-3">
+<div class="w-12 h-12 bg-on-primary rounded-lg flex items-center justify-center overflow-hidden">
+<img alt="VisitFlow Logo" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjpmPkcVWbk_Y4cv2F0G-aZLicUIwS_tG_8_g7VEZdMKcR2nKS518dTyFJsBhrF1D5aZ7wLaklGdFyKjjEfnLm7ii5X8E79uGCbV4lMJVycjSHPmGxT24gkb5ixSwD0h2URwsT6Nuo_w4gxeig7o9NTLoIoNI6Q2Az-FVxxHkq-Gs7scfrqvuWdfiFk5Klxvd8LdSABEY2b-oSUA_4Xtz_ok4dVHU8DLr0DPtnkEEDCDzF0SO-P4_lRhjvv0Gj03zeKCLoOdsdjPs"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-on-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-primary-container tracking-wider uppercase">Enterprise Suite</p>
+</div>
+</div>
+<!-- Hero Illustration/Graphic -->
+<div class="z-10 flex flex-col items-center">
+<div class="glass-panel p-xl rounded-[24px] mb-xl max-w-lg w-full">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden mb-lg">
+<img class="w-full h-full object-cover" data-alt="A futuristic, high-tech security terminal display in a modern corporate lobby. The lighting is low and moody with glowing emerald and deep navy holographic interface elements. The visual style is premium and enterprise-grade, emphasizing secure data protection and sophisticated encryption patterns with a clean, institutional light-mode aesthetic in the interface overlays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl3p1crq7nAXrSCif_r-_jyd1VG1fC691hMteYAp-ZeOvUx9ZuHDeAZbjAi1b1PC3whHlhel6QX3F7lLbf7eLHDHZWPYKbSJdMWODzfiCZ0JXBkveyItBV-zvMg3jIdrUOQV-gveZt6xUPOqZgqfiOQqlqPeY1ibC7cdUSF7pYLxe-1CU8wFVLsHcW-1lZx6bcpYvy7MX9hzDKhLN55YE9WLCtTj9-pj2PK_fxYmWKOYWJ-3JNbsB9CKLVNy_6MUZg163rh6QO8po"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 to-transparent"></div>
+<div class="absolute bottom-md left-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="verified_user">verified_user</span>
+<span class="font-label-md text-label-md text-on-primary">SSL 256-bit Encrypted</span>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex items-center gap-md text-on-primary-container">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="font-body-md text-body-md">Biometric Identity Verification</p>
+</div>
+<div class="flex items-center gap-md text-on-primary-container">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="font-body-md text-body-md">Real-time Visitor Tracking</p>
+</div>
+<div class="flex items-center gap-md text-on-primary-container">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="font-body-md text-body-md">Automated Compliance Logs</p>
+</div>
+</div>
+</div>
+<h2 class="font-display-lg text-display-lg text-on-primary text-center max-w-md">Smart Appointments. <br/><span class="text-secondary-fixed">Secure Access.</span></h2>
+</div>
+<!-- Footer -->
+<div class="z-10 flex justify-between items-center text-on-primary-container font-caption text-caption">
+<p>© 2024 VisitFlow. All Rights Reserved.</p>
+<div class="flex gap-lg">
+<a class="hover:text-on-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-on-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-on-primary transition-colors" href="#">Security</a>
+</div>
+</div>
+</section>
+<!-- Right Panel: Login Form -->
+<section class="w-full lg:w-1/2 flex items-center justify-center p-md lg:p-xl bg-surface">
+<div class="max-w-md w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+<!-- Mobile Logo -->
+<div class="lg:hidden flex items-center gap-3 mb-xl">
+<div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center">
+<img alt="VisitFlow Logo" class="w-6 h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7rCxkZkp_yve7bdWu0wawStlN0cjVYLD3kQn582VrGy0O041Pj07W1TsWAGu5XspaDDUDhmz22qC8wc7xTmO5wCYw2vnX9LJHV0kPe5c0ag5lRDEwOsxjaKpwEcqzVwPTcmKj8hvDjA22P6PuzU2WZLWZKZ-mGhr8hK0q3E_MMtFf6Q8BB6kXqmtaTz151WROLPR4a92xtXne4A_sxNE3Ce3XS08tOYFUnFoUuAf8wmu3hm24lYRhrcVvy57wrqGb4sVRFZgA3yo"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary">VisitFlow</h1>
+</div>
+<div class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-xs">Welcome back</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Please enter your credentials to access the console.</p>
+</div>
+<!-- Form -->
+<form class="space-y-lg">
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-primary block" for="email">Work Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline" data-icon="mail">mail</span>
+<input class="w-full pl-xl pr-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md input-focus-glow transition-all" id="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+</div>
+<div class="space-y-base">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-primary" for="password">Password</label>
+<a class="font-label-md text-label-md text-secondary font-semibold hover:underline" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline" data-icon="lock">lock</span>
+<input class="w-full pl-xl pr-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md input-focus-glow transition-all" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-md top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<input class="w-5 h-5 rounded border-outline-variant text-secondary focus:ring-secondary cursor-pointer" id="remember" type="checkbox"/>
+<label class="font-body-md text-body-md text-on-surface-variant cursor-pointer select-none" for="remember">Remember this device for 30 days</label>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary font-title-md text-title-md py-sm rounded-lg transition-all duration-200 active:scale-[0.98] shadow-sm" type="submit">
+                        Sign In
+                    </button>
+</form>
+<!-- Divider -->
+<div class="relative my-xl">
+<div class="absolute inset-0 flex items-center">
+<span class="w-full border-t border-outline-variant"></span>
+</div>
+<div class="relative flex justify-center">
+<span class="bg-surface px-md font-label-md text-label-md text-outline uppercase tracking-widest">or continue with</span>
+</div>
+</div>
+<!-- SSO Options -->
+<div class="grid grid-cols-2 gap-md">
+<button class="flex items-center justify-center gap-md py-sm border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors font-title-md text-title-md text-on-surface">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2QhP6xwrLWt9YAJ6yTLJJaDJ9lA7ZlqpBFOpOKDlyHJAAFs-0xbKv3r88KfLdIG49p5DOFkiA6LggmoXKwMa5OofsR1nbATlAnFTuo_Zy3M1jjWy4TwWq4YIDjt8ZowafbjOn_ncW1_EsL3tDYSNqrRNat3mbLBT2ruJXNbT5axJhMvYPTGCLcOCQqNH6ZeYSz2U_2OtprgpvANZo98h2-gsC0edk9Vhc-lEx3kRxB_YKvshrrF7Zp3mI2KyTHx0lvuSjKVbMPNs"/>
+<span>Google</span>
+</button>
+<button class="flex items-center justify-center gap-md py-sm border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors font-title-md text-title-md text-on-surface">
+<span class="material-symbols-outlined text-primary" data-icon="corporate_fare">corporate_fare</span>
+<span>SSO</span>
+</button>
+</div>
+<!-- Help Link -->
+<p class="mt-xl text-center font-body-md text-body-md text-on-surface-variant">
+                    Facing issues signing in? <a class="text-secondary font-semibold hover:underline" href="#">Contact System Admin</a>
+</p>
+</div>
+</section>
+</main>
+<script>
+        // Simple Micro-interaction for form focus
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('.material-symbols-outlined').style.color = '#006c4b';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('.material-symbols-outlined').style.color = '#74777e';
+            });
+        });
+
+        // Toggle Password Visibility
+        const togglePass = document.querySelector('button[type="button"]');
+        const passInput = document.getElementById('password');
+        if(togglePass && passInput) {
+            togglePass.addEventListener('click', () => {
+                const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passInput.setAttribute('type', type);
+                togglePass.querySelector('span').innerText = type === 'password' ? 'visibility' : 'visibility_off';
+            });
+        }
+    </script>
+</body></html>

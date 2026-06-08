@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow Kiosk | Check-In</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-background": "#191c1e",
+                        "primary": "#000f22",
+                        "secondary-container": "#60f9bd",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#768dad",
+                        "outline": "#74777e",
+                        "surface-dim": "#d8dadc",
+                        "background": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary-fixed": "#001c37",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-surface": "#2d3133",
+                        "secondary-fixed": "#63fcc0",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "tertiary": "#160d00",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-surface-variant": "#43474d",
+                        "surface": "#f7f9fb",
+                        "tertiary-container": "#312200",
+                        "on-secondary-container": "#00714f",
+                        "primary-container": "#0a2540",
+                        "on-surface": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#261a00",
+                        "secondary": "#006c4b",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-tint": "#49607e",
+                        "inverse-primary": "#b0c8eb",
+                        "on-secondary-fixed": "#002114",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c4c6ce",
+                        "tertiary-fixed": "#ffdea0",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "primary-fixed": "#d2e4ff",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#005138",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#b28400",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "on-primary-fixed-variant": "#314865"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "10px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "xs": "8px",
+                        "md": "16px",
+                        "container_max_width": "1440px",
+                        "sm": "12px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "sidebar_width": "260px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "caption": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            transform: translateY(-24px) scale(0.9);
+            color: #006c4b;
+        }
+        .transition-smooth {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom scrollbar for host results */
+        #host-results::-webkit-scrollbar { width: 6px; }
+        #host-results::-webkit-scrollbar-track { background: transparent; }
+        #host-results::-webkit-scrollbar-thumb { background: #e0e3e5; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation Bar (Kiosk Mode) -->
+<header class="flex justify-between items-center h-20 px-lg bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-2xl" data-icon="qr_code_2">qr_code_2</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Kiosk Terminal 04</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="text-right hidden sm:block">
+<p class="font-title-md text-title-md text-primary" id="current-time">12:00 PM</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Monday, Oct 28</p>
+</div>
+<button aria-label="Language Selector" class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+</button>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center p-gutter">
+<!-- Identification Form Card -->
+<div class="w-full max-w-2xl bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl md:p-16 transition-smooth">
+<!-- Form Header -->
+<div class="mb-xl">
+<button class="flex items-center gap-2 text-primary font-semibold mb-md hover:translate-x-[-4px] transition-smooth" onclick="window.history.back()">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span class="font-title-md text-title-md">Back</span>
+</button>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-xs">Visitor Identification</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Please provide your details to begin the secure check-in process.</p>
+</div>
+<!-- Form Content -->
+<form class="space-y-8" id="kiosk-form" onsubmit="event.preventDefault();">
+<!-- Full Name -->
+<div class="relative group">
+<label class="block font-label-md text-label-md text-primary mb-2">Full Name</label>
+<input class="w-full h-16 px-md bg-surface-container-lowest border border-outline-variant rounded-lg text-title-lg focus:outline-none focus:ring-2 focus:ring-secondary-container focus:border-secondary transition-smooth" placeholder="e.g. Alexander Hamilton" required="" type="text"/>
+<span class="absolute right-4 top-11 text-outline-variant">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</span>
+</div>
+<!-- Company -->
+<div class="relative group">
+<label class="block font-label-md text-label-md text-primary mb-2">Company Name</label>
+<input class="w-full h-16 px-md bg-surface-container-lowest border border-outline-variant rounded-lg text-title-lg focus:outline-none focus:ring-2 focus:ring-secondary-container focus:border-secondary transition-smooth" placeholder="e.g. Global Tech Solutions" type="text"/>
+<span class="absolute right-4 top-11 text-outline-variant">
+<span class="material-symbols-outlined" data-icon="business">business</span>
+</span>
+</div>
+<!-- Host Selection (Search) -->
+<div class="relative group">
+<label class="block font-label-md text-label-md text-primary mb-2">Who are you visiting? (Search for Host)</label>
+<div class="relative">
+<input class="w-full h-16 px-md bg-surface-container-lowest border border-outline-variant rounded-lg text-title-lg focus:outline-none focus:ring-2 focus:ring-secondary-container focus:border-secondary transition-smooth" id="host-search" placeholder="Type name of your host..." type="text"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</span>
+</div>
+<!-- Auto-suggest Results (Bento style items) -->
+<div class="hidden absolute top-full left-0 right-0 mt-2 bg-surface-container-lowest border border-outline-variant rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto" id="host-results">
+<div class="p-2 space-y-1">
+<!-- Host Item 1 -->
+<button class="w-full flex items-center gap-md p-3 hover:bg-secondary-container/10 rounded-lg transition-colors group/item text-left" type="button">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary">JD</div>
+<div>
+<p class="font-title-md text-title-md text-primary group-hover/item:text-secondary">Jane Doe</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Director of Engineering • Level 4</p>
+</div>
+</button>
+<!-- Host Item 2 -->
+<button class="w-full flex items-center gap-md p-3 hover:bg-secondary-container/10 rounded-lg transition-colors group/item text-left" type="button">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary">MS</div>
+<div>
+<p class="font-title-md text-title-md text-primary group-hover/item:text-secondary">Marcus Sterling</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Product Manager • Level 2</p>
+</div>
+</button>
+</div>
+</div>
+</div>
+<!-- Navigation Action -->
+<div class="pt-4">
+<button class="w-full h-20 bg-secondary hover:bg-on-secondary-container text-on-secondary font-headline-md text-headline-md rounded-lg flex items-center justify-center gap-3 shadow-lg active:scale-[0.98] transition-smooth" onclick="handleNext()" type="submit">
+<span>Continue to Next Step</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low p-md border-t border-outline-variant">
+<div class="max-w-container_max_width mx-auto flex flex-col md:flex-row justify-between items-center gap-md opacity-70">
+<p class="font-caption text-caption text-on-surface-variant">© 2024 VisitFlow. Smart Appointments. Secure Access.</p>
+<div class="flex gap-lg">
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary" href="#">Terms of Service</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-primary" href="#">Contact Security</a>
+</div>
+</div>
+</footer>
+<!-- Success Feedback Overlay (Hidden) -->
+<div class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500" id="success-overlay">
+<div class="bg-surface-container-lowest p-xl rounded-xl shadow-2xl flex flex-col items-center text-center max-w-sm">
+<div class="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mb-md animate-bounce">
+<span class="material-symbols-outlined text-on-secondary text-5xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-xs">Information Saved</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Please wait while we notify your host...</p>
+</div>
+</div>
+<script>
+        // Real-time clock update
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dateStr = now.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
+            document.getElementById('current-time').textContent = timeStr;
+            // Update date text if needed
+            const dateElement = document.querySelector('#current-time + p');
+            if (dateElement) dateElement.textContent = dateStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Host search simulation
+        const searchInput = document.getElementById('host-search');
+        const resultsBox = document.getElementById('host-results');
+
+        searchInput.addEventListener('input', (e) => {
+            if (e.target.value.length > 1) {
+                resultsBox.classList.remove('hidden');
+            } else {
+                resultsBox.classList.add('hidden');
+            }
+        });
+
+        // Close search results when clicking away
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+                resultsBox.classList.add('hidden');
+            }
+        });
+
+        // Form submission simulation
+        function handleNext() {
+            const overlay = document.getElementById('success-overlay');
+            overlay.classList.remove('pointer-events-none', 'opacity-0');
+            overlay.classList.add('opacity-100');
+            
+            // In a real app, redirect after API call
+            setTimeout(() => {
+                overlay.classList.add('opacity-0');
+                overlay.classList.add('pointer-events-none');
+            }, 2000);
+        }
+
+        // Host result selection
+        document.querySelectorAll('#host-results button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.querySelector('p').textContent;
+                searchInput.value = name;
+                resultsBox.classList.add('hidden');
+            });
+        });
+    </script>
+</body></html>

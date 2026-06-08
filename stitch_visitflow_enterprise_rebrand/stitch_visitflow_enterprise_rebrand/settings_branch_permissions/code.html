@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Branch Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#006c4b",
+                    "outline-variant": "#c4c6ce",
+                    "on-background": "#191c1e",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface-variant": "#e0e3e5",
+                    "surface-tint": "#49607e",
+                    "on-primary-fixed-variant": "#314865",
+                    "on-primary-container": "#768dad",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#0a2540",
+                    "primary": "#000f22",
+                    "on-primary-fixed": "#001c37",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "on-secondary-container": "#00714f",
+                    "outline": "#74777e",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed": "#63fcc0",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdea0",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-secondary-fixed-variant": "#005138",
+                    "primary-fixed-dim": "#b0c8eb",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-surface-variant": "#43474d",
+                    "surface-container": "#eceef0",
+                    "background": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "secondary-container": "#60f9bd",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed": "#002114",
+                    "on-surface": "#191c1e",
+                    "surface-dim": "#d8dadc",
+                    "tertiary-container": "#312200",
+                    "primary-fixed": "#d2e4ff",
+                    "secondary-fixed-dim": "#3fdfa5",
+                    "inverse-primary": "#b0c8eb",
+                    "tertiary": "#160d00",
+                    "tertiary-fixed-dim": "#fbbc0e",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#b28400",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container-high": "#e6e8ea"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "8px",
+                    "base": "4px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "container_max_width": "1440px",
+                    "sidebar_width": "260px",
+                    "sm": "12px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Custom Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #e0e3e5;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #006c4b; }
+        input:checked + .slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-primary-container flex flex-col py-xl z-50">
+<div class="px-md mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">VisitFlow</h1>
+<p class="font-label-md text-label-md text-on-primary/60">Enterprise Suite</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Visitors</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-body-md text-body-md">Watchlist</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="login">login</span>
+<span class="font-body-md text-body-md">Check-in</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span class="font-body-md text-body-md">Locations</span>
+</a>
+<a class="flex items-center gap-md bg-white/10 text-on-primary border-l-4 border-secondary-fixed px-md py-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-md mt-auto pt-lg space-y-1">
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-on-primary/70 px-md py-sm hover:bg-white/5 hover:text-on-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md text-body-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant z-40 flex justify-between items-center px-lg">
+<div class="flex items-center gap-lg">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary w-64 transition-all" placeholder="Search settings..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-lg">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Security</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors font-label-md text-label-md" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary text-white px-md py-2 rounded-lg font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all">
+                Emergency Lockdown
+            </button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfA3VFrfKcwp4QsjcvXgMImcCcZNMdvjemNOB_wUDUUlNQDW1cY9K2Fj7DcDeFCBM6qQRwdwFnnoFQJsK69gLId9oECLysf-mChK28EbrgEdcrmzE4jUfgAaJX4IU6BYdBVIscOHlqXVp44rHJd4fWan0iASK6zyxr5n0-lSCbJvBhKkiiIgY7pB47U5aFLvZenKciHNU9Gj8HPVlTzpjdF_Ik6YYoJ1DIvS23E3y8VJwqaAYziLu_jgQjtP7RuZejmdgkGwD8zKE"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 min-h-screen">
+<div class="max-w-[1440px] mx-auto p-lg">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">System Configuration</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg">Manage multi-branch permissions and global security protocols.</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-xs border border-outline-variant px-md py-2 rounded-lg text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="file_download">file_download</span>
+                        Export Audit Log
+                    </button>
+<button class="flex items-center gap-xs bg-secondary text-white px-md py-2 rounded-lg font-label-md text-label-md shadow-sm hover:opacity-95 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                        New Branch
+                    </button>
+</div>
+</div>
+<!-- Settings Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Column: Navigation Sidebar for Module -->
+<div class="col-span-3">
+<div class="bg-white rounded-xl border border-outline-variant p-md sticky top-[88px]">
+<nav class="space-y-1">
+<button class="w-full flex items-center gap-md px-md py-sm rounded-lg bg-surface-container-highest text-secondary font-title-md text-title-md text-left">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+                                Branch Management
+                            </button>
+<button class="w-full flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant font-body-md text-body-md text-left hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+                                Badge Customization
+                            </button>
+<button class="w-full flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant font-body-md text-body-md text-left hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="supervised_user_circle">supervised_user_circle</span>
+                                User Roles
+                            </button>
+<button class="w-full flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant font-body-md text-body-md text-left hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+                                Alert Triggers
+                            </button>
+<button class="w-full flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant font-body-md text-body-md text-left hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="integration_instructions">integration_instructions</span>
+                                API &amp; Webhooks
+                            </button>
+</nav>
+<div class="mt-xl pt-lg border-t border-outline-variant">
+<div class="bg-primary-container/5 rounded-lg p-md">
+<p class="font-label-md text-label-md text-primary font-bold mb-xs">System Health</p>
+<div class="flex items-center gap-xs text-secondary mb-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md">All Nodes Operational</span>
+</div>
+<div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+<div class="bg-secondary w-[98%] h-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Settings Content -->
+<div class="col-span-9 space-y-gutter">
+<!-- Branch List Section -->
+<section class="bg-white rounded-xl border border-outline-variant overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low/30">
+<h3 class="font-title-lg text-title-lg text-primary">Active Branches</h3>
+<div class="flex items-center gap-sm">
+<span class="font-label-md text-label-md text-on-surface-variant">Filter by Region:</span>
+<select class="bg-transparent font-label-md text-label-md text-primary focus:outline-none cursor-pointer">
+<option>All Global</option>
+<option>North America</option>
+<option>EMEA</option>
+</select>
+</div>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Branch Item: HQ Tower A -->
+<div class="p-lg hover:bg-surface transition-colors">
+<div class="flex justify-between items-start mb-lg">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined text-[32px]" data-icon="corporate_fare">corporate_fare</span>
+</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary">HQ Tower A</h4>
+<p class="font-label-md text-label-md text-on-surface-variant">Financial District, New York • 1,240 Avg Weekly Visitors</p>
+</div>
+</div>
+<span class="bg-secondary/10 text-secondary px-sm py-1 rounded-full font-label-md text-label-md font-bold">PRIMARY HUB</span>
+</div>
+<div class="grid grid-cols-3 gap-lg">
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg">
+<span class="font-body-md text-body-md text-on-surface-variant">Auto-Print Badges</span>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg">
+<span class="font-body-md text-body-md text-on-surface-variant">Require NDA</span>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg">
+<span class="font-body-md text-body-md text-on-surface-variant">Host Approval</span>
+<label class="switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+</div>
+</div>
+<!-- Branch Item: East R&D -->
+<div class="p-lg hover:bg-surface transition-colors">
+<div class="flex justify-between items-start mb-lg">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]" data-icon="science">science</span>
+</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary">East R&amp;D</h4>
+<p class="font-label-md text-label-md text-on-surface-variant">Cambridge Science Park, Boston • Restricted Access</p>
+</div>
+</div>
+<span class="bg-outline-variant/20 text-on-surface-variant px-sm py-1 rounded-full font-label-md text-label-md font-bold">HIGH SECURITY</span>
+</div>
+<div class="grid grid-cols-3 gap-lg">
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg">
+<span class="font-body-md text-body-md text-on-surface-variant">Auto-Print Badges</span>
+<label class="switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg">
+<span class="font-body-md text-body-md text-on-surface-variant">Require NDA</span>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between p-md border border-outline-variant rounded-lg">
+<span class="font-body-md text-body-md text-on-surface-variant">Host Approval</span>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- User Roles Bento Grid -->
+<section class="grid grid-cols-2 gap-gutter">
+<!-- Role Management Card -->
+<div class="bg-white rounded-xl border border-outline-variant p-lg shadow-sm">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="admin_panel_settings">admin_panel_settings</span>
+<h3 class="font-title-lg text-title-lg text-primary">Access Control</h3>
+</div>
+<div class="space-y-md">
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-outline-variant">
+<img alt="Sarah J." class="w-full h-full object-cover" data-alt="A professional headshot of a female security executive with a confident expression, set against a blurred modern office background. The lighting is soft and corporate, matching a high-end enterprise UI aesthetic with cool blue and grey tones and sharp focus on the subject." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwsqIEMPae0IIL6SUxpP1Ba0SEDYaamse4g3lNvhsxEuBylFzU-0I0gADgEVLRqbN5k1tla9ln_p5ZU1BUfS6O_N4NCeWSCcc6VeF3hTfxE3U8UG6ou96wXiY-oQcBSWMLKy0gQxtuUEZM1Ft05IQRZVT1EgMKFwH4fTRDfGoYrUxHAE3ilUoTAjd7WAnXGEuTUN1gkyhGxpVbEBqePdePzyWoG9g-_dmcwDXvM1GOBSEGfrTmRpD8dIDbn68JspLCmJVq4nPpViU"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary font-bold">Sarah Jenkins</p>
+<p class="font-caption text-caption text-on-surface-variant">Global Admin • All Branches</p>
+</div>
+</div>
+<button class="text-secondary font-label-md text-label-md hover:underline">Edit</button>
+</div>
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-outline-variant">
+<img alt="Marcus T." class="w-full h-full object-cover" data-alt="A professional headshot of a male security director in a tailored business suit, looking directly at the camera with a calm and reliable demeanor. The setting is a bright, minimalist architectural space with clean lines and a palette of whites and soft teals, echoing institutional trust and operational velocity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7WCObDqc7V0vYVzjDKWtuouvnnYc_jQIffuHEWozDdTbCiNP_HhT3k70Kq-OWyAciS7BuQll4sSXvt9rFQjOBNSwasAhIvpVc6OwT2DnFze-h2I5hAnI2Vb1Y2Lwe3p8Uf-m81rMFcl4mfkPdfXGidqEiZiwLJilMSLbNmKrxlAGiy4lU1xsiZmEnNc_pQz0vm98X265DNfhbXY4bIzNeCXKQ3iHsFo_7G0jPSApFL8XuwvxwNFHYAmPDK_zWca3FeeOG1uxXick"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary font-bold">Marcus Thorne</p>
+<p class="font-caption text-caption text-on-surface-variant">Security Lead • HQ Tower A</p>
+</div>
+</div>
+<button class="text-secondary font-label-md text-label-md hover:underline">Edit</button>
+</div>
+<button class="w-full py-md border-2 border-dashed border-outline-variant rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+                                    + Assign New Role
+                                </button>
+</div>
+</div>
+<!-- Permission Preset Card -->
+<div class="bg-primary-container rounded-xl p-lg text-on-primary relative overflow-hidden">
+<!-- Background Abstract Pattern -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<svg height="100%" preserveaspectratio="none" viewbox="0 0 100 100" width="100%">
+<defs>
+<pattern height="10" id="grid" patternunits="userSpaceOnUse" width="10">
+<path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="relative z-10">
+<h3 class="font-title-lg text-title-lg mb-md">Role Presets</h3>
+<p class="font-body-md text-body-md text-on-primary/70 mb-lg">Quickly apply standard permission sets for common staff archetypes.</p>
+<div class="space-y-sm">
+<div class="flex items-center gap-md p-sm bg-white/10 rounded-lg hover:bg-white/20 transition-colors cursor-pointer group">
+<div class="w-8 h-8 rounded bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="shield">shield</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md font-bold">Security Guard</p>
+<p class="font-caption text-caption text-on-primary/60">Check-in, Logs, Emergency</p>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center gap-md p-sm bg-white/10 rounded-lg hover:bg-white/20 transition-colors cursor-pointer group">
+<div class="w-8 h-8 rounded bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="support_agent">support_agent</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md font-bold">Receptionist</p>
+<p class="font-caption text-caption text-on-primary/60">Visitors, Badging, Notifications</p>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center gap-md p-sm bg-white/10 rounded-lg hover:bg-white/20 transition-colors cursor-pointer group">
+<div class="w-8 h-8 rounded bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="monitoring">monitoring</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md font-bold">Data Analyst</p>
+<p class="font-caption text-caption text-on-primary/60">Analytics, Reports, Export Only</p>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('.switch input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const label = this.closest('div').querySelector('span').innerText;
+                const status = this.checked ? 'Enabled' : 'Disabled';
+                console.log(`${label} is now ${status}`);
+                // Simple toast-like effect could be added here
+            });
+        });
+
+        // Simulating tab transitions
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('nav button').forEach(b => {
+                    b.classList.remove('bg-surface-container-highest', 'text-secondary');
+                    b.classList.add('text-on-surface-variant');
+                });
+                this.classList.add('bg-surface-container-highest', 'text-secondary');
+                this.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

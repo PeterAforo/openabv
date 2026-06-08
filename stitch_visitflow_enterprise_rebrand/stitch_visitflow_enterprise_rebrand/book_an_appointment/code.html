@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow | Book Your Appointment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c4c6ce",
+                    "surface-bright": "#f7f9fb",
+                    "primary": "#000f22",
+                    "outline": "#74777e",
+                    "on-tertiary": "#ffffff",
+                    "background": "#f7f9fb",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-dim": "#d8dadc",
+                    "on-primary-fixed-variant": "#314865",
+                    "on-secondary-fixed": "#002114",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-fixed-dim": "#b0c8eb",
+                    "tertiary": "#160d00",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "secondary-fixed": "#63fcc0",
+                    "secondary-fixed-dim": "#3fdfa5",
+                    "surface": "#f7f9fb",
+                    "surface-tint": "#49607e",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#60f9bd",
+                    "primary-container": "#0a2540",
+                    "inverse-primary": "#b0c8eb",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "tertiary-fixed": "#ffdea0",
+                    "on-secondary-fixed-variant": "#005138",
+                    "on-tertiary-fixed": "#261a00",
+                    "inverse-surface": "#2d3133",
+                    "primary-fixed": "#d2e4ff",
+                    "on-secondary-container": "#00714f",
+                    "tertiary-container": "#312200",
+                    "on-primary-fixed": "#001c37",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "on-tertiary-container": "#b28400",
+                    "tertiary-fixed-dim": "#fbbc0e",
+                    "on-background": "#191c1e",
+                    "on-primary-container": "#768dad",
+                    "surface-container": "#eceef0",
+                    "secondary": "#006c4b",
+                    "on-surface": "#191c1e",
+                    "on-surface-variant": "#43474d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "10px",
+                    "xl": "12px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "sidebar_width": "260px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "xs": "8px",
+                    "sm": "12px",
+                    "container_max_width": "1440px",
+                    "gutter": "24px",
+                    "xl": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-input-focus:focus {
+            outline: none;
+            border-color: #006c4b;
+            box-shadow: 0 0 0 2px rgba(0, 108, 75, 0.1);
+        }
+        .step-transition {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .hidden-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .active-step {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col">
+<header class="bg-surface-container-lowest h-16 flex items-center px-lg shadow-sm border-b border-outline-variant sticky top-0 z-50">
+<div class="max-w-container_max_width mx-auto w-full flex justify-between items-center">
+<div class="flex items-center gap-xs">
+<img alt="VisitFlow Logo" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdb8iN_kzHvXNDuGFj8y17NK4oJP5VvAqK5pvcXqdDplXIs7J1yfd0lhGy-Y0Uc1QybrP7IXYzCmxtCX7VsGVBEz5UCqFYcZ83UcJlEN6og6-rxYaKZqvhj9dCW_rLcn1_OUv7mI4Is0vxcE469RXWg1PrTnp1tJQ3GQPenSs0W9AW3lHlD3oE5FcgS-EqiWQEGP7Q0Wa7oFm3CFRVFw00jbRGet3AwGsbLYXanEfznunFJmagv52k9gNkxL3_yOlCyT6K4LNjKAQ"/>
+<span class="font-headline-md text-headline-md font-extrabold text-primary">VisitFlow</span>
+</div>
+<div class="hidden md:flex gap-md items-center text-on-surface-variant font-label-md">
+<span>Enterprise Security Ready</span>
+<span class="w-1 h-1 bg-outline rounded-full"></span>
+<span>ISO 27001 Certified</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center p-md md:p-xl">
+<div class="w-full max-w-2xl bg-surface-container-lowest rounded-xl border border-outline-variant shadow-lg overflow-hidden flex flex-col md:flex-row">
+<div class="hidden md:block w-48 bg-primary-container p-xl text-on-primary border-r border-outline-variant">
+<div class="sticky top-xl space-y-xl">
+<div class="space-y-sm">
+<p class="font-label-md text-on-primary-container uppercase tracking-wider">Appointment</p>
+<h2 class="font-title-lg text-title-lg">Visitor Gate</h2>
+</div>
+<div class="relative w-full h-40 rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-60" data-alt="A premium corporate lobby featuring clean architectural lines, minimalist glass partitions, and a sleek reception desk. The lighting is soft and natural, emphasizing a high-trust, secure professional environment. The atmosphere is quiet, modern, and high-end, perfectly aligned with enterprise visitor management standards." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsvyP-54CROFQ4NrWx0Xu7B1b2RGKKYkVOfFkkrEjvPvyb-qz6WHyvno5mjl8PD-UH8Mr0l59VnZp7r4e1VQJf-Q5Orto-Lg0XPqEnfNALMiapF5sc0kX5Jn5NZrGd8-mGLFrq5gNKbkmmz0EeocSeg2diMuHXYsPZjAALxYuaeX69VyzLNmDSHshNrQq8QQ52uuI-iMz4LEXr2ogZvsLJ9BebHMWUEf7cTCoOVlsA44p_dNmNrkID_v8m5ocq9ENV-12HpTg75ss"/>
+</div>
+</div>
+</div>
+<div class="flex-grow p-xl">
+<div class="mb-xl">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex gap-xs" id="step-indicators">
+<div class="indicator-dot w-8 h-2 rounded-full bg-secondary transition-all" data-step="1"></div>
+<div class="indicator-dot w-2 h-2 rounded-full bg-outline-variant transition-all" data-step="2"></div>
+<div class="indicator-dot w-2 h-2 rounded-full bg-outline-variant transition-all" data-step="3"></div>
+</div>
+<span class="font-label-md text-label-md text-secondary uppercase font-bold" id="step-text">Step 1 of 3</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary" id="step-title">Visit Details</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1" id="step-subtitle">Please provide the necessary details for your upcoming visit.</p>
+</div>
+<form class="space-y-xl" id="booking-form">
+<div class="step-transition active-step space-y-md" id="step-1">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary block">Visit Date</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-md">calendar_today</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md form-input-focus text-on-surface" required="" type="date"/>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary block">Arrival Time</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-md">schedule</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md form-input-focus text-on-surface" required="" type="time"/>
+</div>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary block">Department</label>
+<select class="w-full px-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md form-input-focus text-on-surface appearance-none" required="">
+<option disabled="" selected="" value="">Select destination department</option>
+<option value="eng">Engineering &amp; Development</option>
+<option value="hr">Human Resources</option>
+<option value="ops">Operations &amp; Security</option>
+<option value="sales">Sales &amp; Marketing</option>
+<option value="exec">Executive Suites</option>
+</select>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-primary block">Purpose of Visit</label>
+<textarea class="w-full px-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md form-input-focus text-on-surface resize-none" placeholder="Briefly describe the nature of your meeting" required="" rows="3"></textarea>
+</div>
+</div>
+<div class="step-transition hidden-step space-y-md" id="step-2">
+<p class="font-label-md text-label-md text-on-surface-variant mb-md">Choose your host from our directory</p>
+<div class="space-y-sm">
+<label class="relative flex items-center p-md border border-outline-variant rounded-lg cursor-pointer hover:bg-surface transition-colors">
+<input checked="" class="w-4 h-4 text-secondary border-outline focus:ring-secondary" name="host" type="radio"/>
+<div class="ml-md flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold">JD</div>
+<div>
+<p class="font-title-md text-primary">Jane Doe</p>
+<p class="text-caption text-on-surface-variant">Head of Operations</p>
+</div>
+</div>
+</label>
+<label class="relative flex items-center p-md border border-outline-variant rounded-lg cursor-pointer hover:bg-surface transition-colors">
+<input class="w-4 h-4 text-secondary border-outline focus:ring-secondary" name="host" type="radio"/>
+<div class="ml-md flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">MS</div>
+<div>
+<p class="font-title-md text-primary">Michael Smith</p>
+<p class="text-caption text-on-surface-variant">Senior Security Lead</p>
+</div>
+</div>
+</label>
+<label class="relative flex items-center p-md border border-outline-variant rounded-lg cursor-pointer hover:bg-surface transition-colors">
+<input class="w-4 h-4 text-secondary border-outline focus:ring-secondary" name="host" type="radio"/>
+<div class="ml-md flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-dim flex items-center justify-center text-on-surface-variant font-bold">AK</div>
+<div>
+<p class="font-title-md text-primary">Aditi Kapoor</p>
+<p class="text-caption text-on-surface-variant">HR Manager</p>
+</div>
+</div>
+</label>
+</div>
+</div>
+<div class="step-transition hidden-step space-y-xl text-center" id="step-3">
+<div class="flex flex-col items-center justify-center py-xl">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-secondary text-display-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Request Prepared</h3>
+<p class="font-body-md text-on-surface-variant max-w-sm mt-md">Please confirm all details are correct. Upon confirmation, a temporary QR code will be generated for your check-in.</p>
+</div>
+<div class="bg-surface-container rounded-lg p-md text-left space-y-xs">
+<div class="flex justify-between border-b border-outline-variant pb-xs">
+<span class="text-caption text-on-surface-variant">LOCATION</span>
+<span class="text-caption font-bold text-primary">HQ - West Wing</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-xs">
+<span class="text-caption text-on-surface-variant">VISITOR</span>
+<span class="text-caption font-bold text-primary">Guest User</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-xl border-t border-outline-variant">
+<button class="hidden px-6 py-2 rounded-lg font-title-md text-primary hover:bg-surface-variant transition-colors flex items-center gap-xs" id="prev-btn" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+                            Back
+                        </button>
+<div class="flex-grow"></div>
+<button class="px-8 py-3 bg-secondary text-on-secondary rounded-lg font-title-md hover:bg-opacity-90 transition-all flex items-center gap-xs shadow-md shadow-secondary/20" id="next-btn" type="button">
+                            Continue
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<footer class="bg-surface-container-low border-t border-outline-variant py-xl mt-auto">
+<div class="max-w-container_max_width mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-title-md text-title-md font-bold text-primary">VisitFlow</span>
+<p class="font-caption text-caption text-on-surface-variant mt-1">© 2024 VisitFlow. Smart Appointments. Secure Access.</p>
+</div>
+<div class="flex gap-md">
+<a class="font-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Security Compliance</a>
+<a class="font-caption text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+<script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        const steps = {
+            1: { title: "Visit Details", subtitle: "Please provide the necessary details for your upcoming visit." },
+            2: { title: "Select Host", subtitle: "Who are you here to see today?" },
+            3: { title: "Confirmation", subtitle: "Finalize your appointment request." }
+        };
+
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const stepIndicators = document.querySelectorAll('.indicator-dot');
+        const stepText = document.getElementById('step-text');
+        const stepTitle = document.getElementById('step-title');
+        const stepSubtitle = document.getElementById('step-subtitle');
+
+        function updateUI() {
+            // Content
+            stepTitle.innerText = steps[currentStep].title;
+            stepSubtitle.innerText = steps[currentStep].subtitle;
+            stepText.innerText = `Step ${currentStep} of 3`;
+
+            // Steps visibility
+            document.querySelectorAll('.step-transition').forEach((el, idx) => {
+                if (idx + 1 === currentStep) {
+                    el.classList.remove('hidden-step');
+                    el.classList.add('active-step');
+                } else {
+                    el.classList.add('hidden-step');
+                    el.classList.remove('active-step');
+                }
+            });
+
+            // Indicators
+            stepIndicators.forEach((dot, idx) => {
+                const stepNum = idx + 1;
+                if (stepNum === currentStep) {
+                    dot.classList.add('w-8', 'bg-secondary');
+                    dot.classList.remove('w-2', 'bg-outline-variant');
+                } else {
+                    dot.classList.remove('w-8', 'bg-secondary');
+                    dot.classList.add('w-2', 'bg-outline-variant');
+                }
+            });
+
+            // Buttons
+            if (currentStep === 1) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = 'Confirm Appointment <span class="material-symbols-outlined">check</span>';
+                nextBtn.classList.replace('bg-secondary', 'bg-primary');
+            } else {
+                nextBtn.innerHTML = 'Continue <span class="material-symbols-outlined">arrow_forward</span>';
+                nextBtn.classList.replace('bg-primary', 'bg-secondary');
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            } else {
+                // Submit action
+                nextBtn.disabled = true;
+                nextBtn.innerHTML = 'Processing... <span class="material-symbols-outlined animate-spin">sync</span>';
+                setTimeout(() => {
+                    alert('Appointment successfully booked! A confirmation email has been sent to your registered address.');
+                    location.reload();
+                }, 1500);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        });
+    </script>
+</body></html>

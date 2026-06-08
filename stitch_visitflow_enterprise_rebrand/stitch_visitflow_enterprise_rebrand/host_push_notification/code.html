@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisitFlow Notification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#63fcc0",
+                        "primary-container": "#0a2540",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "on-secondary-fixed": "#002114",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-tertiary-container": "#b28400",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#768dad",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#160d00",
+                        "surface-container": "#eceef0",
+                        "on-surface-variant": "#43474d",
+                        "surface-dim": "#d8dadc",
+                        "outline": "#74777e",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-fixed": "#001c37",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "primary": "#000f22",
+                        "tertiary-container": "#312200",
+                        "on-background": "#191c1e",
+                        "inverse-primary": "#b0c8eb",
+                        "secondary": "#006c4b",
+                        "primary-fixed": "#d2e4ff",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "surface-tint": "#49607e",
+                        "on-tertiary-fixed": "#261a00",
+                        "secondary-container": "#60f9bd",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#00714f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#005138",
+                        "on-primary-fixed-variant": "#314865",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed": "#ffdea0",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c4c6ce",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "background": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar_width": "260px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "container_max_width": "1440px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "caption": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .lock-screen-gradient {
+            background: linear-gradient(180deg, #0A2540 0%, #1a3a5a 100%);
+        }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background m-0 overflow-hidden">
+<!-- Mobile Screen Wrapper (Lock Screen Simulation) -->
+<div class="relative w-full h-screen flex items-center justify-center p-4 lock-screen-gradient">
+<!-- Abstract Background Decorative Elements -->
+<div class="absolute inset-0 overflow-hidden pointer-events-none">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float"></div>
+<div class="absolute top-1/2 -right-48 w-[500px] h-[500px] bg-primary-container/20 rounded-full blur-[100px]"></div>
+</div>
+<!-- Simulated Mobile Frame -->
+<div class="relative w-full max-w-[375px] h-[760px] bg-slate-900 rounded-[60px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col items-center">
+<!-- Dynamic Island -->
+<div class="mt-4 w-32 h-8 bg-black rounded-full z-20"></div>
+<!-- Lock Screen Content -->
+<div class="absolute inset-0 w-full h-full">
+<!-- Wallpaper Image -->
+<div class="w-full h-full bg-cover bg-center opacity-80" data-alt="A sophisticated abstract digital landscape with deep blue and emerald green flowing silk-like waves. The lighting is moody and cinematic with high-contrast highlights, reflecting a premium enterprise security aesthetic. The textures are smooth and high-definition, providing a clean professional backdrop for a mobile device lock screen." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfHi1WuOUq3sVJJkaZZPhGIIRe0k3RAX4eDsLyt9xOzU6Z_rRUkpkPoNB_S_9VQ4kNJkXt2Jmtv6w8XzBReJJJpTBuLMIiUh_o1qIUsw_mrOhmlgSb3SSRr_JpFgjk0ZGW1m-IBaE86qbUAuU0i8wJVCPt47VoOHTk5id4qlZvG6Ls184BYIu6SdvYrcERWhkWlAt8ltxs_l8l9lDwUarh9SVi_BY8m3Tdxr7AnWnr55WRgPnGF2MLPy0_QzPPERiq-VQxIafIDiQ')">
+</div>
+<!-- Time and Date -->
+<div class="absolute top-24 w-full flex flex-col items-center text-white/90">
+<h1 class="font-display-lg text-[80px] leading-none tracking-tighter">1:32</h1>
+<p class="font-title-md text-white/70 mt-2">Tuesday, October 24</p>
+</div>
+<!-- NOTIFICATION AREA -->
+<div class="absolute inset-x-0 bottom-32 px-4 space-y-3 flex flex-col items-center">
+<!-- VisitFlow Notification Card -->
+<div class="w-full glass-morphism rounded-[24px] overflow-hidden border border-white/20 shadow-xl transition-all hover:scale-[1.02] active:scale-95 duration-300">
+<!-- Header -->
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-lg bg-white p-1 flex items-center justify-center shadow-sm">
+<img alt="VisitFlow Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtxVIc5ErdAO4d_Jo4TECgIqHkQ9B2GduXNkn-3eJ3DLav-sEZqZDhqT6sbwPo1Ku1VgSvTmIkeDgSy_edC3kOp6YM6dnzITSWoPbJoumbYw2ahZX1meqkR86Po2qNyWsFGFNpD3sYNa5D5W5dQv8s1OJUDEzsmZOD20VpCtdnzoM9aqe5KaVPRhz3uzQK7oPT5tLkZJl3jUJXN8HxVdaPoDAX_vgUHNh9PMtQpE1MWDth8BnvN2qPwog"/>
+</div>
+<span class="font-label-md text-primary font-bold uppercase tracking-wider">VisitFlow</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant/60">now</span>
+</div>
+<!-- Content Body -->
+<div class="px-4 pb-4">
+<h3 class="font-title-md text-primary mb-1">Visitor Arrived</h3>
+<p class="font-body-md text-on-surface-variant leading-snug">
+<span class="font-semibold text-primary">Jonathan Miller</span> is here for your 1:30 PM meeting.
+                            </p>
+</div>
+<!-- Actions (Horizontal Divider) -->
+<div class="border-t border-black/5 flex">
+<!-- Action 1 -->
+<button class="flex-1 py-4 px-2 flex items-center justify-center gap-2 hover:bg-black/5 active:bg-black/10 transition-colors group">
+<span class="material-symbols-outlined text-[18px] text-secondary" style="font-variation-settings: 'FILL' 1;">directions_walk</span>
+<span class="font-label-md text-secondary font-bold whitespace-nowrap">I'm on my way</span>
+</button>
+<!-- Vertical Divider -->
+<div class="w-[1px] bg-black/5"></div>
+<!-- Action 2 -->
+<button class="flex-1 py-4 px-2 flex items-center justify-center gap-2 hover:bg-black/5 active:bg-black/10 transition-colors group">
+<span class="material-symbols-outlined text-[18px] text-primary-container">support_agent</span>
+<span class="font-label-md text-primary-container font-bold whitespace-nowrap">Notify Reception</span>
+</button>
+</div>
+</div>
+<!-- Subtle Secondary Stacked Notification Effect -->
+<div class="w-[92%] h-4 glass-morphism rounded-[12px] opacity-40 border border-white/10 -mt-2"></div>
+</div>
+<!-- Bottom Bar / Home Indicator -->
+<div class="absolute bottom-12 w-full flex flex-col items-center gap-8">
+<div class="flex justify-between w-full px-12">
+<div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/10">
+<span class="material-symbols-outlined">flashlight_on</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/10">
+<span class="material-symbols-outlined">photo_camera</span>
+</div>
+</div>
+<div class="w-32 h-1.5 bg-white/40 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Instructional Overlay / Desktop Context -->
+<div class="hidden lg:flex absolute right-12 top-1/2 -translate-y-1/2 flex-col gap-lg max-w-sm">
+<div class="bg-surface p-lg rounded-xl border border-outline-variant shadow-lg">
+<div class="flex items-center gap-md mb-md">
+<img alt="VisitFlow Logo" class="w-10 h-10" src="https://lh3.googleusercontent.com/aida/AP1WRLtxVIc5ErdAO4d_Jo4TECgIqHkQ9B2GduXNkn-3eJ3DLav-sEZqZDhqT6sbwPo1Ku1VgSvTmIkeDgSy_edC3kOp6YM6dnzITSWoPbJoumbYw2ahZX1meqkR86Po2qNyWsFGFNpD3sYNa5D5W5dQv8s1OJUDEzsmZOD20VpCtdnzoM9aqe5KaVPRhz3uzQK7oPT5tLkZJl3jUJXN8HxVdaPoDAX_vgUHNh9PMtQpE1MWDth8BnvN2qPwog"/>
+<div>
+<h2 class="font-headline-md text-primary leading-tight">VisitFlow</h2>
+<p class="font-label-md text-secondary font-bold uppercase tracking-widest">Enterprise Notification</p>
+</div>
+</div>
+<div class="space-y-md">
+<div class="flex items-start gap-sm">
+<div class="mt-1 w-2 h-2 rounded-full bg-secondary"></div>
+<p class="font-body-md text-on-surface-variant">Real-time visitor alerts with one-tap host confirmation.</p>
+</div>
+<div class="flex items-start gap-sm">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary-container"></div>
+<p class="font-body-md text-on-surface-variant">Direct communication channel between host and reception desk.</p>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant flex gap-sm">
+<span class="px-sm py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md">Security Level 4</span>
+<span class="px-sm py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-md">Encrypted</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-interaction script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Subtle pulse for the secondary accent icon
+            const actionIcon = document.querySelector('.text-secondary');
+            if (actionIcon) {
+                setInterval(() => {
+                    actionIcon.classList.add('scale-110');
+                    setTimeout(() => actionIcon.classList.remove('scale-110'), 200);
+                }, 4000);
+            }
+
+            // Click handling for buttons (simulated)
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ripple = document.createElement('div');
+                    ripple.className = 'absolute inset-0 bg-white/20 transition-opacity duration-300';
+                    this.style.position = 'relative';
+                    this.appendChild(ripple);
+                    setTimeout(() => {
+                        ripple.style.opacity = '0';
+                        setTimeout(() => ripple.remove(), 300);
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body></html>

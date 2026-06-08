@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Your Visit Invitation - VisitFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#3fdfa5",
+                        "surface-container-low": "#f2f4f6",
+                        "on-surface": "#191c1e",
+                        "primary-container": "#0a2540",
+                        "on-primary-container": "#768dad",
+                        "tertiary-container": "#312200",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "on-primary-fixed": "#001c37",
+                        "on-tertiary-container": "#b28400",
+                        "surface": "#f7f9fb",
+                        "inverse-primary": "#b0c8eb",
+                        "on-secondary-container": "#00714f",
+                        "outline": "#74777e",
+                        "tertiary-fixed-dim": "#fbbc0e",
+                        "primary-fixed-dim": "#b0c8eb",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#005138",
+                        "background": "#f7f9fb",
+                        "secondary-container": "#60f9bd",
+                        "on-secondary-fixed": "#002114",
+                        "secondary": "#006c4b",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#d2e4ff",
+                        "surface-bright": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-dim": "#d8dadc",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-fixed-variant": "#314865",
+                        "surface-variant": "#e0e3e5",
+                        "on-background": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c4c6ce",
+                        "primary": "#000f22",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#49607e",
+                        "on-surface-variant": "#43474d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#ffdea0",
+                        "secondary-fixed": "#63fcc0",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#160d00",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface-container-high": "#e6e8ea",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container_max_width": "1440px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "sidebar_width": "260px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "md": "16px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-md": ["16px", {"lineHeight": "24px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #f7f9fb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            border: 1px solid #e5e7eb;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .qr-gradient {
+            background: linear-gradient(135deg, #0a2540 0%, #006c4b 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<div class="email-container">
+<!-- Header Branding -->
+<div class="bg-primary-container px-lg py-xl text-center relative overflow-hidden">
+
+<div class="relative z-10">
+<div class="flex justify-center items-center gap-2 mb-md">
+<span class="material-symbols-outlined text-secondary text-headline-md" style="font-variation-settings: 'FILL' 1;">domain</span>
+<h1 class="font-title-lg text-title-lg font-bold text-on-primary tracking-tight">VisitFlow</h1>
+</div>
+<p class="font-body-md text-body-md text-on-primary-container">Smart Appointments. Secure Access.</p>
+</div>
+</div>
+<!-- Main Content -->
+<div class="px-xl py-xl">
+<div class="mb-xl">
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Hello, Alexander Wright</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">You are invited to visit Sarah Jenkins at our corporate headquarters.</p>
+</div>
+<!-- Bento Grid Info Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md mb-xl">
+<!-- Appointment Card -->
+<div class="p-md bg-surface-container-low border border-outline-variant rounded-xl">
+<div class="flex items-center gap-base text-secondary mb-xs">
+<span class="material-symbols-outlined text-body-md">calendar_today</span>
+<span class="font-label-md text-label-md uppercase font-bold tracking-wider">Appointment</span>
+</div>
+<p class="font-title-md text-title-md text-primary">Thursday, Oct 24</p>
+<p class="font-body-md text-body-md text-on-surface-variant">10:30 AM — 11:30 AM EST</p>
+</div>
+<!-- Location Card -->
+<div class="p-md bg-surface-container-low border border-outline-variant rounded-xl">
+<div class="flex items-center gap-base text-secondary mb-xs">
+<span class="material-symbols-outlined text-body-md">location_on</span>
+<span class="font-label-md text-label-md uppercase font-bold tracking-wider">Location</span>
+</div>
+<p class="font-title-md text-title-md text-primary">HQ Tower A</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Floor 12, Suite 1205</p>
+</div>
+</div>
+<!-- QR Code Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-xl flex flex-col items-center text-center shadow-sm">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-md">Your Express Pass</p>
+<div class="p-base bg-white border-2 border-primary-container rounded-xl mb-md">
+<img alt="Your Visitor QR Code" class="w-48 h-48 block" data-alt="A high-contrast, professional QR code centered on a clean white background. The QR code is surrounded by a sleek, minimalist navy blue border with rounded corners. The lighting is soft and studio-quality, emphasizing the digital precision of the code. The overall aesthetic is high-tech, corporate, and secure, reflecting a premium enterprise software environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCji6XDXDH0O-KV3VBNtZoH51yyC1-g-k9RVCu9bHM__aOW0y6pX7imnciLY3VBbRXn0HDweqARf92J6DZr2okhOvxI6ON4cpeGg5tHkknGOLRMQVQqVNdg-dzdpeGhNhQJwK1YFIjgWpKA9RBlnkIPFXbIFZNbGOEK_YTWUK8hzLS2slxGLb_9yiS7PIDCv3IuCWCHS51BlztzTjZiwHcbLDUuH7JG7Z1IzzI7p5zRKdZDrGvfIXy43l2ITIzKdO8JudhDgbjQcfU"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs">
+                    Scan this code at the kiosk in the lobby for instant check-in.
+                </p>
+</div>
+<!-- Actions -->
+<div class="mt-xl space-y-md">
+<button class="w-full bg-secondary text-on-secondary py-md rounded-lg font-title-md text-title-md hover:bg-on-secondary-container transition-all flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+                    Pre-register &amp; Sign NDA
+                </button>
+<div class="flex gap-md">
+<a class="flex-1 border border-outline-variant py-md rounded-lg font-body-md text-body-md text-primary flex items-center justify-center gap-2 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">map</span>
+                        Get Directions
+                    </a>
+<a class="flex-1 border border-outline-variant py-md rounded-lg font-body-md text-body-md text-primary flex items-center justify-center gap-2 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">event</span>
+                        Add to Calendar
+                    </a>
+</div>
+</div>
+</div>
+<!-- Map Section (Simulated) -->
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist architectural photograph of a sleek glass skyscraper against a clear blue sky, reflecting the surrounding urban environment. The building represents the VisitFlow HQ Tower A, projecting a sense of modern corporate stability and high-end professional services. The lighting is bright and optimistic, typical of a mid-morning corporate setting." data-location="Manhattan, New York" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRO0qCCuU-sadG2XMobV9YTFt-9d4DW3tq4pGPLnaMohyFamWrwmXmwkJD601ar__otaIEtTm_Gj3f4Ne7qzRJh4biuG-_MV72Zqb0lCdxxslIYXsHWONP5tCewfqK4Flr8Mi39rlJe4k6eI7aY6sUJq8vHgUR0EUVBJG73sePcU06xNnhIP_4Y7pGV8wSdCozCT0_siB1A4pMzUzzOyccpEMKlCCI7loEOAfogM6GSRYXniT2OHWz4WkuNeeDm0IUOhkgDniL7CA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent flex items-end p-lg">
+<div class="text-white">
+<p class="font-title-md text-white">VisitFlow HQ Tower A</p>
+<p class="font-caption text-white/80">123 Enterprise Plaza, New York, NY 10001</p>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-low px-lg py-xl border-t border-outline-variant">
+<div class="max-w-container_max_width mx-auto flex flex-col items-center gap-md">
+<div class="flex gap-lg">
+<a class="font-caption text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="font-caption text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="font-caption text-on-surface-variant hover:text-secondary transition-colors" href="#">Contact Support</a>
+</div>
+<div class="text-center">
+<p class="font-caption text-on-surface-variant mb-xs">© 2024 VisitFlow. Smart Appointments. Secure Access.</p>
+<p class="font-caption text-outline">Sent by Sarah Jenkins via VisitFlow Enterprise Suite.</p>
+</div>
+<!-- Branding Mark -->
+<div class="opacity-20 flex items-center gap-base">
+<span class="material-symbols-outlined text-body-md" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-md font-bold tracking-widest uppercase">Verified Secure Invitation</span>
+</div>
+</div>
+</footer>
+</div>
+<!-- Interactive Micro-interactions -->
+<script>
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.98)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>
