@@ -1,13 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { MessageCircle, Users } from "lucide-react";
+import { Card, Empty, Spin, Tag, Typography } from "antd";
+import { MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { getStatusColor } from "@/lib/utils";
 import LiveChat from "@/components/dashboard/live-chat";
+
+const { Title, Text } = Typography;
+
+const decisionTagColor: Record<string, string> = {
+  PENDING: "warning",
+  APPROVED: "success",
+  WAIT: "processing",
+  DECLINED: "error",
+};
 
 interface Conversation {
   id: string;
@@ -42,70 +48,41 @@ export default function ChatPage() {
 
   const activeConvo = conversations.find((c) => c.id === activeChatId);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <p className="text-muted-foreground">Loading conversations...</p>
-      </div>
-    );
-  }
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Live Chat</h1>
-        <p className="text-muted-foreground">
-          Instant communication about walk-in visitor requests
-        </p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>Live Chat</Title>
+        <Text type="secondary">Instant communication about walk-in visitor requests</Text>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[350px_1fr]">
-        {/* Conversation list */}
-        <Card className="h-[600px] flex flex-col">
-          <CardHeader className="flex-shrink-0 py-3 px-4 border-b">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Conversations ({conversations.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 overflow-y-auto p-0">
-            {conversations.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-8">
-                No conversations yet
-              </p>
-            )}
-            {conversations.map((convo) => (
-              <button
+      <div style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: 24 }}>
+        <Card title={<><TeamOutlined /> Conversations ({conversations.length})</>} style={{ height: 600, overflow: "hidden", display: "flex", flexDirection: "column" }} bodyStyle={{ flex: 1, overflowY: "auto", padding: 0 }}>
+          {conversations.length === 0 ? (
+            <Empty description="No conversations yet" style={{ padding: "40px 0" }} />
+          ) : (
+            conversations.map((convo) => (
+              <div
                 key={convo.id}
                 onClick={() => setActiveChatId(convo.id)}
-                className={`w-full text-left p-3 border-b hover:bg-muted/50 transition-colors ${
-                  activeChatId === convo.id ? "bg-muted" : ""
-                }`}
+                style={{
+                  padding: "10px 16px", borderBottom: "1px solid #f0f0f0", cursor: "pointer",
+                  background: activeChatId === convo.id ? "#f5f5f5" : "transparent",
+                }}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium">
-                    {convo.visitor.firstName} {convo.visitor.lastName}
-                  </span>
-                  <Badge
-                    variant="secondary"
-                    className={`text-[10px] ${getStatusColor(convo.decision)}`}
-                  >
-                    {convo.decision}
-                  </Badge>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+                  <Text strong style={{ fontSize: 13 }}>{convo.visitor.firstName} {convo.visitor.lastName}</Text>
+                  <Tag color={decisionTagColor[convo.decision] || "default"} style={{ fontSize: 10 }}>{convo.decision}</Tag>
                 </div>
-                <p className="text-xs text-muted-foreground truncate">
-                  To: {convo.recipient.firstName} {convo.recipient.lastName}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">{convo.purpose}</p>
-                <p className="text-[10px] text-muted-foreground mt-1">
-                  {new Date(convo.createdAt).toLocaleString()}
-                </p>
-              </button>
-            ))}
-          </CardContent>
+                <Text type="secondary" style={{ fontSize: 11 }}>To: {convo.recipient.firstName} {convo.recipient.lastName}</Text>
+                <div><Text type="secondary" style={{ fontSize: 11 }} ellipsis>{convo.purpose}</Text></div>
+                <Text type="secondary" style={{ fontSize: 10 }}>{new Date(convo.createdAt).toLocaleString()}</Text>
+              </div>
+            ))
+          )}
         </Card>
 
-        {/* Chat panel */}
         <div>
           {activeConvo ? (
             <LiveChat
@@ -114,11 +91,8 @@ export default function ChatPage() {
               onClose={() => setActiveChatId(null)}
             />
           ) : (
-            <Card className="h-[600px] flex items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <MessageCircle className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">Select a conversation to start chatting</p>
-              </div>
+            <Card style={{ height: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Empty image={<MessageOutlined style={{ fontSize: 48, color: "#bfbfbf" }} />} description="Select a conversation to start chatting" />
             </Card>
           )}
         </div>

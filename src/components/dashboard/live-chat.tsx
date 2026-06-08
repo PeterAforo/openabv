@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Send, X, MessageCircle } from "lucide-react";
+import { Button, Card, Input, Spin, Tag, Typography } from "antd";
+import { CloseOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import { usePusherEvent } from "@/hooks/use-pusher";
 import { CHANNELS, EVENTS } from "@/lib/pusher";
+
+const { Text } = Typography;
 
 interface ChatMessage {
   id: string;
@@ -30,13 +29,8 @@ interface LiveChatProps {
   compact?: boolean;
 }
 
-const roleBadgeColor: Record<string, string> = {
-  ADMIN: "bg-purple-100 text-purple-700",
-  SUPER_ADMIN: "bg-purple-100 text-purple-700",
-  STAFF: "bg-blue-100 text-blue-700",
-  DEPARTMENT_HEAD: "bg-blue-100 text-blue-700",
-  SECURITY: "bg-orange-100 text-orange-700",
-  RECEPTIONIST: "bg-green-100 text-green-700",
+const roleTagColor: Record<string, string> = {
+  ADMIN: "purple", SUPER_ADMIN: "purple", STAFF: "blue", DEPARTMENT_HEAD: "blue", SECURITY: "orange", RECEPTIONIST: "green",
 };
 
 export default function LiveChat({ walkInRequestId, visitorName, onClose, compact = false }: LiveChatProps) {
@@ -51,152 +45,70 @@ export default function LiveChat({ walkInRequestId, visitorName, onClose, compac
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Fetch existing messages
   useEffect(() => {
     async function fetchMessages() {
       try {
         const res = await fetch(`/api/chat?walkInRequestId=${walkInRequestId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setMessages(data);
-        }
-      } catch {
-        console.error("Failed to load messages");
-      } finally {
-        setIsLoading(false);
-      }
+        if (res.ok) { const data = await res.json(); setMessages(data); }
+      } catch { console.error("Failed to load messages"); } finally { setIsLoading(false); }
     }
     fetchMessages();
   }, [walkInRequestId]);
 
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
+  useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
 
-  // Real-time message listener via Pusher
-  usePusherEvent(
-    CHANNELS.chat(walkInRequestId),
-    EVENTS.CHAT_MESSAGE,
-    (data: unknown) => {
-      const msg = data as ChatMessage;
-      setMessages((prev) => {
-        if (prev.some((m) => m.id === msg.id)) return prev;
-        return [...prev, msg];
-      });
-    }
-  );
+  usePusherEvent(CHANNELS.chat(walkInRequestId), EVENTS.CHAT_MESSAGE, (data: unknown) => {
+    const msg = data as ChatMessage;
+    setMessages((prev) => { if (prev.some((m) => m.id === msg.id)) return prev; return [...prev, msg]; });
+  });
 
-  async function handleSend(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSend() {
     if (!newMessage.trim() || isSending) return;
-
     setIsSending(true);
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          walkInRequestId,
-          message: newMessage.trim(),
-        }),
-      });
-
+      const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ walkInRequestId, message: newMessage.trim() }) });
       if (res.ok) {
         const msg = await res.json();
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === msg.id)) return prev;
-          return [...prev, msg];
-        });
+        setMessages((prev) => { if (prev.some((m) => m.id === msg.id)) return prev; return [...prev, msg]; });
         setNewMessage("");
       }
-    } catch {
-      console.error("Failed to send message");
-    } finally {
-      setIsSending(false);
-    }
+    } catch { console.error("Failed to send message"); } finally { setIsSending(false); }
   }
 
   const isOwnMessage = (msg: ChatMessage) => msg.sender?.id === session?.user?.id;
-
-  const containerClass = compact
-    ? "flex flex-col h-[350px]"
-    : "flex flex-col h-[500px]";
+  const height = compact ? 350 : 500;
 
   return (
-    <Card className={`${containerClass} overflow-hidden`}>
-      <CardHeader className="flex-shrink-0 py-3 px-4 border-b flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-semibold flex items-center gap-2">
-          <MessageCircle className="h-4 w-4" />
-          Chat — {visitorName}
-        </CardTitle>
-        {onClose && (
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onClose}>
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-      </CardHeader>
-
-      <CardContent className="flex-1 overflow-y-auto p-3 space-y-3">
-        {isLoading && (
-          <p className="text-center text-sm text-muted-foreground py-4">Loading messages...</p>
-        )}
-
-        {!isLoading && messages.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground py-4">
-            No messages yet. Start the conversation!
-          </p>
-        )}
-
+    <Card
+      title={<><MessageOutlined /> Chat — {visitorName}</>}
+      extra={onClose && <Button type="text" size="small" icon={<CloseOutlined />} onClick={onClose} />}
+      styles={{ body: { padding: 0, display: "flex", flexDirection: "column", height: height - 57 } }}
+      style={{ height, overflow: "hidden" }}
+    >
+      <div style={{ flex: 1, overflowY: "auto", padding: 12, display: "flex", flexDirection: "column", gap: 12 }}>
+        {isLoading && <div style={{ textAlign: "center", padding: 32 }}><Spin /></div>}
+        {!isLoading && messages.length === 0 && <Text type="secondary" style={{ textAlign: "center", padding: 32 }}>No messages yet. Start the conversation!</Text>}
         {messages.map((msg) => {
           const own = isOwnMessage(msg);
           return (
-            <div
-              key={msg.id}
-              className={`flex flex-col ${own ? "items-end" : "items-start"}`}
-            >
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <span className="text-xs font-medium text-muted-foreground">
-                  {own ? "You" : `${msg.sender.firstName} ${msg.sender.lastName}`}
-                </span>
-                <Badge
-                  variant="secondary"
-                  className={`text-[10px] px-1 py-0 ${roleBadgeColor[msg.sender.role] || ""}`}
-                >
-                  {msg.sender.role.replace("_", " ")}
-                </Badge>
+            <div key={msg.id} style={{ display: "flex", flexDirection: "column", alignItems: own ? "flex-end" : "flex-start" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 2 }}>
+                <Text style={{ fontSize: 11 }} type="secondary">{own ? "You" : `${msg.sender.firstName} ${msg.sender.lastName}`}</Text>
+                <Tag color={roleTagColor[msg.sender.role] || "default"} style={{ fontSize: 10, lineHeight: "16px", margin: 0, padding: "0 4px" }}>{msg.sender.role.replace("_", " ")}</Tag>
               </div>
-              <div
-                className={`rounded-lg px-3 py-2 max-w-[80%] text-sm ${
-                  own
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted"
-                }`}
-              >
+              <div style={{ borderRadius: 8, padding: "6px 12px", maxWidth: "80%", fontSize: 14, background: own ? "#1677ff" : "#f5f5f5", color: own ? "#fff" : undefined }}>
                 {msg.message}
               </div>
-              <span className="text-[10px] text-muted-foreground mt-0.5">
-                {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </span>
+              <Text style={{ fontSize: 10, marginTop: 2 }} type="secondary">{new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</Text>
             </div>
           );
         })}
         <div ref={messagesEndRef} />
-      </CardContent>
+      </div>
 
-      <div className="flex-shrink-0 border-t p-3">
-        <form onSubmit={handleSend} className="flex gap-2">
-          <Input
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
-            disabled={isSending}
-            className="flex-1"
-          />
-          <Button type="submit" size="icon" disabled={isSending || !newMessage.trim()}>
-            <Send className="h-4 w-4" />
-          </Button>
-        </form>
+      <div style={{ borderTop: "1px solid #f0f0f0", padding: 12, display: "flex", gap: 8 }}>
+        <Input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onPressEnter={handleSend} placeholder="Type a message..." disabled={isSending} style={{ flex: 1 }} />
+        <Button type="primary" icon={<SendOutlined />} onClick={handleSend} disabled={isSending || !newMessage.trim()} />
       </div>
     </Card>
   );

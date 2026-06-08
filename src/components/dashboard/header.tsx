@@ -1,20 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bell, Menu, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+import { Avatar, Badge, Button, Dropdown, Input, Tag, Typography } from "antd";
+import { BellOutlined, LogoutOutlined, MenuOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
+import type { MenuProps } from "antd";
 import Link from "next/link";
+
+const { Text } = Typography;
 
 interface HeaderProps {
   user: {
@@ -55,76 +47,51 @@ export function DashboardHeader({ user, onMenuToggle }: HeaderProps) {
         // silently fail
       }
     }
-    // Defer to avoid blocking initial page render
     const timeout = setTimeout(fetchCount, 1500);
     const interval = setInterval(fetchCount, 30000);
     return () => { clearTimeout(timeout); clearInterval(interval); };
   }, []);
 
-  return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 lg:px-6">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="lg:hidden"
-        onClick={onMenuToggle}
-      >
-        <Menu className="h-5 w-5" />
-      </Button>
+  const dropdownItems: MenuProps["items"] = [
+    {
+      key: "info",
+      label: (
+        <div style={{ padding: "4px 0" }}>
+          <Text strong style={{ display: "block" }}>{user.name}</Text>
+          <Text type="secondary" style={{ fontSize: 12, display: "block" }}>{user.email}</Text>
+          <Tag style={{ marginTop: 4, fontSize: 10 }}>{user.role.replace("_", " ")}</Tag>
+        </div>
+      ),
+      disabled: true,
+    },
+    { type: "divider" },
+    { key: "profile", label: <Link href="/dashboard/profile">Profile</Link>, icon: <UserOutlined /> },
+    { type: "divider" },
+    { key: "signout", label: <Link href="/api/auth/signout">Sign out</Link>, icon: <LogoutOutlined />, danger: true },
+  ];
 
-      <div className="flex-1 flex items-center gap-4">
-        <div className="relative hidden md:flex w-full max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search..."
-            className="pl-8 w-full"
-          />
+  return (
+    <header style={{ position: "sticky", top: 0, zIndex: 40, display: "flex", height: 64, alignItems: "center", gap: 16, borderBottom: "1px solid #f0f0f0", background: "#fff", padding: "0 16px" }}>
+      <Button type="text" icon={<MenuOutlined />} onClick={onMenuToggle} className="lg:!hidden" />
+
+      <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 16 }}>
+        <div className="hidden md:block" style={{ maxWidth: 300, width: "100%" }}>
+          <Input prefix={<SearchOutlined />} placeholder="Search..." />
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" className="relative" asChild>
-          <Link href={getNotificationsPath(user.role)}>
-            <Bell className="h-5 w-5" />
-            {unreadCount > 0 && (
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px]">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </Badge>
-            )}
-          </Link>
-        </Button>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <Link href={getNotificationsPath(user.role)}>
+          <Badge count={unreadCount} size="small" offset={[-2, 2]}>
+            <Button type="text" icon={<BellOutlined style={{ fontSize: 20 }} />} />
+          </Badge>
+        </Link>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={user.image || undefined} alt={user.name} />
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{user.name}</p>
-                <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                <Badge variant="secondary" className="w-fit mt-1 text-[10px]">
-                  {user.role.replace("_", " ")}
-                </Badge>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/profile">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/api/auth/signout" className="text-destructive">
-                Sign out
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dropdown menu={{ items: dropdownItems }} trigger={["click"]} placement="bottomRight">
+          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0, borderRadius: "50%" }}>
+            <Avatar size={36} src={user.image || undefined} icon={<UserOutlined />} style={{ background: "#1677ff" }}>{initials}</Avatar>
+          </button>
+        </Dropdown>
       </div>
     </header>
   );

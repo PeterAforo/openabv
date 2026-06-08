@@ -1,17 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button, Card, Col, Empty, Form, Input, Modal, Row, Spin, Tag, Typography } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
+const { Title, Text } = Typography;
 
 interface Department {
   id: string;
@@ -26,7 +20,7 @@ export default function AdminDepartmentsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: "", description: "" });
+  const [form] = Form.useForm();
 
   useEffect(() => { fetchDepartments(); }, []);
 
@@ -43,14 +37,13 @@ export default function AdminDepartmentsPage() {
     }
   }
 
-  async function createDepartment() {
-    if (!form.name.trim()) { toast.error("Name is required"); return; }
+  async function createDepartment(values: { name: string; description?: string }) {
     setIsSubmitting(true);
     try {
       const res = await fetch("/api/admin/departments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(values),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -59,7 +52,7 @@ export default function AdminDepartmentsPage() {
       }
       toast.success("Department created");
       setShowCreate(false);
-      setForm({ name: "", description: "" });
+      form.resetFields();
       fetchDepartments();
     } catch {
       toast.error("Something went wrong");
@@ -68,65 +61,49 @@ export default function AdminDepartmentsPage() {
     }
   }
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Departments</h1>
-          <p className="text-muted-foreground">Manage organizational departments</p>
+          <Title level={3} style={{ margin: 0 }}>Departments</Title>
+          <Text type="secondary">Manage organizational departments</Text>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <Plus className="h-4 w-4 mr-2" /> Add Department
-        </Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setShowCreate(true)}>Add Department</Button>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {departments.map((dept) => (
-          <Card key={dept.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-semibold">{dept.name}</p>
-                  {dept.description && <p className="text-sm text-muted-foreground mt-1">{dept.description}</p>}
-                  <p className="text-sm text-muted-foreground mt-2">{dept._count.users} staff members</p>
+      {departments.length === 0 ? (
+        <Card><Empty description="No departments found" /></Card>
+      ) : (
+        <Row gutter={[16, 16]}>
+          {departments.map((dept) => (
+            <Col key={dept.id} xs={24} md={12} lg={8}>
+              <Card>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div>
+                    <Text strong style={{ fontSize: 15 }}>{dept.name}</Text>
+                    {dept.description && <div><Text type="secondary">{dept.description}</Text></div>}
+                    <Text type="secondary" style={{ fontSize: 12 }}>{dept._count.users} staff members</Text>
+                  </div>
+                  <Tag color={dept.isActive ? "green" : "default"}>{dept.isActive ? "Active" : "Inactive"}</Tag>
                 </div>
-                <Badge variant={dept.isActive ? "default" : "secondary"}>
-                  {dept.isActive ? "Active" : "Inactive"}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {departments.length === 0 && (
-          <Card className="col-span-full"><CardContent className="py-8 text-center"><p className="text-muted-foreground">No departments found</p></CardContent></Card>
-        )}
-      </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
 
-      <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Create Department</DialogTitle></DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Name</Label>
-              <Input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Department name" />
-            </div>
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} placeholder="Optional description" />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button onClick={createDepartment} disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <Modal title="Create Department" open={showCreate} onCancel={() => setShowCreate(false)} onOk={() => form.submit()} confirmLoading={isSubmitting} okText="Create">
+        <Form form={form} layout="vertical" onFinish={createDepartment}>
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: "Name is required" }]}>
+            <Input placeholder="Department name" />
+          </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea placeholder="Optional description" rows={3} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

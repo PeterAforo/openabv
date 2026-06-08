@@ -1,6 +1,8 @@
+"use client";
+
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { Card, Statistic } from "antd";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 interface KPICardProps {
   title: string;
@@ -14,24 +16,23 @@ interface KPICardProps {
   className?: string;
 }
 
-export function KPICard({ title, value, description, icon, trend, className }: KPICardProps) {
+export function KPICard({ title, value, description, icon, trend }: KPICardProps) {
   return (
-    <Card className={cn("", className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {icon && <div className="text-muted-foreground">{icon}</div>}
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-1">{description}</p>
-        )}
-        {trend && (
-          <p className={cn("text-xs mt-1", trend.isPositive ? "text-green-600" : "text-red-600")}>
-            {trend.isPositive ? "+" : ""}{trend.value}% from last period
-          </p>
-        )}
-      </CardContent>
+    <Card size="small" hoverable>
+      <Statistic
+        title={title}
+        value={value}
+        prefix={icon}
+        suffix={
+          trend ? (
+            <span style={{ fontSize: 12, color: trend.isPositive ? "#52c41a" : "#ff4d4f" }}>
+              {trend.isPositive ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+              {Math.abs(trend.value)}%
+            </span>
+          ) : undefined
+        }
+      />
+      {description && <p style={{ fontSize: 12, color: "#8c8c8c", marginTop: 4 }}>{description}</p>}
     </Card>
   );
 }

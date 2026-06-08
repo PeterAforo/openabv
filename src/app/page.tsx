@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Calendar, Shield, Users, Clock, CheckCircle, ArrowRight } from "lucide-react";
+import { CalendarOutlined, SafetyCertificateOutlined, CheckCircleOutlined, ArrowRightOutlined } from "@ant-design/icons";
 
 export default function Home() {
   return (
@@ -15,15 +14,9 @@ export default function Home() {
             <span className="font-bold text-xl">OpenABV</span>
           </Link>
           <nav className="flex items-center gap-4">
-            <Button variant="ghost" asChild>
-              <Link href="/appointment-status">Check Status</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/book-appointment">Book Appointment</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/login">Staff Login</Link>
-            </Button>
+            <Link href="/appointment-status" className="text-sm hover:underline">Check Status</Link>
+            <Link href="/book-appointment" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">Book Appointment</Link>
+            <Link href="/login" className="px-4 py-2 border rounded-lg text-sm font-medium">Staff Login</Link>
           </nav>
         </div>
       </header>
@@ -39,15 +32,12 @@ export default function Home() {
             Book appointments online, streamline visitor check-ins, and manage your front desk operations efficiently.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild className="text-lg px-8">
-              <Link href="/book-appointment">
-                Book an Appointment
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild className="text-lg px-8">
-              <Link href="/appointment-status">Track My Appointment</Link>
-            </Button>
+            <Link href="/book-appointment" className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-lg text-lg font-medium">
+              Book an Appointment <ArrowRightOutlined />
+            </Link>
+            <Link href="/appointment-status" className="inline-flex items-center gap-2 px-8 py-3 border rounded-lg text-lg font-medium">
+              Track My Appointment
+            </Link>
           </div>
         </div>
       </section>
@@ -59,7 +49,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center space-y-4">
               <div className="mx-auto h-16 w-16 rounded-2xl bg-blue-100 flex items-center justify-center">
-                <Calendar className="h-8 w-8 text-blue-600" />
+                <CalendarOutlined style={{ fontSize: 32, color: '#2563eb' }} />
               </div>
               <h3 className="text-xl font-semibold">Book Online</h3>
               <p className="text-muted-foreground">
@@ -68,7 +58,7 @@ export default function Home() {
             </div>
             <div className="text-center space-y-4">
               <div className="mx-auto h-16 w-16 rounded-2xl bg-green-100 flex items-center justify-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+                <CheckCircleOutlined style={{ fontSize: 32, color: '#16a34a' }} />
               </div>
               <h3 className="text-xl font-semibold">Get Approved</h3>
               <p className="text-muted-foreground">
@@ -77,7 +67,7 @@ export default function Home() {
             </div>
             <div className="text-center space-y-4">
               <div className="mx-auto h-16 w-16 rounded-2xl bg-purple-100 flex items-center justify-center">
-                <Shield className="h-8 w-8 text-purple-600" />
+                <SafetyCertificateOutlined style={{ fontSize: 32, color: '#9333ea' }} />
               </div>
               <h3 className="text-xl font-semibold">Check In</h3>
               <p className="text-muted-foreground">

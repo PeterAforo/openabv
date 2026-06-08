@@ -1,28 +1,26 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge, Button, Input, Spin, Tag, Typography } from "antd";
 import {
-  MessageCircle,
-  X,
-  Send,
-  ArrowLeft,
-  UserCheck,
-  Clock,
-  XCircle,
-  Volume2,
-  VolumeX,
-  Plus,
-  Search,
-  Users,
-  MessageSquare,
-} from "lucide-react";
+  ArrowLeftOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  CloseOutlined,
+  MessageOutlined,
+  PlusOutlined,
+  SearchOutlined,
+  SendOutlined,
+  SoundOutlined,
+  TeamOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import { usePusherEvent } from "@/hooks/use-pusher";
 import { CHANNELS, EVENTS } from "@/lib/pusher";
+
+const { Text } = Typography;
 
 // --- Types ---
 
@@ -77,21 +75,12 @@ type ActiveThread = {
 
 type ViewMode = "list" | "thread" | "new-chat";
 
-const roleBadgeColor: Record<string, string> = {
-  ADMIN: "bg-purple-100 text-purple-700",
-  SUPER_ADMIN: "bg-purple-100 text-purple-700",
-  STAFF: "bg-blue-100 text-blue-700",
-  DEPARTMENT_HEAD: "bg-blue-100 text-blue-700",
-  SECURITY: "bg-orange-100 text-orange-700",
-  RECEPTIONIST: "bg-green-100 text-green-700",
+const roleTagColor: Record<string, string> = {
+  ADMIN: "purple", SUPER_ADMIN: "purple", STAFF: "blue", DEPARTMENT_HEAD: "blue", SECURITY: "orange", RECEPTIONIST: "green",
 };
 
-const decisionColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800",
-  APPROVED: "bg-green-100 text-green-800",
-  WAIT: "bg-blue-100 text-blue-800",
-  DECLINED: "bg-red-100 text-red-800",
-  RESCHEDULED: "bg-purple-100 text-purple-800",
+const decisionTagColor: Record<string, string> = {
+  PENDING: "warning", APPROVED: "success", WAIT: "processing", DECLINED: "error", RESCHEDULED: "purple",
 };
 
 export function ChatWidget({ userId }: { userId: string }) {
@@ -340,98 +329,78 @@ export function ChatWidget({ userId }: { userId: string }) {
     <>
       {/* Floating button */}
       {!isOpen && (
-        <button
-          onClick={handleOpen}
-          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center"
-        >
-          <MessageCircle className="h-6 w-6" />
-          {totalUnread > 0 && (
-            <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center font-bold animate-pulse">
-              {totalUnread > 9 ? "9+" : totalUnread}
-            </span>
-          )}
-        </button>
+        <Badge count={totalUnread > 9 ? "9+" : totalUnread} size="small" offset={[-4, 4]}>
+          <button
+            onClick={handleOpen}
+            style={{ position: "fixed", bottom: 24, right: 24, zIndex: 50, height: 56, width: 56, borderRadius: "50%", background: "#1677ff", color: "#fff", border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s" }}
+          >
+            <MessageOutlined style={{ fontSize: 24 }} />
+          </button>
+        </Badge>
       )}
 
       {/* Chat popup */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[380px] h-[520px] bg-background border rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-200">
+        <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 50, width: 380, height: 520, background: "#fff", border: "1px solid #f0f0f0", borderRadius: 12, boxShadow: "0 8px 24px rgba(0,0,0,0.15)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-primary text-primary-foreground">
-            <div className="flex items-center gap-2">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #f0f0f0", background: "#1677ff", color: "#fff" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               {viewMode !== "list" && (
-                <button onClick={goBack} className="hover:opacity-70">
-                  <ArrowLeft className="h-4 w-4" />
+                <button onClick={goBack} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 0 }}>
+                  <ArrowLeftOutlined />
                 </button>
               )}
-              <MessageCircle className="h-5 w-5" />
-              <span className="font-semibold text-sm">
+              <MessageOutlined />
+              <span style={{ fontWeight: 600, fontSize: 14 }}>
                 {viewMode === "list" ? "Chat" : viewMode === "new-chat" ? "New Chat" : getThreadTitle()}
               </span>
             </div>
-            <div className="flex items-center gap-1">
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
               {viewMode === "list" && (
-                <button onClick={() => setViewMode("new-chat")} className="p-1 hover:opacity-70" title="New Chat">
-                  <Plus className="h-4 w-4" />
+                <button onClick={() => setViewMode("new-chat")} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 4 }} title="New Chat">
+                  <PlusOutlined />
                 </button>
               )}
-              <button onClick={() => setSoundEnabled(!soundEnabled)} className="p-1 hover:opacity-70" title={soundEnabled ? "Mute" : "Unmute"}>
-                {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              <button onClick={() => setSoundEnabled(!soundEnabled)} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 4 }} title={soundEnabled ? "Mute" : "Unmute"}>
+                {soundEnabled ? <SoundOutlined /> : <StopOutlined />}
               </button>
-              <button onClick={() => { setIsOpen(false); setActiveThread(null); setViewMode("list"); }} className="p-1 hover:opacity-70">
-                <X className="h-4 w-4" />
+              <button onClick={() => { setIsOpen(false); setActiveThread(null); setViewMode("list"); }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 4 }}>
+                <CloseOutlined />
               </button>
             </div>
           </div>
 
           {/* CONVERSATION LIST */}
           {viewMode === "list" && (
-            <ScrollArea className="flex-1">
-              {isLoading && <p className="text-center text-sm text-muted-foreground py-8">Loading...</p>}
+            <div style={{ flex: 1, overflowY: "auto" }}>
+              {isLoading && <div style={{ textAlign: "center", padding: 32 }}><Spin /></div>}
 
               {!isLoading && directConvos.length === 0 && walkinConvos.length === 0 && (
-                <div className="text-center py-12 px-4">
-                  <MessageSquare className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
-                  <p className="text-sm text-muted-foreground mb-3">No conversations yet</p>
-                  <Button size="sm" variant="outline" onClick={() => setViewMode("new-chat")}>
-                    <Plus className="h-3.5 w-3.5 mr-1" /> Start a Chat
-                  </Button>
+                <div style={{ textAlign: "center", padding: "48px 16px" }}>
+                  <MessageOutlined style={{ fontSize: 40, color: "#d9d9d9", display: "block", marginBottom: 12 }} />
+                  <Text type="secondary" style={{ display: "block", marginBottom: 12 }}>No conversations yet</Text>
+                  <Button size="small" icon={<PlusOutlined />} onClick={() => setViewMode("new-chat")}>Start a Chat</Button>
                 </div>
               )}
 
-              {/* Direct messages section */}
               {directConvos.length > 0 && (
                 <>
-                  <div className="px-3 pt-3 pb-1">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Direct Messages</p>
-                  </div>
+                  <div style={{ padding: "12px 12px 4px", fontSize: 10, fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: 1 }}>Direct Messages</div>
                   {directConvos.map((convo) => (
-                    <button
-                      key={convo.id}
-                      onClick={() => openDirectThread(convo)}
-                      className="w-full text-left px-3 py-2.5 border-b hover:bg-muted/50 transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
+                    <button key={convo.id} onClick={() => openDirectThread(convo)} style={{ width: "100%", textAlign: "left", padding: "10px 12px", borderBottom: "1px solid #f5f5f5", background: "none", border: "none", cursor: "pointer", borderBottomWidth: 1, borderBottomStyle: "solid", borderBottomColor: "#f5f5f5" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ height: 32, width: 32, borderRadius: "50%", background: "#e6f4ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 500 }}>
                             {convo.otherUser.firstName[0]}{convo.otherUser.lastName[0]}
                           </div>
                           <div>
-                            <span className="text-sm font-medium">{convo.otherUser.firstName} {convo.otherUser.lastName}</span>
-                            <p className="text-xs text-muted-foreground truncate max-w-[180px]">
-                              {convo.lastMessage || "No messages yet"}
-                            </p>
+                            <div style={{ fontSize: 14, fontWeight: 500 }}>{convo.otherUser.firstName} {convo.otherUser.lastName}</div>
+                            <div style={{ fontSize: 12, color: "#999", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 180 }}>{convo.lastMessage || "No messages yet"}</div>
                           </div>
                         </div>
-                        <div className="flex flex-col items-end gap-1">
-                          {convo.unreadCount > 0 && (
-                            <span className="h-4 w-4 rounded-full bg-primary text-primary-foreground text-[9px] flex items-center justify-center">
-                              {convo.unreadCount}
-                            </span>
-                          )}
-                          <Badge variant="secondary" className={`text-[8px] px-1 py-0 ${roleBadgeColor[convo.otherUser.role] || ""}`}>
-                            {convo.otherUser.role.replace("_", " ")}
-                          </Badge>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+                          {convo.unreadCount > 0 && <Badge count={convo.unreadCount} size="small" />}
+                          <Tag color={roleTagColor[convo.otherUser.role] || "default"} style={{ fontSize: 10, margin: 0, lineHeight: "16px", padding: "0 4px" }}>{convo.otherUser.role.replace("_", " ")}</Tag>
                         </div>
                       </div>
                     </button>
@@ -439,163 +408,104 @@ export function ChatWidget({ userId }: { userId: string }) {
                 </>
               )}
 
-              {/* Walk-in threads section */}
               {walkinConvos.length > 0 && (
                 <>
-                  <div className="px-3 pt-3 pb-1">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Walk-In Threads</p>
-                  </div>
+                  <div style={{ padding: "12px 12px 4px", fontSize: 10, fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: 1 }}>Walk-In Threads</div>
                   {walkinConvos.map((convo) => (
-                    <button
-                      key={convo.id}
-                      onClick={() => openWalkinThread(convo)}
-                      className="w-full text-left px-3 py-2.5 border-b hover:bg-muted/50 transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
+                    <button key={convo.id} onClick={() => openWalkinThread(convo)} style={{ width: "100%", textAlign: "left", padding: "10px 12px", background: "none", border: "none", cursor: "pointer", borderBottom: "1px solid #f5f5f5" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <div>
-                          <span className="text-sm font-medium">{convo.visitorName}</span>
-                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                            {convo.lastMessage || convo.purpose}
-                          </p>
+                          <div style={{ fontSize: 14, fontWeight: 500 }}>{convo.visitorName}</div>
+                          <div style={{ fontSize: 12, color: "#999", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200 }}>{convo.lastMessage || convo.purpose}</div>
                         </div>
-                        <Badge variant="secondary" className={`text-[10px] ${decisionColors[convo.decision] || ""}`}>
-                          {convo.decision}
-                        </Badge>
+                        <Tag color={decisionTagColor[convo.decision] || "default"} style={{ fontSize: 10 }}>{convo.decision}</Tag>
                       </div>
                     </button>
                   ))}
                 </>
               )}
-            </ScrollArea>
+            </div>
           )}
 
           {/* NEW CHAT - USER SEARCH */}
           {viewMode === "new-chat" && (
-            <div className="flex-1 flex flex-col">
-              <div className="p-3 border-b">
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    placeholder="Search staff by name..."
-                    className="pl-8 h-9 text-sm"
-                    autoFocus
-                  />
-                </div>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <div style={{ padding: 12, borderBottom: "1px solid #f0f0f0" }}>
+                <Input prefix={<SearchOutlined />} value={searchQuery} onChange={(e) => handleSearch(e.target.value)} placeholder="Search staff by name..." autoFocus size="small" />
               </div>
-              <ScrollArea className="flex-1">
-                {isSearching && <p className="text-center text-sm text-muted-foreground py-4">Searching...</p>}
+              <div style={{ flex: 1, overflowY: "auto" }}>
+                {isSearching && <div style={{ textAlign: "center", padding: 16 }}><Spin size="small" /></div>}
                 {!isSearching && searchQuery.length >= 2 && searchResults.length === 0 && (
-                  <p className="text-center text-sm text-muted-foreground py-4">No users found</p>
+                  <Text type="secondary" style={{ display: "block", textAlign: "center", padding: 16 }}>No users found</Text>
                 )}
                 {searchQuery.length < 2 && (
-                  <div className="text-center py-8 px-4">
-                    <Users className="h-8 w-8 mx-auto mb-2 text-muted-foreground/30" />
-                    <p className="text-xs text-muted-foreground">Type at least 2 characters to search</p>
+                  <div style={{ textAlign: "center", padding: "32px 16px" }}>
+                    <TeamOutlined style={{ fontSize: 32, color: "#d9d9d9", display: "block", marginBottom: 8 }} />
+                    <Text type="secondary" style={{ fontSize: 12 }}>Type at least 2 characters to search</Text>
                   </div>
                 )}
                 {searchResults.map((user) => (
-                  <button
-                    key={user.id}
-                    onClick={() => startChatWith(user)}
-                    className="w-full text-left px-3 py-2.5 border-b hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
+                  <button key={user.id} onClick={() => startChatWith(user)} style={{ width: "100%", textAlign: "left", padding: "10px 12px", background: "none", border: "none", cursor: "pointer", borderBottom: "1px solid #f5f5f5" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ height: 32, width: 32, borderRadius: "50%", background: "#e6f4ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 500 }}>
                         {user.firstName[0]}{user.lastName[0]}
                       </div>
                       <div>
-                        <span className="text-sm font-medium">{user.firstName} {user.lastName}</span>
-                        <div className="flex items-center gap-1">
-                          <Badge variant="secondary" className={`text-[8px] px-1 py-0 ${roleBadgeColor[user.role] || ""}`}>
-                            {user.role.replace("_", " ")}
-                          </Badge>
-                          {user.department && <span className="text-[10px] text-muted-foreground">{user.department.name}</span>}
+                        <div style={{ fontSize: 14, fontWeight: 500 }}>{user.firstName} {user.lastName}</div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                          <Tag color={roleTagColor[user.role] || "default"} style={{ fontSize: 10, margin: 0, lineHeight: "16px", padding: "0 4px" }}>{user.role.replace("_", " ")}</Tag>
+                          {user.department && <span style={{ fontSize: 10, color: "#999" }}>{user.department.name}</span>}
                         </div>
                       </div>
                     </div>
                   </button>
                 ))}
-              </ScrollArea>
+              </div>
             </div>
           )}
 
           {/* MESSAGE THREAD */}
           {viewMode === "thread" && activeThread && (
-            <div className="flex-1 flex flex-col overflow-hidden">
-              {/* Quick decision bar for walk-in threads */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
               {canDecide && (
-                <div className="flex items-center gap-1.5 px-3 py-2 border-b bg-muted/30">
-                  <span className="text-xs text-muted-foreground mr-auto">Respond:</span>
-                  <Button size="sm" variant="default" className="h-7 text-xs bg-green-600 hover:bg-green-700" onClick={() => handleDecision("APPROVED")}>
-                    <UserCheck className="h-3 w-3 mr-1" /> See Now
-                  </Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => handleDecision("WAIT")}>
-                    <Clock className="h-3 w-3 mr-1" /> Wait
-                  </Button>
-                  <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => handleDecision("DECLINED")}>
-                    <XCircle className="h-3 w-3 mr-1" /> No
-                  </Button>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", borderBottom: "1px solid #f0f0f0", background: "#fafafa" }}>
+                  <Text type="secondary" style={{ fontSize: 12, marginRight: "auto" }}>Respond:</Text>
+                  <Button size="small" type="primary" style={{ background: "#52c41a", borderColor: "#52c41a", fontSize: 12 }} icon={<CheckCircleOutlined />} onClick={() => handleDecision("APPROVED")}>See Now</Button>
+                  <Button size="small" style={{ fontSize: 12 }} icon={<ClockCircleOutlined />} onClick={() => handleDecision("WAIT")}>Wait</Button>
+                  <Button size="small" danger style={{ fontSize: 12 }} icon={<CloseCircleOutlined />} onClick={() => handleDecision("DECLINED")}>No</Button>
                 </div>
               )}
 
-              {/* Status bar for decided walk-ins */}
               {activeThread.type === "walkin" && activeThread.decision !== "PENDING" && (
-                <div className="flex items-center gap-2 px-3 py-1.5 border-b bg-muted/20">
-                  <Badge variant="secondary" className={`text-[10px] ${decisionColors[activeThread.decision] || ""}`}>
-                    {activeThread.decision}
-                  </Badge>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderBottom: "1px solid #f0f0f0", background: "#fafafa" }}>
+                  <Tag color={decisionTagColor[activeThread.decision] || "default"} style={{ fontSize: 10 }}>{activeThread.decision}</Tag>
                 </div>
               )}
 
-              {/* Messages */}
-              <ScrollArea className="flex-1 px-3 py-2">
-                {isLoading && <p className="text-center text-sm text-muted-foreground py-4">Loading...</p>}
-                {!isLoading && messages.length === 0 && (
-                  <p className="text-center text-sm text-muted-foreground py-4">No messages yet. Start the conversation!</p>
-                )}
-                <div className="space-y-3">
-                  {messages.map((msg) => {
-                    const own = msg.sender?.id === session?.user?.id;
-                    return (
-                      <div key={msg.id} className={`flex flex-col ${own ? "items-end" : "items-start"}`}>
-                        <div className="flex items-center gap-1 mb-0.5">
-                          <span className="text-[10px] font-medium text-muted-foreground">
-                            {own ? "You" : msg.sender.firstName}
-                          </span>
-                          <Badge variant="secondary" className={`text-[8px] px-1 py-0 ${roleBadgeColor[msg.sender.role] || ""}`}>
-                            {msg.sender.role.replace("_", " ")}
-                          </Badge>
-                        </div>
-                        <div className={`rounded-lg px-3 py-1.5 max-w-[75%] text-sm ${own ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                          {msg.message}
-                        </div>
-                        <span className="text-[9px] text-muted-foreground mt-0.5">
-                          {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                        </span>
+              <div style={{ flex: 1, overflowY: "auto", padding: "8px 12px", display: "flex", flexDirection: "column", gap: 12 }}>
+                {isLoading && <div style={{ textAlign: "center", padding: 16 }}><Spin /></div>}
+                {!isLoading && messages.length === 0 && <Text type="secondary" style={{ textAlign: "center", padding: 16 }}>No messages yet. Start the conversation!</Text>}
+                {messages.map((msg) => {
+                  const own = msg.sender?.id === session?.user?.id;
+                  return (
+                    <div key={msg.id} style={{ display: "flex", flexDirection: "column", alignItems: own ? "flex-end" : "flex-start" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 2 }}>
+                        <span style={{ fontSize: 10, color: "#999", fontWeight: 500 }}>{own ? "You" : msg.sender.firstName}</span>
+                        <Tag color={roleTagColor[msg.sender.role] || "default"} style={{ fontSize: 8, margin: 0, lineHeight: "14px", padding: "0 3px" }}>{msg.sender.role.replace("_", " ")}</Tag>
                       </div>
-                    );
-                  })}
-                </div>
+                      <div style={{ borderRadius: 8, padding: "4px 12px", maxWidth: "75%", fontSize: 14, background: own ? "#1677ff" : "#f5f5f5", color: own ? "#fff" : undefined }}>
+                        {msg.message}
+                      </div>
+                      <span style={{ fontSize: 9, color: "#999", marginTop: 2 }}>{new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                    </div>
+                  );
+                })}
                 <div ref={messagesEndRef} />
-              </ScrollArea>
+              </div>
 
-              {/* Input */}
-              <div className="border-t p-2">
-                <form onSubmit={handleSend} className="flex gap-2">
-                  <Input
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type a message..."
-                    disabled={isSending}
-                    className="flex-1 h-9 text-sm"
-                    autoFocus
-                  />
-                  <Button type="submit" size="icon" className="h-9 w-9" disabled={isSending || !newMessage.trim()}>
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </form>
+              <div style={{ borderTop: "1px solid #f0f0f0", padding: 8, display: "flex", gap: 8 }}>
+                <Input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onPressEnter={(e) => { e.preventDefault(); handleSend(e as unknown as React.FormEvent); }} placeholder="Type a message..." disabled={isSending} size="small" style={{ flex: 1 }} autoFocus />
+                <Button type="primary" size="small" icon={<SendOutlined />} onClick={(e) => handleSend(e as unknown as React.FormEvent)} disabled={isSending || !newMessage.trim()} />
               </div>
             </div>
           )}

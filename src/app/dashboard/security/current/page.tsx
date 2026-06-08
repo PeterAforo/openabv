@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button, Card, Empty, List, Spin, Tag, Typography } from "antd";
+import { LogoutOutlined, TeamOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { LogOut, Users } from "lucide-react";
+
+const { Title, Text } = Typography;
 
 interface VisitorLog {
   id: string;
@@ -49,12 +49,7 @@ export default function CurrentVisitorsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ visitorLogId: logId }),
       });
-
-      if (!res.ok) {
-        toast.error("Check-out failed");
-        return;
-      }
-
+      if (!res.ok) { toast.error("Check-out failed"); return; }
       toast.success("Visitor checked out");
       fetchCurrentVisitors();
     } catch {
@@ -62,77 +57,45 @@ export default function CurrentVisitorsPage() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Current Visitors</h1>
-          <p className="text-muted-foreground">Visitors currently inside the premises</p>
+          <Title level={3} style={{ margin: 0 }}>Current Visitors</Title>
+          <Text type="secondary">Visitors currently inside the premises</Text>
         </div>
-        <Badge variant="secondary" className="text-lg px-4 py-2">
-          <Users className="h-4 w-4 mr-2" />
-          {visitors.length} Inside
-        </Badge>
+        <Tag icon={<TeamOutlined />} color="blue" style={{ fontSize: 14, padding: "4px 12px" }}>{visitors.length} Inside</Tag>
       </div>
 
       {visitors.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No visitors currently inside</p>
-          </CardContent>
-        </Card>
+        <Card><Empty image={<TeamOutlined style={{ fontSize: 48, color: "#bfbfbf" }} />} description="No visitors currently inside" /></Card>
       ) : (
-        <div className="grid gap-3">
-          {visitors.map((log) => (
-            <Card key={log.id}>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-semibold">
-                        {log.visitor.firstName} {log.visitor.lastName}
-                      </p>
-                      <Badge variant={log.isWalkIn ? "destructive" : "default"} className="text-xs">
-                        {log.isWalkIn ? "Walk-In" : "Appointment"}
-                      </Badge>
-                      {log.badgeNumber && (
-                        <Badge variant="outline">Badge: {log.badgeNumber}</Badge>
-                      )}
-                    </div>
-                    {log.visitor.company && (
-                      <p className="text-sm text-muted-foreground">{log.visitor.company}</p>
-                    )}
-                    <p className="text-sm text-muted-foreground">Purpose: {log.purpose}</p>
-                    {log.recipientName && (
-                      <p className="text-sm text-muted-foreground">Visiting: {log.recipientName}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground">
-                      In since: {new Date(log.checkInTime).toLocaleTimeString()}
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleCheckOut(log.id)}
-                    className="gap-1"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Check Out
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <List
+          dataSource={visitors}
+          renderItem={(log) => (
+            <List.Item
+              key={log.id}
+              style={{ background: "#fff", marginBottom: 8, padding: "12px 16px", borderRadius: 8, border: "1px solid #f0f0f0" }}
+              actions={[<Button key="out" icon={<LogoutOutlined />} onClick={() => handleCheckOut(log.id)} size="small">Check Out</Button>]}
+            >
+              <List.Item.Meta
+                title={<>
+                  <Text strong>{log.visitor.firstName} {log.visitor.lastName}</Text>{" "}
+                  <Tag color={log.isWalkIn ? "orange" : "blue"}>{log.isWalkIn ? "Walk-In" : "Appointment"}</Tag>
+                  {log.badgeNumber && <Tag>Badge: {log.badgeNumber}</Tag>}
+                </>}
+                description={<>
+                  {log.visitor.company && <Text type="secondary">{log.visitor.company} · </Text>}
+                  <Text type="secondary">Purpose: {log.purpose}</Text>
+                  {log.recipientName && <Text type="secondary"> · Visiting: {log.recipientName}</Text>}
+                  <br /><Text type="secondary" style={{ fontSize: 11 }}>In since: {new Date(log.checkInTime).toLocaleTimeString()}</Text>
+                </>}
+              />
+            </List.Item>
+          )}
+        />
       )}
     </div>
   );

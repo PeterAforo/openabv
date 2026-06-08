@@ -1,12 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/ui/data-table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button, Input, Select, Spin, Table, Tag, Typography } from "antd";
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { getStatusColor } from "@/lib/utils";
+import type { ColumnsType } from "antd/es/table";
+
+const { Title, Text } = Typography;
+
+const statusTagColor: Record<string, string> = {
+  PENDING: "warning",
+  APPROVED: "success",
+  DECLINED: "error",
+  RESCHEDULED: "processing",
+  CANCELLED: "default",
+  CHECKED_IN: "cyan",
+  CHECKED_OUT: "geekblue",
+  NO_SHOW: "volcano",
+  COMPLETED: "purple",
+};
 
 interface Appointment {
   id: string;
@@ -20,64 +32,6 @@ interface Appointment {
   recipient: { firstName: string; lastName: string };
   department?: { name: string } | null;
 }
-
-const columns: ColumnDef<Appointment>[] = [
-  {
-    accessorKey: "appointmentCode",
-    header: "Code",
-    cell: ({ row }) => (
-      <span className="font-mono text-sm">{row.original.appointmentCode}</span>
-    ),
-  },
-  {
-    accessorKey: "visitor",
-    header: "Visitor",
-    accessorFn: (row) => `${row.visitor.firstName} ${row.visitor.lastName}`,
-    cell: ({ row }) => (
-      <div>
-        <p className="font-medium">{row.original.visitor.firstName} {row.original.visitor.lastName}</p>
-        <p className="text-xs text-muted-foreground">{row.original.visitor.phone}</p>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "recipient",
-    header: "Recipient",
-    accessorFn: (row) => `${row.recipient.firstName} ${row.recipient.lastName}`,
-    cell: ({ row }) => (
-      <div>
-        <p>{row.original.recipient.firstName} {row.original.recipient.lastName}</p>
-        {row.original.department && (
-          <p className="text-xs text-muted-foreground">{row.original.department.name}</p>
-        )}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => new Date(row.original.date).toLocaleDateString(),
-  },
-  {
-    accessorKey: "startTime",
-    header: "Time",
-    cell: ({ row }) => new Date(row.original.startTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <Badge className={getStatusColor(row.original.status)}>{row.original.status}</Badge>
-    ),
-  },
-  {
-    accessorKey: "purpose",
-    header: "Purpose",
-    cell: ({ row }) => (
-      <span className="text-sm max-w-[200px] truncate block">{row.original.purpose}</span>
-    ),
-  },
-];
 
 function exportAppointmentsCSV(appointments: Appointment[]) {
   const headers = ["Code", "Visitor", "Phone", "Recipient", "Date", "Time", "Status", "Purpose"];
@@ -105,6 +59,7 @@ export default function AdminAppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchAppointments();
@@ -125,39 +80,57 @@ export default function AdminAppointmentsPage() {
     }
   }
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  const columns: ColumnsType<Appointment> = [
+    { title: "Code", dataIndex: "appointmentCode", key: "code", render: (v: string) => <Text code>{v}</Text> },
+    {
+      title: "Visitor", key: "visitor",
+      render: (_, r) => <div><Text strong>{r.visitor.firstName} {r.visitor.lastName}</Text><br /><Text type="secondary" style={{ fontSize: 12 }}>{r.visitor.phone}</Text></div>,
+    },
+    {
+      title: "Recipient", key: "recipient",
+      render: (_, r) => <div><Text>{r.recipient.firstName} {r.recipient.lastName}</Text>{r.department && <><br /><Text type="secondary" style={{ fontSize: 12 }}>{r.department.name}</Text></>}</div>,
+    },
+    { title: "Date", dataIndex: "date", key: "date", render: (v: string) => new Date(v).toLocaleDateString() },
+    { title: "Time", dataIndex: "startTime", key: "time", render: (v: string) => new Date(v).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
+    { title: "Status", dataIndex: "status", key: "status", render: (s: string) => <Tag color={statusTagColor[s] || "default"}>{s}</Tag> },
+    { title: "Purpose", dataIndex: "purpose", key: "purpose", ellipsis: true },
+  ];
+
+  const filtered = appointments.filter(a => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return a.appointmentCode.toLowerCase().includes(q) ||
+      `${a.visitor.firstName} ${a.visitor.lastName}`.toLowerCase().includes(q) ||
+      a.visitor.phone.includes(q) ||
+      `${a.recipient.firstName} ${a.recipient.lastName}`.toLowerCase().includes(q);
+  });
+
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">All Appointments</h1>
-          <p className="text-muted-foreground">{appointments.length} appointments</p>
+          <Title level={3} style={{ margin: 0 }}>All Appointments</Title>
+          <Text type="secondary">{appointments.length} appointments</Text>
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
-            <SelectItem value="APPROVED">Approved</SelectItem>
-            <SelectItem value="DECLINED">Declined</SelectItem>
-            <SelectItem value="CHECKED_IN">Checked In</SelectItem>
-            <SelectItem value="COMPLETED">Completed</SelectItem>
-            <SelectItem value="NO_SHOW">No Show</SelectItem>
-          </SelectContent>
-        </Select>
+        <div style={{ display: "flex", gap: 8 }}>
+          <Select value={statusFilter} onChange={setStatusFilter} style={{ width: 160 }} options={[
+            { label: "All Statuses", value: "all" },
+            { label: "Pending", value: "PENDING" },
+            { label: "Approved", value: "APPROVED" },
+            { label: "Declined", value: "DECLINED" },
+            { label: "Checked In", value: "CHECKED_IN" },
+            { label: "Completed", value: "COMPLETED" },
+            { label: "No Show", value: "NO_SHOW" },
+          ]} />
+          <Button icon={<DownloadOutlined />} onClick={() => exportAppointmentsCSV(appointments)}>Export</Button>
+        </div>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={appointments}
-        searchPlaceholder="Search appointments..."
-        onExport={() => exportAppointmentsCSV(appointments)}
-      />
+      <Input prefix={<SearchOutlined />} placeholder="Search appointments..." value={search} onChange={(e) => setSearch(e.target.value)} allowClear style={{ marginBottom: 16, maxWidth: 320 }} />
+
+      <Table<Appointment> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} />
     </div>
   );
 }

@@ -1,16 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button, Card, Col, Empty, Form, Input, Modal, Row, Spin, Tag, Typography } from "antd";
+import { PlusOutlined, TeamOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+
+const { Title, Text } = Typography;
 
 interface Branch {
   id: string;
@@ -27,7 +22,7 @@ export default function AdminBranchesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: "", address: "", city: "", phone: "" });
+  const [form] = Form.useForm();
 
   useEffect(() => { fetchBranches(); }, []);
 
@@ -44,14 +39,13 @@ export default function AdminBranchesPage() {
     }
   }
 
-  async function createBranch() {
-    if (!form.name.trim()) { toast.error("Name is required"); return; }
+  async function createBranch(values: Record<string, string>) {
     setIsSubmitting(true);
     try {
       const res = await fetch("/api/admin/branches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(values),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -60,7 +54,7 @@ export default function AdminBranchesPage() {
       }
       toast.success("Branch created");
       setShowCreate(false);
-      setForm({ name: "", address: "", city: "", phone: "" });
+      form.resetFields();
       fetchBranches();
     } catch {
       toast.error("Something went wrong");
@@ -69,77 +63,51 @@ export default function AdminBranchesPage() {
     }
   }
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Branches</h1>
-          <p className="text-muted-foreground">Manage organization branches</p>
+          <Title level={3} style={{ margin: 0 }}>Branches</Title>
+          <Text type="secondary">Manage organization branches</Text>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <Plus className="h-4 w-4 mr-2" /> Add Branch
-        </Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setShowCreate(true)}>Add Branch</Button>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {branches.map((branch) => (
-          <Card key={branch.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-semibold">{branch.name}</p>
-                  {branch.address && <p className="text-sm text-muted-foreground mt-1">{branch.address}</p>}
-                  {branch.city && <p className="text-sm text-muted-foreground">{branch.city}</p>}
-                  {branch.phone && <p className="text-sm text-muted-foreground">{branch.phone}</p>}
-                  <p className="text-sm text-muted-foreground mt-2">{branch._count.users} staff members</p>
+      {branches.length === 0 ? (
+        <Card><Empty description="No branches found" /></Card>
+      ) : (
+        <Row gutter={[16, 16]}>
+          {branches.map((branch) => (
+            <Col xs={24} md={12} lg={8} key={branch.id}>
+              <Card hoverable>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div>
+                    <Text strong style={{ fontSize: 16 }}>{branch.name}</Text>
+                    {branch.address && <div><Text type="secondary">{branch.address}</Text></div>}
+                    {branch.city && <div><Text type="secondary">{branch.city}</Text></div>}
+                    {branch.phone && <div><Text type="secondary">{branch.phone}</Text></div>}
+                    <div style={{ marginTop: 8 }}><Text type="secondary"><TeamOutlined /> {branch._count.users} staff members</Text></div>
+                  </div>
+                  <Tag color={branch.isActive ? "green" : "default"}>{branch.isActive ? "Active" : "Inactive"}</Tag>
                 </div>
-                <Badge variant={branch.isActive ? "default" : "secondary"}>
-                  {branch.isActive ? "Active" : "Inactive"}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {branches.length === 0 && (
-          <Card className="col-span-full"><CardContent className="py-8 text-center"><p className="text-muted-foreground">No branches found</p></CardContent></Card>
-        )}
-      </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
 
-      <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Create Branch</DialogTitle></DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Name</Label>
-              <Input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Branch name" />
-            </div>
-            <div className="space-y-2">
-              <Label>Address</Label>
-              <Input value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Street address" />
-            </div>
-            <div className="grid gap-4 grid-cols-2">
-              <div className="space-y-2">
-                <Label>City</Label>
-                <Input value={form.city} onChange={(e) => setForm((p) => ({ ...p, city: e.target.value }))} />
-              </div>
-              <div className="space-y-2">
-                <Label>Phone</Label>
-                <Input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} />
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button onClick={createBranch} disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <Modal title="Create Branch" open={showCreate} onCancel={() => setShowCreate(false)} onOk={() => form.submit()} confirmLoading={isSubmitting} okText="Create">
+        <Form form={form} layout="vertical" onFinish={createBranch}>
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: "Name is required" }]}><Input placeholder="Branch name" /></Form.Item>
+          <Form.Item name="address" label="Address"><Input placeholder="Street address" /></Form.Item>
+          <Row gutter={12}>
+            <Col span={12}><Form.Item name="city" label="City"><Input /></Form.Item></Col>
+            <Col span={12}><Form.Item name="phone" label="Phone"><Input /></Form.Item></Col>
+          </Row>
+        </Form>
+      </Modal>
     </div>
   );
 }

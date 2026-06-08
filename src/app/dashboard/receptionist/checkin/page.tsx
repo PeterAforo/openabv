@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
+import { Button, Card, Input, List, Space, Tag, Typography } from "antd";
+import { LoginOutlined, SearchOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { Search, UserCheck } from "lucide-react";
+
+const { Title, Text } = Typography;
 
 interface AppointmentResult {
   id: string;
@@ -55,11 +53,7 @@ export default function ReceptionistCheckinPage() {
           badgeNumber: badgeNumber || undefined,
         }),
       });
-      if (!res.ok) {
-        const data = await res.json();
-        toast.error(data.error || "Check-in failed");
-        return;
-      }
+      if (!res.ok) { const data = await res.json(); toast.error(data.error || "Check-in failed"); return; }
       toast.success(`${appointment.visitor.firstName} ${appointment.visitor.lastName} checked in`);
       setResults((prev) => prev.filter((r) => r.id !== appointment.id));
       setBadgeNumber("");
@@ -69,57 +63,38 @@ export default function ReceptionistCheckinPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Check-In</h1>
-        <p className="text-muted-foreground">Search for appointments and check in visitors</p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>Check-In</Title>
+        <Text type="secondary">Search for appointments and check in visitors</Text>
       </div>
 
       <Card>
-        <CardContent className="p-4">
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <Input
-                placeholder="Search by name, phone, or appointment code..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              />
-            </div>
-            <Button onClick={handleSearch} disabled={isSearching}>
-              <Search className="h-4 w-4 mr-2" /> {isSearching ? "Searching..." : "Search"}
-            </Button>
-          </div>
-        </CardContent>
+        <Space.Compact style={{ width: "100%" }}>
+          <Input placeholder="Search by name, phone, or appointment code..." value={query} onChange={(e) => setQuery(e.target.value)} onPressEnter={handleSearch} style={{ flex: 1 }} />
+          <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch} loading={isSearching}>{isSearching ? "Searching..." : "Search"}</Button>
+        </Space.Compact>
       </Card>
 
       {results.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-3 max-w-xs">
-            <Label className="whitespace-nowrap">Badge #</Label>
+        <div style={{ marginTop: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, maxWidth: 300 }}>
+            <Text strong style={{ whiteSpace: "nowrap" }}>Badge #</Text>
             <Input value={badgeNumber} onChange={(e) => setBadgeNumber(e.target.value)} placeholder="Optional" />
           </div>
-          {results.map((apt) => (
-            <Card key={apt.id}>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-semibold">{apt.visitor.firstName} {apt.visitor.lastName}</p>
-                      <Badge>{apt.status}</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground font-mono">{apt.appointmentCode}</p>
-                    <p className="text-sm text-muted-foreground">
-                      With: {apt.recipient.firstName} {apt.recipient.lastName} | {apt.purpose}
-                    </p>
-                  </div>
-                  <Button onClick={() => handleCheckin(apt)} className="gap-1">
-                    <UserCheck className="h-4 w-4" /> Check In
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          <List
+            dataSource={results}
+            renderItem={(apt) => (
+              <List.Item key={apt.id} style={{ background: "#fff", marginBottom: 8, padding: "12px 16px", borderRadius: 8, border: "1px solid #f0f0f0" }}
+                actions={[<Button key="checkin" type="primary" icon={<LoginOutlined />} onClick={() => handleCheckin(apt)}>Check In</Button>]}
+              >
+                <List.Item.Meta
+                  title={<><Text strong>{apt.visitor.firstName} {apt.visitor.lastName}</Text> <Tag>{apt.status}</Tag></>}
+                  description={<><Text code>{apt.appointmentCode}</Text><br /><Text type="secondary">With: {apt.recipient.firstName} {apt.recipient.lastName} | {apt.purpose}</Text></>}
+                />
+              </List.Item>
+            )}
+          />
         </div>
       )}
     </div>

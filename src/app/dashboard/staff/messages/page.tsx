@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, Empty, List, Spin, Tag, Typography } from "antd";
+import { MessageOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { MessageSquare } from "lucide-react";
+
+const { Title, Text } = Typography;
 
 interface ChatMessage {
   id: string;
@@ -34,43 +36,31 @@ export default function StaffMessagesPage() {
     load();
   }, []);
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Messages</h1>
-        <p className="text-muted-foreground">Walk-in chat conversations</p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>Messages</Title>
+        <Text type="secondary">Walk-in chat conversations</Text>
       </div>
 
-      <div className="space-y-2">
-        {messages.map((msg) => (
-          <Card key={msg.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <MessageSquare className="h-5 w-5 mt-0.5 text-muted-foreground" />
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium text-sm">{msg.senderName}</p>
-                    <span className="text-xs text-muted-foreground">({msg.senderRole})</span>
-                  </div>
-                  <p className="text-sm mt-1">{msg.message}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{new Date(msg.createdAt).toLocaleString()}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {messages.length === 0 && (
-          <Card><CardContent className="py-8 text-center">
-            <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No messages yet</p>
-            <p className="text-sm text-muted-foreground mt-1">Messages from walk-in chats will appear here</p>
-          </CardContent></Card>
-        )}
-      </div>
+      {messages.length === 0 ? (
+        <Card><Empty image={<MessageOutlined style={{ fontSize: 48, color: "#bfbfbf" }} />} description={<><Text type="secondary">No messages yet</Text><br /><Text type="secondary" style={{ fontSize: 12 }}>Messages from walk-in chats will appear here</Text></>} /></Card>
+      ) : (
+        <List
+          dataSource={messages}
+          renderItem={(msg) => (
+            <List.Item key={msg.id} style={{ background: "#fff", marginBottom: 8, padding: "12px 16px", borderRadius: 8, border: "1px solid #f0f0f0" }}>
+              <List.Item.Meta
+                avatar={<MessageOutlined style={{ fontSize: 18, marginTop: 4 }} />}
+                title={<><Text strong>{msg.senderName}</Text> <Tag>{msg.senderRole}</Tag></>}
+                description={<><Text>{msg.message}</Text><br /><Text type="secondary" style={{ fontSize: 11 }}>{new Date(msg.createdAt).toLocaleString()}</Text></>}
+              />
+            </List.Item>
+          )}
+        />
+      )}
     </div>
   );
 }

@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Empty, Input, Select, Space, Spin, Table, Tag, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { getStatusColor } from "@/lib/utils";
-import { Search } from "lucide-react";
+import type { ColumnsType } from "antd/es/table";
+
+const { Title, Text } = Typography;
+
+const statusTagColor: Record<string, string> = {
+  PENDING: "warning", APPROVED: "success", CHECKED_IN: "green", DECLINED: "error", COMPLETED: "default",
+};
 
 interface Appointment {
   id: string;
@@ -48,60 +51,40 @@ export default function ReceptionistAppointmentsPage() {
     `${a.visitor.firstName} ${a.visitor.lastName} ${a.appointmentCode}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  const columns: ColumnsType<Appointment> = [
+    {
+      title: "Visitor", key: "visitor",
+      render: (_, apt) => <><Text strong>{apt.visitor.firstName} {apt.visitor.lastName}</Text><br /><Text type="secondary" style={{ fontSize: 12 }}>{apt.visitor.phone}</Text></>,
+    },
+    { title: "Code", dataIndex: "appointmentCode", key: "code", render: (v: string) => <Text code>{v}</Text> },
+    { title: "Host", key: "host", render: (_, apt) => `${apt.recipient.firstName} ${apt.recipient.lastName}` },
+    { title: "Purpose", dataIndex: "purpose", key: "purpose", ellipsis: true },
+    { title: "Status", dataIndex: "status", key: "status", render: (v: string) => <Tag color={statusTagColor[v] || "default"}>{v}</Tag> },
+    { title: "Date", dataIndex: "date", key: "date", render: (v: string) => new Date(v).toLocaleDateString() },
+    { title: "Time", dataIndex: "startTime", key: "time", render: (v: string) => new Date(v).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
+  ];
+
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Appointments</h1>
-        <p className="text-muted-foreground">View today&apos;s and upcoming appointments</p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>Appointments</Title>
+        <Text type="secondary">View today&apos;s and upcoming appointments</Text>
       </div>
 
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-8" />
-        </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]"><SelectValue placeholder="Filter" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
-            <SelectItem value="APPROVED">Approved</SelectItem>
-            <SelectItem value="CHECKED_IN">Checked In</SelectItem>
-            <SelectItem value="COMPLETED">Completed</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <Space style={{ marginBottom: 16 }} wrap>
+        <Input prefix={<SearchOutlined />} placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} allowClear style={{ width: 250 }} />
+        <Select value={statusFilter} onChange={setStatusFilter} style={{ width: 160 }} options={[
+          { label: "All", value: "all" },
+          { label: "Pending", value: "PENDING" },
+          { label: "Approved", value: "APPROVED" },
+          { label: "Checked In", value: "CHECKED_IN" },
+          { label: "Completed", value: "COMPLETED" },
+        ]} />
+      </Space>
 
-      <div className="space-y-3">
-        {filtered.map((apt) => (
-          <Card key={apt.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold">{apt.visitor.firstName} {apt.visitor.lastName}</p>
-                    <Badge className={getStatusColor(apt.status)}>{apt.status}</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground font-mono">{apt.appointmentCode}</p>
-                  <p className="text-sm text-muted-foreground">With: {apt.recipient.firstName} {apt.recipient.lastName}</p>
-                  <p className="text-sm text-muted-foreground">Purpose: {apt.purpose}</p>
-                </div>
-                <div className="text-right text-sm text-muted-foreground">
-                  <p>{new Date(apt.date).toLocaleDateString()}</p>
-                  <p>{new Date(apt.startTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {filtered.length === 0 && (
-          <Card><CardContent className="py-8 text-center"><p className="text-muted-foreground">No appointments found</p></CardContent></Card>
-        )}
-      </div>
+      <Table<Appointment> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No appointments found" /> }} />
     </div>
   );
 }

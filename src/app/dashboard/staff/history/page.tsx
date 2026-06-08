@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Empty, Input, Spin, Table, Tag, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { Search } from "lucide-react";
+import type { ColumnsType } from "antd/es/table";
+
+const { Title, Text } = Typography;
 
 interface HistoryEntry {
   id: string;
@@ -42,44 +43,31 @@ export default function StaffHistoryPage() {
     `${h.visitor.firstName} ${h.visitor.lastName} ${h.appointmentCode}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  const columns: ColumnsType<HistoryEntry> = [
+    {
+      title: "Visitor", key: "visitor",
+      render: (_, e) => <><Text strong>{e.visitor.firstName} {e.visitor.lastName}</Text><br /><Text type="secondary" style={{ fontSize: 12 }}>{e.visitor.phone}</Text></>,
+    },
+    { title: "Code", dataIndex: "appointmentCode", key: "code", render: (v: string) => <Text code>{v}</Text> },
+    { title: "Purpose", dataIndex: "purpose", key: "purpose", ellipsis: true },
+    { title: "Status", dataIndex: "status", key: "status", render: (v: string) => <Tag color="default">{v}</Tag> },
+    { title: "Date", dataIndex: "date", key: "date", render: (v: string) => new Date(v).toLocaleDateString(), sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() },
+  ];
+
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Visitor History</h1>
-        <p className="text-muted-foreground">Past completed appointments</p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>Visitor History</Title>
+        <Text type="secondary">Past completed appointments</Text>
       </div>
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-8" />
+      <div style={{ marginBottom: 16 }}>
+        <Input prefix={<SearchOutlined />} placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} allowClear style={{ maxWidth: 300 }} />
       </div>
 
-      <div className="space-y-2">
-        {filtered.map((entry) => (
-          <Card key={entry.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium">{entry.visitor.firstName} {entry.visitor.lastName}</p>
-                    <Badge variant="secondary">{entry.status}</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground font-mono">{entry.appointmentCode}</p>
-                  <p className="text-sm text-muted-foreground">Purpose: {entry.purpose}</p>
-                </div>
-                <p className="text-sm text-muted-foreground">{new Date(entry.date).toLocaleDateString()}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {filtered.length === 0 && (
-          <Card><CardContent className="py-8 text-center"><p className="text-muted-foreground">No history found</p></CardContent></Card>
-        )}
-      </div>
+      <Table<HistoryEntry> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No history found" /> }} />
     </div>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Empty, Input, Select, Spin, Table, Tag, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { Search } from "lucide-react";
+import type { ColumnsType } from "antd/es/table";
+
+const { Title, Text } = Typography;
 
 interface VisitorLog {
   id: string;
@@ -54,65 +54,51 @@ export default function AdminVisitorsPage() {
     `${l.visitor.firstName} ${l.visitor.lastName} ${l.visitor.phone} ${l.recipientName || ""}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading...</p></div>;
-  }
+  const columns: ColumnsType<VisitorLog> = [
+    {
+      title: "Visitor", key: "visitor",
+      render: (_, log) => (
+        <div>
+          <Text strong>{log.visitor.firstName} {log.visitor.lastName}</Text>
+          <br /><Text type="secondary" style={{ fontSize: 12 }}>{log.visitor.phone}{log.visitor.company && ` · ${log.visitor.company}`}</Text>
+        </div>
+      ),
+    },
+    {
+      title: "Status", key: "status",
+      render: (_, log) => (
+        <>
+          <Tag color={log.status === "CHECKED_IN" ? "green" : "default"}>{log.status === "CHECKED_IN" ? "Inside" : "Checked Out"}</Tag>
+          {log.isWalkIn && <Tag color="orange">Walk-In</Tag>}
+        </>
+      ),
+    },
+    { title: "Purpose", dataIndex: "purpose", key: "purpose", ellipsis: true },
+    { title: "Visiting", dataIndex: "recipientName", key: "host", render: (v: string | null) => v || "-" },
+    { title: "Check-In", dataIndex: "checkInTime", key: "in", render: (v: string) => new Date(v).toLocaleString() },
+    { title: "Check-Out", dataIndex: "checkOutTime", key: "out", render: (v: string | null) => v ? new Date(v).toLocaleString() : "-" },
+    { title: "Badge", dataIndex: "badgeNumber", key: "badge", render: (v: string | null) => v || "-" },
+  ];
+
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Visitor Logs</h1>
-        <p className="text-muted-foreground">View all visitor check-in and check-out records</p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>Visitor Logs</Title>
+        <Text type="secondary">View all visitor check-in and check-out records</Text>
       </div>
 
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search visitors..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-8" />
-        </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="CHECKED_IN">Currently Inside</SelectItem>
-            <SelectItem value="CHECKED_OUT">Checked Out</SelectItem>
-          </SelectContent>
-        </Select>
+      <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+        <Input prefix={<SearchOutlined />} placeholder="Search visitors..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} allowClear style={{ maxWidth: 300 }} />
+        <Select value={statusFilter} onChange={setStatusFilter} style={{ width: 160 }} options={[
+          { label: "All", value: "all" },
+          { label: "Currently Inside", value: "CHECKED_IN" },
+          { label: "Checked Out", value: "CHECKED_OUT" },
+        ]} />
       </div>
 
-      <div className="space-y-3">
-        {filtered.map((log) => (
-          <Card key={log.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold">{log.visitor.firstName} {log.visitor.lastName}</p>
-                    <Badge variant={log.status === "CHECKED_IN" ? "default" : "secondary"}>
-                      {log.status === "CHECKED_IN" ? "Inside" : "Checked Out"}
-                    </Badge>
-                    {log.isWalkIn && <Badge variant="outline">Walk-In</Badge>}
-                  </div>
-                  <p className="text-sm text-muted-foreground">{log.visitor.phone}</p>
-                  {log.visitor.company && <p className="text-sm text-muted-foreground">{log.visitor.company}</p>}
-                  <p className="text-sm text-muted-foreground">Purpose: {log.purpose}</p>
-                  {log.recipientName && <p className="text-sm text-muted-foreground">Visiting: {log.recipientName}</p>}
-                </div>
-                <div className="text-right text-sm text-muted-foreground">
-                  <p>In: {new Date(log.checkInTime).toLocaleString()}</p>
-                  {log.checkOutTime && <p>Out: {new Date(log.checkOutTime).toLocaleString()}</p>}
-                  {log.badgeNumber && <p>Badge: {log.badgeNumber}</p>}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {filtered.length === 0 && (
-          <Card><CardContent className="py-8 text-center"><p className="text-muted-foreground">No visitor logs found</p></CardContent></Card>
-        )}
-      </div>
+      <Table<VisitorLog> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No visitor logs found" /> }} />
     </div>
   );
 }

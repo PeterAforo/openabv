@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { KPICard } from "@/components/dashboard/kpi-card";
-import { Users, UserCheck, Clock, Calendar } from "lucide-react";
+import { CalendarOutlined, ClockCircleOutlined, TeamOutlined, UserSwitchOutlined } from "@ant-design/icons";
 
 export default async function ReceptionistDashboardPage() {
   const session = await auth();
@@ -30,10 +30,10 @@ export default async function ReceptionistDashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KPICard title="Currently Inside" value={currentVisitors} icon={<Users className="h-4 w-4" />} />
-        <KPICard title="Today's Appointments" value={todayAppointments} icon={<Calendar className="h-4 w-4" />} />
-        <KPICard title="Today's Check-Ins" value={todayCheckins} icon={<UserCheck className="h-4 w-4" />} />
-        <KPICard title="Pending Walk-Ins" value={pendingWalkins} icon={<Clock className="h-4 w-4" />} />
+        <KPICard title="Currently Inside" value={currentVisitors} icon={<TeamOutlined />} />
+        <KPICard title="Today's Appointments" value={todayAppointments} icon={<CalendarOutlined />} />
+        <KPICard title="Today's Check-Ins" value={todayCheckins} icon={<UserSwitchOutlined />} />
+        <KPICard title="Pending Walk-Ins" value={pendingWalkins} icon={<ClockCircleOutlined />} />
       </div>
     </div>
   );

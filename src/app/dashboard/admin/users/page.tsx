@@ -1,22 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/ui/data-table";
+import { Button, Col, Form, Input, Modal, Row, Select, Spin, Table, Tag, Typography } from "antd";
+import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { ColumnsType } from "antd/es/table";
+
+const { Title, Text } = Typography;
 
 interface User {
   id: string;
@@ -30,47 +20,6 @@ interface User {
   branch?: { name: string } | null;
   createdAt: string;
 }
-
-const columns: ColumnDef<User>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    accessorFn: (row) => `${row.firstName} ${row.lastName}`,
-    cell: ({ row }) => (
-      <div>
-        <p className="font-medium">{row.original.firstName} {row.original.lastName}</p>
-        {row.original.department && (
-          <p className="text-xs text-muted-foreground">{row.original.department.name}</p>
-        )}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-    cell: ({ row }) => (
-      <Badge variant="secondary">{row.original.role.replace("_", " ")}</Badge>
-    ),
-  },
-  {
-    accessorKey: "isActive",
-    header: "Status",
-    cell: ({ row }) => (
-      <Badge variant={row.original.isActive ? "default" : "destructive"}>
-        {row.original.isActive ? "Active" : "Inactive"}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Joined",
-    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
-  },
-];
 
 function exportUsersCSV(users: User[]) {
   const headers = ["Name", "Email", "Role", "Department", "Status", "Joined"];
@@ -97,20 +46,9 @@ export default function AdminUsersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newUser, setNewUser] = useState({
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    role: "STAFF",
-    departmentId: "",
-    branchId: "",
-  });
+  const [form] = Form.useForm();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  useEffect(() => { fetchUsers(); }, []);
 
   async function fetchUsers() {
     try {
@@ -124,24 +62,22 @@ export default function AdminUsersPage() {
     }
   }
 
-  async function createUser() {
+  async function createUser(values: Record<string, string>) {
     setIsSubmitting(true);
     try {
       const res = await fetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(values),
       });
-
       if (!res.ok) {
         const data = await res.json();
         toast.error(data.error || "Failed to create user");
         return;
       }
-
       toast.success("User created successfully");
       setShowCreate(false);
-      setNewUser({ email: "", password: "", firstName: "", lastName: "", phone: "", role: "STAFF", departmentId: "", branchId: "" });
+      form.resetFields();
       fetchUsers();
     } catch {
       toast.error("Something went wrong");
@@ -150,79 +86,60 @@ export default function AdminUsersPage() {
     }
   }
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">Loading users...</p></div>;
-  }
+  const columns: ColumnsType<User> = [
+    {
+      title: "Name", key: "name",
+      render: (_, u) => (
+        <div>
+          <Text strong>{u.firstName} {u.lastName}</Text>
+          {u.department && <div><Text type="secondary" style={{ fontSize: 12 }}>{u.department.name}</Text></div>}
+        </div>
+      ),
+      sorter: (a, b) => `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`),
+    },
+    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "Role", dataIndex: "role", key: "role", render: (r: string) => <Tag color="blue">{r.replace("_", " ")}</Tag> },
+    { title: "Status", dataIndex: "isActive", key: "status", render: (v: boolean) => <Tag color={v ? "green" : "red"}>{v ? "Active" : "Inactive"}</Tag> },
+    { title: "Joined", dataIndex: "createdAt", key: "joined", render: (v: string) => new Date(v).toLocaleDateString() },
+  ];
+
+  if (isLoading) return <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-          <p className="text-muted-foreground">{users.length} users total</p>
+          <Title level={3} style={{ margin: 0 }}>User Management</Title>
+          <Text type="secondary">{users.length} users total</Text>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <Plus className="h-4 w-4 mr-2" /> Add User
-        </Button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <Button icon={<DownloadOutlined />} onClick={() => exportUsersCSV(users)}>Export</Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setShowCreate(true)}>Add User</Button>
+        </div>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={users}
-        searchPlaceholder="Search users..."
-        onExport={() => exportUsersCSV(users)}
-      />
+      <Table<User> columns={columns} dataSource={users} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} />
 
-      <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Create New User</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="grid gap-4 grid-cols-2">
-              <div className="space-y-2">
-                <Label>First Name</Label>
-                <Input value={newUser.firstName} onChange={(e) => setNewUser((p) => ({ ...p, firstName: e.target.value }))} />
-              </div>
-              <div className="space-y-2">
-                <Label>Last Name</Label>
-                <Input value={newUser.lastName} onChange={(e) => setNewUser((p) => ({ ...p, lastName: e.target.value }))} />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <Input type="email" value={newUser.email} onChange={(e) => setNewUser((p) => ({ ...p, email: e.target.value }))} />
-            </div>
-            <div className="space-y-2">
-              <Label>Password</Label>
-              <Input type="password" value={newUser.password} onChange={(e) => setNewUser((p) => ({ ...p, password: e.target.value }))} />
-            </div>
-            <div className="space-y-2">
-              <Label>Phone</Label>
-              <Input value={newUser.phone} onChange={(e) => setNewUser((p) => ({ ...p, phone: e.target.value }))} />
-            </div>
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <Select value={newUser.role} onValueChange={(val) => setNewUser((p) => ({ ...p, role: val }))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
-                  <SelectItem value="SECURITY">Security</SelectItem>
-                  <SelectItem value="RECEPTIONIST">Receptionist</SelectItem>
-                  <SelectItem value="STAFF">Staff</SelectItem>
-                  <SelectItem value="DEPARTMENT_HEAD">Department Head</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button onClick={createUser} disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create User"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <Modal title="Create New User" open={showCreate} onCancel={() => setShowCreate(false)} onOk={() => form.submit()} confirmLoading={isSubmitting} okText="Create User">
+        <Form form={form} layout="vertical" onFinish={createUser}>
+          <Row gutter={12}>
+            <Col span={12}><Form.Item name="firstName" label="First Name" rules={[{ required: true }]}><Input /></Form.Item></Col>
+            <Col span={12}><Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}><Input /></Form.Item></Col>
+          </Row>
+          <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}><Input /></Form.Item>
+          <Form.Item name="password" label="Password" rules={[{ required: true, min: 6 }]}><Input.Password /></Form.Item>
+          <Form.Item name="phone" label="Phone"><Input /></Form.Item>
+          <Form.Item name="role" label="Role" initialValue="STAFF">
+            <Select options={[
+              { label: "Admin", value: "ADMIN" },
+              { label: "Security", value: "SECURITY" },
+              { label: "Receptionist", value: "RECEPTIONIST" },
+              { label: "Staff", value: "STAFF" },
+              { label: "Department Head", value: "DEPARTMENT_HEAD" },
+            ]} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

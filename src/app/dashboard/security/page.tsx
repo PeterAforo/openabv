@@ -1,11 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { KPICard } from "@/components/dashboard/kpi-card";
-import { Users, UserCheck, Clock, AlertTriangle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { formatTime, getStatusColor } from "@/lib/utils";
+import { SecurityDashboardView } from "./security-dashboard-view";
 
 export default async function SecurityDashboardPage() {
   const session = await auth();
@@ -32,70 +28,18 @@ export default async function SecurityDashboardPage() {
     take: 10,
   });
 
+  const visitors = currentVisitorsList.map((log) => ({
+    id: log.id,
+    name: `${log.visitor.firstName} ${log.visitor.lastName}`,
+    purpose: log.purpose,
+    checkInTime: log.checkInTime.toISOString(),
+    isWalkIn: log.isWalkIn,
+  }));
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Security Dashboard</h1>
-        <p className="text-muted-foreground">Manage visitor check-ins and appointments</p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KPICard
-          title="Currently Inside"
-          value={currentVisitors}
-          icon={<Users className="h-4 w-4" />}
-        />
-        <KPICard
-          title="Today's Check-Ins"
-          value={todayCheckins}
-          icon={<UserCheck className="h-4 w-4" />}
-        />
-        <KPICard
-          title="Today's Check-Outs"
-          value={todayCheckouts}
-          icon={<Clock className="h-4 w-4" />}
-        />
-        <KPICard
-          title="Pending Walk-Ins"
-          value={pendingWalkins}
-          icon={<AlertTriangle className="h-4 w-4" />}
-        />
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Visitors Currently Inside</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {currentVisitorsList.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">No visitors currently inside</p>
-          ) : (
-            <div className="space-y-3">
-              {currentVisitorsList.map((log) => (
-                <div
-                  key={log.id}
-                  className="flex items-center justify-between p-3 rounded-lg border"
-                >
-                  <div>
-                    <p className="font-medium text-sm">
-                      {log.visitor.firstName} {log.visitor.lastName}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{log.purpose}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground">
-                      In: {formatTime(log.checkInTime)}
-                    </p>
-                    <Badge className={getStatusColor(log.status)}>
-                      {log.isWalkIn ? "Walk-In" : "Appointment"}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+    <SecurityDashboardView
+      stats={{ currentVisitors, todayCheckins, todayCheckouts, pendingWalkins }}
+      visitors={visitors}
+    />
   );
 }

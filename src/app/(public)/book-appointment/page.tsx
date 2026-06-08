@@ -1,26 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button, Card, Col, Form, Input, Result, Row, Select, Typography } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import Link from "next/link";
 
-interface StaffOption {
-  id: string;
-  firstName: string;
-  lastName: string;
-  department?: { name: string } | null;
-}
+const { Title, Text } = Typography;
 
-interface DepartmentOption {
-  id: string;
-  name: string;
-}
+interface StaffOption { id: string; firstName: string; lastName: string; department?: { name: string } | null; }
+interface DepartmentOption { id: string; name: string; }
 
 export default function BookAppointmentPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,219 +17,106 @@ export default function BookAppointmentPage() {
   const [appointmentCode, setAppointmentCode] = useState("");
   const [staff, setStaff] = useState<StaffOption[]>([]);
   const [departments, setDepartments] = useState<DepartmentOption[]>([]);
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    company: "",
-    recipientId: "",
-    departmentId: "",
-    purpose: "",
-    date: "",
-    startTime: "",
-    endTime: "",
-    notes: "",
-  });
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    fetch("/api/public/staff")
-      .then((res) => res.json())
-      .then((data) => setStaff(data))
-      .catch(() => toast.error("Failed to load staff list"));
-
-    fetch("/api/public/departments")
-      .then((res) => res.json())
-      .then((data) => setDepartments(data))
-      .catch(() => toast.error("Failed to load departments"));
+    fetch("/api/public/staff").then((r) => r.json()).then(setStaff).catch(() => toast.error("Failed to load staff list"));
+    fetch("/api/public/departments").then((r) => r.json()).then(setDepartments).catch(() => toast.error("Failed to load departments"));
   }, []);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit(values: Record<string, string>) {
     setIsLoading(true);
-
     try {
-      const res = await fetch("/api/appointments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
+      const res = await fetch("/api/appointments", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(values) });
       const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error || "Failed to book appointment");
-        return;
-      }
-
+      if (!res.ok) { toast.error(data.error || "Failed to book appointment"); return; }
       setAppointmentCode(data.appointmentCode);
       setSuccess(true);
       toast.success("Appointment booked successfully!");
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
+    } catch { toast.error("Something went wrong"); } finally { setIsLoading(false); }
   }
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
-              <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <CardTitle>Appointment Booked!</CardTitle>
-            <CardDescription>Your appointment has been submitted for approval</CardDescription>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <div className="bg-muted rounded-lg p-4">
-              <p className="text-sm text-muted-foreground">Your reference code</p>
-              <p className="text-2xl font-bold font-mono mt-1">{appointmentCode}</p>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Please save this code. You&apos;ll need it when you arrive.
-            </p>
-            <div className="flex gap-2 justify-center">
-              <Button asChild>
-                <Link href={`/appointment-status?code=${appointmentCode}`}>
-                  Check Status
-                </Link>
-              </Button>
-              <Button variant="outline" onClick={() => { setSuccess(false); setFormData({ firstName: "", lastName: "", email: "", phone: "", company: "", recipientId: "", departmentId: "", purpose: "", date: "", startTime: "", endTime: "", notes: "" }); }}>
-                Book Another
-              </Button>
-            </div>
-          </CardContent>
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f5f5f5", padding: 16 }}>
+        <Card style={{ maxWidth: 450, width: "100%" }}>
+          <Result
+            icon={<CheckCircleOutlined style={{ color: "#52c41a" }} />}
+            title="Appointment Booked!"
+            subTitle="Your appointment has been submitted for approval"
+            extra={[
+              <div key="code" style={{ background: "#f5f5f5", borderRadius: 8, padding: 16, marginBottom: 16 }}>
+                <Text type="secondary">Your reference code</Text>
+                <div><Text strong style={{ fontSize: 24, fontFamily: "monospace" }}>{appointmentCode}</Text></div>
+              </div>,
+              <Text key="note" type="secondary" style={{ display: "block", marginBottom: 16 }}>Please save this code. You&apos;ll need it when you arrive.</Text>,
+              <div key="actions" style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+                <Link href={`/appointment-status?code=${appointmentCode}`}><Button type="primary">Check Status</Button></Link>
+                <Button onClick={() => { setSuccess(false); form.resetFields(); }}>Book Another</Button>
+              </div>,
+            ]}
+          />
         </Card>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 py-8 px-4">
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="text-center">
-          <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold">OA</span>
+    <div style={{ minHeight: "100vh", background: "#f5f5f5", padding: "32px 16px" }}>
+      <div style={{ maxWidth: 700, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+            <div style={{ height: 40, width: 40, borderRadius: 12, background: "#1677ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ color: "#fff", fontWeight: "bold" }}>OA</span>
             </div>
-            <span className="text-xl font-bold">OpenABV</span>
+            <span style={{ fontSize: 20, fontWeight: "bold" }}>OpenABV</span>
           </Link>
-          <h1 className="text-3xl font-bold">Book an Appointment</h1>
-          <p className="text-muted-foreground mt-2">Fill in the form below to schedule your visit</p>
+          <Title level={2}>Book an Appointment</Title>
+          <Text type="secondary">Fill in the form below to schedule your visit</Text>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Appointment Details</CardTitle>
-            <CardDescription>All fields marked with * are required</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={onSubmit} className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name *</Label>
-                  <Input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name *</Label>
-                  <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number *</Label>
-                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="company">Company / Organization</Label>
-                <Input id="company" name="company" value={formData.company} onChange={handleChange} />
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Department</Label>
-                  <Select value={formData.departmentId} onValueChange={(val) => setFormData((p) => ({ ...p, departmentId: val }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select department" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {departments.map((dept) => (
-                        <SelectItem key={dept.id} value={dept.id}>{dept.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Who do you want to see? *</Label>
-                  <Select value={formData.recipientId} onValueChange={(val) => setFormData((p) => ({ ...p, recipientId: val }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select person" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {staff.map((s) => (
-                        <SelectItem key={s.id} value={s.id}>
-                          {s.firstName} {s.lastName} {s.department ? `(${s.department.name})` : ""}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="purpose">Purpose of Visit *</Label>
-                <Textarea id="purpose" name="purpose" value={formData.purpose} onChange={handleChange} required rows={3} />
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="space-y-2">
-                  <Label htmlFor="date">Preferred Date *</Label>
-                  <Input id="date" name="date" type="date" value={formData.date} onChange={handleChange} required min={new Date().toISOString().split("T")[0]} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="startTime">Start Time *</Label>
-                  <Input id="startTime" name="startTime" type="time" value={formData.startTime} onChange={handleChange} required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="endTime">End Time *</Label>
-                  <Input id="endTime" name="endTime" type="time" value={formData.endTime} onChange={handleChange} required />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Additional Notes</Label>
-                <Textarea id="notes" name="notes" value={formData.notes} onChange={handleChange} rows={2} />
-              </div>
-
-              <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                {isLoading ? "Booking..." : "Book Appointment"}
-              </Button>
-            </form>
-          </CardContent>
+        <Card title="Appointment Details" extra={<Text type="secondary">Fields marked with * are required</Text>}>
+          <Form form={form} layout="vertical" onFinish={onSubmit}>
+            <Row gutter={16}>
+              <Col xs={24} md={12}><Form.Item name="firstName" label="First Name" rules={[{ required: true }]}><Input /></Form.Item></Col>
+              <Col xs={24} md={12}><Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}><Input /></Form.Item></Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xs={24} md={12}><Form.Item name="email" label="Email"><Input type="email" /></Form.Item></Col>
+              <Col xs={24} md={12}><Form.Item name="phone" label="Phone Number" rules={[{ required: true }]}><Input /></Form.Item></Col>
+            </Row>
+            <Form.Item name="company" label="Company / Organization"><Input /></Form.Item>
+            <Row gutter={16}>
+              <Col xs={24} md={12}>
+                <Form.Item name="departmentId" label="Department">
+                  <Select placeholder="Select department" allowClear options={departments.map((d) => ({ label: d.name, value: d.id }))} />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item name="recipientId" label="Who do you want to see?" rules={[{ required: true }]}>
+                  <Select placeholder="Select person" showSearch optionFilterProp="label"
+                    options={staff.map((s) => ({ label: `${s.firstName} ${s.lastName}${s.department ? ` (${s.department.name})` : ""}`, value: s.id }))} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item name="purpose" label="Purpose of Visit" rules={[{ required: true }]}>
+              <Input.TextArea rows={3} />
+            </Form.Item>
+            <Row gutter={16}>
+              <Col xs={24} md={8}><Form.Item name="date" label="Preferred Date" rules={[{ required: true }]}><Input type="date" min={new Date().toISOString().split("T")[0]} /></Form.Item></Col>
+              <Col xs={24} md={8}><Form.Item name="startTime" label="Start Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
+              <Col xs={24} md={8}><Form.Item name="endTime" label="End Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
+            </Row>
+            <Form.Item name="notes" label="Additional Notes"><Input.TextArea rows={2} /></Form.Item>
+            <Button type="primary" htmlType="submit" block size="large" loading={isLoading}>
+              {isLoading ? "Booking..." : "Book Appointment"}
+            </Button>
+          </Form>
         </Card>
 
-        <p className="text-center text-sm text-muted-foreground">
-          Already have a reference code?{" "}
-          <Link href="/appointment-status" className="text-primary hover:underline font-medium">
-            Check your status
-          </Link>
+        <p style={{ textAlign: "center", marginTop: 24 }}>
+          <Text type="secondary">Already have a reference code? </Text>
+          <Link href="/appointment-status" style={{ fontWeight: 500 }}>Check your status</Link>
         </p>
       </div>
     </div>

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Users, Clock, RefreshCw, MessageCircle, UserCheck, XCircle } from "lucide-react";
+import { Button, Card, Col, Empty, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
+import { ReloadOutlined, ClockCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, TeamOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import { usePusherEvent } from "@/hooks/use-pusher";
 import { CHANNELS, EVENTS } from "@/lib/pusher";
+
+const { Title, Text } = Typography;
 
 interface QueueItem {
   id: string;
@@ -22,12 +22,19 @@ interface QueueItem {
   respondedAt: string | null;
 }
 
-const decisionColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800 border-yellow-300",
-  APPROVED: "bg-green-100 text-green-800 border-green-300",
-  WAIT: "bg-blue-100 text-blue-800 border-blue-300",
-  DECLINED: "bg-red-100 text-red-800 border-red-300",
-  RESCHEDULED: "bg-purple-100 text-purple-800 border-purple-300",
+const decisionTagColor: Record<string, string> = {
+  PENDING: "warning",
+  APPROVED: "success",
+  WAIT: "processing",
+  DECLINED: "error",
+  RESCHEDULED: "purple",
+};
+
+const borderColors: Record<string, string> = {
+  PENDING: "#faad14",
+  APPROVED: "#52c41a",
+  WAIT: "#1677ff",
+  DECLINED: "#ff4d4f",
 };
 
 function formatWaitTime(minutes: number): string {
@@ -59,19 +66,11 @@ export default function QueuePage() {
 
   useEffect(() => {
     fetchQueue();
-    // Auto-refresh every 30 seconds for wait time updates
     const interval = setInterval(fetchQueue, 30000);
     return () => clearInterval(interval);
   }, [fetchQueue]);
 
-  // Listen for real-time walk-in decisions
-  usePusherEvent(
-    CHANNELS.security,
-    EVENTS.WALKIN_DECISION,
-    () => {
-      fetchQueue();
-    }
-  );
+  usePusherEvent(CHANNELS.security, EVENTS.WALKIN_DECISION, () => { fetchQueue(); });
 
   async function handleDecision(id: string, decision: string) {
     try {
@@ -96,162 +95,77 @@ export default function QueuePage() {
   const waitingCount = queue.filter((q) => q.decision === "WAIT").length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Visitor Queue</h1>
-          <p className="text-muted-foreground">Real-time visitor waiting queue management</p>
+          <Title level={3} style={{ margin: 0 }}>Visitor Queue</Title>
+          <Text type="secondary">Real-time visitor waiting queue management</Text>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant={filter === "ACTIVE" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFilter("ACTIVE")}
-          >
-            Active Queue
-          </Button>
-          <Button
-            variant={filter === "ALL_TODAY" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFilter("ALL_TODAY")}
-          >
-            All Today
-          </Button>
-          <Button variant="ghost" size="icon" onClick={fetchQueue}>
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-        </div>
+        <Space>
+          <Button type={filter === "ACTIVE" ? "primary" : "default"} size="small" onClick={() => setFilter("ACTIVE")}>Active Queue</Button>
+          <Button type={filter === "ALL_TODAY" ? "primary" : "default"} size="small" onClick={() => setFilter("ALL_TODAY")}>All Today</Button>
+          <Button type="text" icon={<ReloadOutlined />} onClick={fetchQueue} />
+        </Space>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-        <Card>
-          <CardContent className="pt-4 pb-3 text-center">
-            <p className="text-2xl font-bold text-yellow-600">{pendingCount}</p>
-            <p className="text-xs text-muted-foreground">Awaiting Response</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4 pb-3 text-center">
-            <p className="text-2xl font-bold text-blue-600">{waitingCount}</p>
-            <p className="text-xs text-muted-foreground">Asked to Wait</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4 pb-3 text-center">
-            <p className="text-2xl font-bold text-green-600">{queue.filter((q) => q.decision === "APPROVED").length}</p>
-            <p className="text-xs text-muted-foreground">Approved Today</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4 pb-3 text-center">
-            <p className="text-2xl font-bold">{queue.length}</p>
-            <p className="text-xs text-muted-foreground">Total Walk-Ins</p>
-          </CardContent>
-        </Card>
-      </div>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={12} md={6}>
+          <Card size="small"><Statistic title="Awaiting Response" value={pendingCount} valueStyle={{ color: "#faad14" }} /></Card>
+        </Col>
+        <Col xs={12} md={6}>
+          <Card size="small"><Statistic title="Asked to Wait" value={waitingCount} valueStyle={{ color: "#1677ff" }} /></Card>
+        </Col>
+        <Col xs={12} md={6}>
+          <Card size="small"><Statistic title="Approved Today" value={queue.filter((q) => q.decision === "APPROVED").length} valueStyle={{ color: "#52c41a" }} /></Card>
+        </Col>
+        <Col xs={12} md={6}>
+          <Card size="small"><Statistic title="Total Walk-Ins" value={queue.length} /></Card>
+        </Col>
+      </Row>
 
-      {/* Queue list */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground">Loading queue...</p>
-        </div>
+        <div style={{ textAlign: "center", padding: "80px 0" }}><Spin size="large" /></div>
       ) : queue.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <Users className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
-            <p className="text-muted-foreground">No visitors in queue</p>
-          </CardContent>
-        </Card>
+        <Card><Empty image={<TeamOutlined style={{ fontSize: 48, color: "#bfbfbf" }} />} description="No visitors in queue" /></Card>
       ) : (
-        <div className="space-y-3">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {queue.map((item) => (
             <Card
               key={item.id}
-              className={`border-l-4 ${
-                item.decision === "PENDING"
-                  ? "border-l-yellow-500"
-                  : item.decision === "WAIT"
-                  ? "border-l-blue-500"
-                  : item.decision === "APPROVED"
-                  ? "border-l-green-500"
-                  : item.decision === "DECLINED"
-                  ? "border-l-red-500"
-                  : "border-l-gray-300"
-              }`}
+              size="small"
+              style={{ borderLeft: `4px solid ${borderColors[item.decision] || "#d9d9d9"}` }}
             >
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between gap-4">
-                  {/* Left: visitor info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-sm">
-                        #{item.position} {item.visitor.firstName} {item.visitor.lastName}
-                      </span>
-                      {item.visitor.company && (
-                        <span className="text-xs text-muted-foreground">({item.visitor.company})</span>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      To see: <span className="font-medium text-foreground">{item.recipient.firstName} {item.recipient.lastName}</span>
-                      {item.recipient.department && ` • ${item.recipient.department.name}`}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                      Purpose: {item.purpose}
-                    </p>
-                    {item.decisionNote && (
-                      <p className="text-xs text-muted-foreground mt-0.5 italic">
-                        Note: {item.decisionNote}
-                      </p>
-                    )}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ marginBottom: 4 }}>
+                    <Text strong>#{item.position} {item.visitor.firstName} {item.visitor.lastName}</Text>
+                    {item.visitor.company && <Text type="secondary" style={{ marginLeft: 8, fontSize: 12 }}>({item.visitor.company})</Text>}
                   </div>
-
-                  {/* Right: status + wait time + actions */}
-                  <div className="flex flex-col items-end gap-2">
-                    <div className="flex items-center gap-2">
-                      {(item.decision === "PENDING" || item.decision === "WAIT") && (
-                        <div className="flex items-center gap-1 text-orange-600">
-                          <Clock className="h-3.5 w-3.5" />
-                          <span className="text-xs font-medium">{formatWaitTime(item.waitTimeMinutes)}</span>
-                        </div>
-                      )}
-                      <Badge variant="secondary" className={`text-[10px] ${decisionColors[item.decision] || ""}`}>
-                        {item.decision}
-                      </Badge>
-                    </div>
-
-                    {/* Quick actions for pending items */}
-                    {item.decision === "PENDING" && (
-                      <div className="flex items-center gap-1">
-                        <Button
-                          size="sm"
-                          variant="default"
-                          className="h-7 text-xs bg-green-600 hover:bg-green-700"
-                          onClick={() => handleDecision(item.id, "APPROVED")}
-                        >
-                          <UserCheck className="h-3 w-3 mr-1" /> Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-7 text-xs"
-                          onClick={() => handleDecision(item.id, "WAIT")}
-                        >
-                          <Clock className="h-3 w-3 mr-1" /> Wait
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="h-7 text-xs"
-                          onClick={() => handleDecision(item.id, "DECLINED")}
-                        >
-                          <XCircle className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    )}
-                  </div>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    To see: <Text strong style={{ fontSize: 12 }}>{item.recipient.firstName} {item.recipient.lastName}</Text>
+                    {item.recipient.department && ` · ${item.recipient.department.name}`}
+                  </Text>
+                  <div><Text type="secondary" style={{ fontSize: 12 }}>Purpose: {item.purpose}</Text></div>
+                  {item.decisionNote && <div><Text type="secondary" italic style={{ fontSize: 12 }}>Note: {item.decisionNote}</Text></div>}
                 </div>
-              </CardContent>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+                  <Space size={4}>
+                    {(item.decision === "PENDING" || item.decision === "WAIT") && (
+                      <Tag icon={<ClockCircleOutlined />} color="orange">{formatWaitTime(item.waitTimeMinutes)}</Tag>
+                    )}
+                    <Tag color={decisionTagColor[item.decision] || "default"}>{item.decision}</Tag>
+                  </Space>
+
+                  {item.decision === "PENDING" && (
+                    <Space size={4}>
+                      <Button size="small" type="primary" style={{ background: "#52c41a", borderColor: "#52c41a" }} icon={<CheckCircleOutlined />} onClick={() => handleDecision(item.id, "APPROVED")}>Approve</Button>
+                      <Button size="small" icon={<ClockCircleOutlined />} onClick={() => handleDecision(item.id, "WAIT")}>Wait</Button>
+                      <Button size="small" danger icon={<CloseCircleOutlined />} onClick={() => handleDecision(item.id, "DECLINED")} />
+                    </Space>
+                  )}
+                </div>
+              </div>
             </Card>
           ))}
         </div>

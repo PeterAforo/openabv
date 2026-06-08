@@ -24,6 +24,7 @@ enum AppointmentStatus {
   DECLINED
   RESCHEDULED
   CANCELLED
+  ARRIVED
   CHECKED_IN
   CHECKED_OUT
   NO_SHOW
@@ -64,6 +65,67 @@ enum IDType {
   VOTER_ID
   COMPANY_ID
   OTHER
+}
+
+enum VisitorType {
+  GUEST
+  CONTRACTOR
+  VENDOR
+  DELIVERY
+  VIP
+  STAFF_GUEST
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+}
+
+enum ConsentStatus {
+  GRANTED
+  REVOKED
+  EXPIRED
+}
+
+enum DocumentType {
+  INVITATION_LETTER
+  ID_DOCUMENT
+  WORK_PERMIT
+  SAFETY_INDUCTION
+  DELIVERY_NOTE
+  CONTRACT
+  OTHER
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+  RESERVED
+}
+
+enum AccessAction {
+  GRANT
+  REVOKE
+  ENTRY
+  EXIT
+}
+
+enum KioskStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  CANCELLED
 }
 
 // ==================== MODELS ====================
@@ -167,9 +229,10 @@ model Branch {
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
-  users       User[]
+  users        User[]
   appointments Appointment[]
-  visitorLogs VisitorLog[]
+  visitorLogs  VisitorLog[]
+  meetingRooms MeetingRoom[]
 }
 
 model StaffProfile {
@@ -185,35 +248,49 @@ model StaffProfile {
 }
 
 model Visitor {
-  id          String    @id @default(uuid())
-  firstName   String
-  lastName    String
-  email       String?
-  phone       String
-  company     String?
-  idType      IDType?
-  idNumber    String?
-  vehicleNumber String?
-  photo       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String      @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String?
+  phone           String
+  company         String?
+  visitorType     VisitorType @default(GUEST)
+  idType          IDType?
+  idNumber        String?     // Masked ID number
+  idDocumentUrl   String?     // Uploaded ID document
+  idVerified      Boolean     @default(false)
+  vehicleNumber   String?
+  photo           String?     // Captured photo URL
+  isBlacklisted   Boolean     @default(false)
+  // Contractor/vendor fields
+  accessExpiry    DateTime?
+  safetyInduction Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
-  appointments Appointment[]
-  visitorLogs  VisitorLog[]
+  appointments   Appointment[]
+  visitorLogs    VisitorLog[]
   walkInRequests WalkInRequest[]
+  documents      VisitorDocument[]
+  watchlistEntries WatchlistEntry[]
+  consentRecords ConsentRecord[]
 
   @@index([phone])
   @@index([email])
+  @@index([isBlacklisted])
+  @@index([visitorType])
 }
 
 model Appointment {
   id              String            @id @default(uuid())
   appointmentCode String            @unique
   qrCodeToken     String            @unique @default(uuid())
+  qrExpiresAt     DateTime?         // QR expires after appointment window
   visitorId       String
   recipientId     String
   departmentId    String?
   branchId        String?
+  roomId          String?           // Meeting room booking
   purpose         String
   date            DateTime
   startTime       DateTime
@@ -224,7 +301,11 @@ model Appointment {
   rescheduledDate DateTime?
   rescheduledTime DateTime?
   googleEventId   String?
+  outlookEventId  String?
   reminderSent    Boolean           @default(false)
+  // Waiting time tracking
+  arrivedAt       DateTime?
+  respondedAt     DateTime?         // When host responded
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   deletedAt       DateTime?
@@ -233,7 +314,9 @@ model Appointment {
   recipient       User              @relation("AppointmentRecipient", fields: [recipientId], references: [id])
   department      Department?       @relation(fields: [departmentId], references: [id])
   branch          Branch?           @relation(fields: [branchId], references: [id])
+  room            MeetingRoom?      @relation(fields: [roomId], references: [id])
   visitorLog      VisitorLog?
+  roomBooking     RoomBooking?
 
   @@index([appointmentCode])
   @@index([qrCodeToken])
@@ -241,6 +324,7 @@ model Appointment {
   @@index([date])
   @@index([recipientId])
   @@index([visitorId])
+  @@index([roomId])
 }
 
 model VisitorLog {
@@ -250,14 +334,19 @@ model VisitorLog {
   branchId      String?
   purpose       String
   recipientName String?
+  hostId        String?
   status        VisitorLogStatus @default(CHECKED_IN)
   checkInTime   DateTime        @default(now())
   checkOutTime  DateTime?
   badgeNumber   String?
+  photoUrl      String?         // Photo taken at check-in
   isWalkIn      Boolean         @default(false)
   notes         String?
   checkedInBy   String?
   checkedOutBy  String?
+  // Emergency roll call
+  isAccountedFor Boolean        @default(false)
+  accountedAt   DateTime?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
@@ -269,6 +358,8 @@ model VisitorLog {
   @@index([status])
   @@index([checkInTime])
   @@index([isWalkIn])
+  @@index([branchId])
+  @@index([hostId])
 }
 
 model WalkInRequest {
@@ -412,4 +503,261 @@ model SystemSetting {
 
   @@index([key])
   @@index([group])
+}
+
+// ==================== PRO FEATURE MODELS ====================
+
+model WatchlistEntry {
+  id          String    @id @default(uuid())
+  visitorId   String?
+  firstName   String?
+  lastName    String?
+  phone       String?
+  email       String?
+  idNumber    String?
+  riskLevel   RiskLevel @default(MEDIUM)
+  reason      String
+  notes       String?   @db.Text
+  isActive    Boolean   @default(true)
+  addedBy     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  visitor     Visitor?  @relation(fields: [visitorId], references: [id])
+
+  @@index([visitorId])
+  @@index([phone])
+  @@index([email])
+  @@index([idNumber])
+  @@index([riskLevel])
+  @@index([isActive])
+}
+
+model VisitorDocument {
+  id          String       @id @default(uuid())
+  visitorId   String
+  type        DocumentType
+  fileName    String
+  fileUrl     String
+  fileSize    Int?
+  mimeType    String?
+  uploadedBy  String?
+  isVerified  Boolean      @default(false)
+  expiresAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  visitor     Visitor      @relation(fields: [visitorId], references: [id])
+
+  @@index([visitorId])
+  @@index([type])
+}
+
+model MeetingRoom {
+  id          String     @id @default(uuid())
+  name        String
+  branchId    String?
+  floor       String?
+  capacity    Int        @default(4)
+  amenities   String?    // JSON: ["projector","whiteboard","video_conferencing"]
+  status      RoomStatus @default(AVAILABLE)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  branch      Branch?    @relation(fields: [branchId], references: [id])
+  bookings    RoomBooking[]
+  appointments Appointment[]
+
+  @@index([branchId])
+  @@index([status])
+}
+
+model RoomBooking {
+  id            String    @id @default(uuid())
+  roomId        String
+  appointmentId String?   @unique
+  bookedBy      String
+  title         String
+  date          DateTime
+  startTime     DateTime
+  endTime       DateTime
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  room          MeetingRoom @relation(fields: [roomId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+
+  @@index([roomId])
+  @@index([date])
+  @@index([bookedBy])
+}
+
+model KioskSession {
+  id          String      @id @default(uuid())
+  branchId    String?
+  visitorPhone String?
+  visitorName String?
+  appointmentCode String?
+  qrToken     String?
+  status      KioskStatus @default(ACTIVE)
+  deviceId    String?
+  ipAddress   String?
+  startedAt   DateTime    @default(now())
+  completedAt DateTime?
+  expiresAt   DateTime
+
+  @@index([branchId])
+  @@index([visitorPhone])
+  @@index([status])
+  @@index([appointmentCode])
+}
+
+model ApprovalRule {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  // Conditions (JSON for flexibility)
+  conditions    String   @db.Text // JSON: { visitorType, department, timeRange, visitCount }
+  // Action
+  action        String   // auto_approve, require_approval, block
+  priority      Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([priority])
+}
+
+model AccessControlDevice {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // turnstile, smart_door, biometric
+  location    String?
+  branchId    String?
+  ipAddress   String?
+  apiEndpoint String?
+  apiKey      String?
+  isActive    Boolean  @default(true)
+  lastPing    DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  logs        AccessControlLog[]
+
+  @@index([branchId])
+  @@index([type])
+}
+
+model AccessControlLog {
+  id        String       @id @default(uuid())
+  deviceId  String
+  visitorId String?
+  userId    String?
+  action    AccessAction
+  granted   Boolean      @default(true)
+  reason    String?
+  metadata  String?      @db.Text // JSON
+  createdAt DateTime     @default(now())
+
+  device    AccessControlDevice @relation(fields: [deviceId], references: [id])
+
+  @@index([deviceId])
+  @@index([visitorId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model ConsentRecord {
+  id          String        @id @default(uuid())
+  visitorId   String
+  consentType String        // data_processing, photo_capture, id_storage
+  status      ConsentStatus @default(GRANTED)
+  ipAddress   String?
+  grantedAt   DateTime      @default(now())
+  revokedAt   DateTime?
+  expiresAt   DateTime?
+
+  visitor     Visitor       @relation(fields: [visitorId], references: [id])
+
+  @@index([visitorId])
+  @@index([consentType])
+  @@index([status])
+}
+
+model DataRetentionPolicy {
+  id              String   @id @default(uuid())
+  entityType      String   // visitor_log, visitor_photo, documents
+  retentionDays   Int      @default(365)
+  action          String   // delete, anonymize
+  isActive        Boolean  @default(true)
+  lastRunAt       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([entityType])
+}
+
+// ==================== SAAS / MULTI-TENANT ====================
+
+model Tenant {
+  id            String   @id @default(uuid())
+  name          String
+  slug          String   @unique
+  domain        String?  @unique
+  logo          String?
+  primaryColor  String?  @default("#3b82f6")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions TenantSubscription[]
+
+  @@index([slug])
+  @@index([domain])
+}
+
+model SubscriptionPlan {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  description   String?
+  price         Float
+  currency      String   @default("GHS")
+  interval      String   @default("monthly") // monthly, yearly
+  // Limits
+  maxUsers      Int      @default(10)
+  maxBranches   Int      @default(1)
+  maxVisitors   Int      @default(500) // per month
+  maxRooms      Int      @default(3)
+  // Feature flags
+  features      String   @db.Text // JSON array of feature keys
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions TenantSubscription[]
+}
+
+model TenantSubscription {
+  id            String             @id @default(uuid())
+  tenantId      String
+  planId        String
+  status        SubscriptionStatus @default(TRIAL)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  trialEndsAt   DateTime?
+  cancelledAt   DateTime?
+  // Usage tracking
+  usersCount    Int    @default(0)
+  visitorsThisMonth Int @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant           @relation(fields: [tenantId], references: [id])
+  plan          SubscriptionPlan @relation(fields: [planId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
 }
