@@ -17,6 +17,7 @@ export default function Home() {
           </Link>
           <nav className="flex items-center gap-4">
             <Link href="/appointment-status" className="text-sm hover:underline">Check Status</Link>
+            <Link href="/ai-assistant" className="text-sm hover:underline">AI Assistant</Link>
             <Link href="/book-appointment" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">Book Appointment</Link>
             <Link href="/login" className="px-4 py-2 border rounded-lg text-sm font-medium">Staff Login</Link>
           </nav>

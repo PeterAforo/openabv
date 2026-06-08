@@ -55,6 +55,7 @@
     "next": "16.2.7",
     "next-auth": "^5.0.0-beta.31",
     "nodemailer": "^7.0.13",
+    "openai": "^6.42.0",
     "pusher": "^5.3.3",
     "pusher-js": "^8.5.0",
     "qrcode": "^1.5.4",

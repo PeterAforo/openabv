@@ -27,6 +27,7 @@ import {
   LockOutlined,
   ToolOutlined,
   CrownOutlined,
+  RobotOutlined,
 } from "@ant-design/icons";
 
 interface SidebarProps {
@@ -54,6 +55,7 @@ const adminNav: NavItem[] = [
   { title: "Contractors", href: "/dashboard/admin/contractors", icon: <ToolOutlined /> },
   { title: "Privacy", href: "/dashboard/admin/privacy", icon: <LockOutlined /> },
   { title: "Subscriptions", href: "/dashboard/admin/subscriptions", icon: <CrownOutlined /> },
+  { title: "AI Assistant", href: "/dashboard/ai-assistant", icon: <RobotOutlined /> },
   { title: "Settings", href: "/dashboard/admin/settings", icon: <SettingOutlined /> },
 ];
 
