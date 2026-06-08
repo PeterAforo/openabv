@@ -36,9 +36,18 @@ export function DashboardHeader({ user, onMenuToggle }: HeaderProps) {
     .toUpperCase();
 
   useEffect(() => {
+    let stopped = false;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+
     async function fetchCount() {
+      if (stopped) return;
       try {
         const res = await fetch("/api/notifications?unread=true&limit=1");
+        if (res.status === 401) {
+          stopped = true;
+          if (intervalId) clearInterval(intervalId);
+          return;
+        }
         if (res.ok) {
           const data = await res.json();
           setUnreadCount(data.unreadCount || 0);
@@ -48,8 +57,8 @@ export function DashboardHeader({ user, onMenuToggle }: HeaderProps) {
       }
     }
     const timeout = setTimeout(fetchCount, 1500);
-    const interval = setInterval(fetchCount, 30000);
-    return () => { clearTimeout(timeout); clearInterval(interval); };
+    intervalId = setInterval(fetchCount, 30000);
+    return () => { stopped = true; clearTimeout(timeout); if (intervalId) clearInterval(intervalId); };
   }, []);
 
   const dropdownItems: MenuProps["items"] = [
