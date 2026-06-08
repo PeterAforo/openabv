@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Badge, Button, Input, Spin, Tag, Typography } from "antd";
+import type { InputRef } from "antd";
 import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
@@ -101,6 +102,7 @@ export function ChatWidget({ userId }: { userId: string }) {
   const [isSearching, setIsSearching] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const inputRef = useRef<InputRef>(null);
 
   // Initialize audio
   useEffect(() => {
@@ -285,6 +287,7 @@ export function ChatWidget({ userId }: { userId: string }) {
         if (activeThread.type === "direct" && !activeThread.conversationId && msg.conversationId) {
           setActiveThread({ ...activeThread, conversationId: msg.conversationId });
         }
+        setTimeout(() => inputRef.current?.focus(), 0);
       }
     } catch { /* ignore */ }
     setIsSending(false);
@@ -504,7 +507,7 @@ export function ChatWidget({ userId }: { userId: string }) {
               </div>
 
               <div style={{ borderTop: "1px solid #f0f0f0", padding: 8, display: "flex", gap: 8 }}>
-                <Input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onPressEnter={(e) => { e.preventDefault(); handleSend(e as unknown as React.FormEvent); }} placeholder="Type a message..." disabled={isSending} size="small" style={{ flex: 1 }} autoFocus />
+                <Input ref={inputRef} value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onPressEnter={(e) => { e.preventDefault(); handleSend(e as unknown as React.FormEvent); }} placeholder="Type a message..." disabled={isSending} size="small" style={{ flex: 1 }} autoFocus />
                 <Button type="primary" size="small" icon={<SendOutlined />} onClick={(e) => handleSend(e as unknown as React.FormEvent)} disabled={isSending || !newMessage.trim()} />
               </div>
             </div>

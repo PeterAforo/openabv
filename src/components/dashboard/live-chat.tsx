@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Button, Card, Input, Spin, Tag, Typography } from "antd";
+import type { InputRef } from "antd";
 import { CloseOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import { usePusherEvent } from "@/hooks/use-pusher";
@@ -40,6 +41,7 @@ export default function LiveChat({ walkInRequestId, visitorName, onClose, compac
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<InputRef>(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -71,6 +73,7 @@ export default function LiveChat({ walkInRequestId, visitorName, onClose, compac
         const msg = await res.json();
         setMessages((prev) => { if (prev.some((m) => m.id === msg.id)) return prev; return [...prev, msg]; });
         setNewMessage("");
+        setTimeout(() => inputRef.current?.focus(), 0);
       }
     } catch { console.error("Failed to send message"); } finally { setIsSending(false); }
   }
@@ -107,7 +110,7 @@ export default function LiveChat({ walkInRequestId, visitorName, onClose, compac
       </div>
 
       <div style={{ borderTop: "1px solid #f0f0f0", padding: 12, display: "flex", gap: 8 }}>
-        <Input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onPressEnter={handleSend} placeholder="Type a message..." disabled={isSending} style={{ flex: 1 }} />
+        <Input ref={inputRef} value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onPressEnter={handleSend} placeholder="Type a message..." disabled={isSending} style={{ flex: 1 }} autoFocus />
         <Button type="primary" icon={<SendOutlined />} onClick={handleSend} disabled={isSending || !newMessage.trim()} />
       </div>
     </Card>
