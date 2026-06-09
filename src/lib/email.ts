@@ -5,6 +5,7 @@ interface EmailOptions {
   to: string;
   subject: string;
   html: string;
+  text?: string;
   attachments?: Array<{
     filename: string;
     content: string | Buffer;
@@ -65,6 +66,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
       to: options.to,
       subject: options.subject,
       html: options.html,
+      text: options.text,
       attachments: options.attachments,
     });
     return true;
