@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Col, Form, Input, Modal, Row, Select, Spin, Table, Tag, Typography } from "antd";
 import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { PhotoCapture } from "@/components/ui/photo-capture";
 import { toast } from "sonner";
 import type { ColumnsType } from "antd/es/table";
 
@@ -163,6 +164,9 @@ export default function AdminUsersPage() {
           <Form.Item name="departmentId" label="Department" help="Required for Staff and Department Head roles">
             <Select placeholder="Select department" allowClear showSearch optionFilterProp="label"
               options={departments.map(d => ({ label: d.name, value: d.id }))} />
+          </Form.Item>
+          <Form.Item name="image" label="Profile Photo">
+            <PhotoCapture />
           </Form.Item>
         </Form>
       </Modal>

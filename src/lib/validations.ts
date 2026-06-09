@@ -14,6 +14,7 @@ export const registerUserSchema = z.object({
   role: z.enum(["SUPER_ADMIN", "ADMIN", "SECURITY", "RECEPTIONIST", "STAFF", "DEPARTMENT_HEAD"]),
   departmentId: z.string().uuid().optional().nullable(),
   branchId: z.string().uuid().optional().nullable(),
+  image: z.string().optional().nullable(),
 });
 
 export const bookAppointmentSchema = z.object({
@@ -30,6 +31,7 @@ export const bookAppointmentSchema = z.object({
   startTime: z.string().min(1, "Start time is required"),
   endTime: z.string().min(1, "End time is required"),
   notes: z.string().optional(),
+  photo: z.string().optional().nullable(),
 });
 
 export const walkInVisitorSchema = z.object({

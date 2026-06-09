@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Button, Card, Col, Form, Input, Modal, Row, Table, Tag, Typography, Space, Empty } from "antd";
 import { PlusOutlined, ReloadOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { PhotoCapture } from "@/components/ui/photo-capture";
 import { toast } from "sonner";
 import type { ColumnsType } from "antd/es/table";
 
@@ -163,6 +164,9 @@ export default function StaffPreRegisterPage() {
             <Col span={8}><Form.Item name="startTime" label="Start Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
             <Col span={8}><Form.Item name="endTime" label="End Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
           </Row>
+          <Form.Item name="photo" label="Visitor Photo">
+            <PhotoCapture />
+          </Form.Item>
           <Form.Item name="notes" label="Notes"><Input.TextArea rows={2} /></Form.Item>
           <Button type="primary" htmlType="submit" block size="large" loading={isSubmitting}>Pre-Register Visitor</Button>
         </Form>

@@ -34,7 +34,13 @@ export async function POST(request: NextRequest) {
           email: data.email || null,
           phone: data.phone,
           company: data.company || null,
+          photo: data.photo || null,
         },
+      });
+    } else if (data.photo && !visitor.photo) {
+      visitor = await prisma.visitor.update({
+        where: { id: visitor.id },
+        data: { photo: data.photo },
       });
     }
 

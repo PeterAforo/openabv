@@ -5,6 +5,7 @@ import { Button, Card, Col, Form, Input, Result, Row, Select, Typography, Steps 
 import { CheckCircleOutlined, PhoneOutlined, SafetyOutlined, FormOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import Link from "next/link";
+import { PhotoCapture } from "@/components/ui/photo-capture";
 
 const { Text } = Typography;
 
@@ -34,8 +35,13 @@ export default function BookAppointmentPage() {
 
   async function requestCode() {
     const phone = verifyForm.getFieldValue("phone");
+    const email = verifyForm.getFieldValue("email");
     if (!phone || phone.length < 10) {
       toast.error("Please enter a valid phone number");
+      return;
+    }
+    if (!email || !email.includes("@")) {
+      toast.error("Please enter a valid email address");
       return;
     }
     setIsLoading(true);
@@ -43,12 +49,12 @@ export default function BookAppointmentPage() {
       const res = await fetch("/api/public/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, action: "request" }),
+        body: JSON.stringify({ phone, email, action: "request" }),
       });
       const data = await res.json();
       if (!res.ok) { toast.error(data.error || "Failed to send code"); return; }
       setCodeSent(true);
-      toast.success("Verification code sent to your phone");
+      toast.success(data.message || "Verification code sent to your email");
       // In dev mode, show the code
       if (data._devCode) {
         toast.info(`Dev code: ${data._devCode}`, { duration: 30000 });
@@ -150,14 +156,21 @@ export default function BookAppointmentPage() {
         {step === "verify" && (
           <div style={{ background: "#fff", borderRadius: 16, border: "1px solid #E5E7EB", padding: 32, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
             <div style={{ marginBottom: 24 }}>
-              <h2 style={{ fontSize: 18, fontWeight: 600, color: "#0A2540", margin: 0 }}>Verify Your Phone Number</h2>
-              <p style={{ fontSize: 13, color: "#43474D", marginTop: 4 }}>For security purposes, we need to verify your identity before showing company information.</p>
+              <h2 style={{ fontSize: 18, fontWeight: 600, color: "#0A2540", margin: 0 }}>Verify Your Identity</h2>
+              <p style={{ fontSize: 13, color: "#43474D", marginTop: 4 }}>For security purposes, we need to verify your identity before showing company information. Enter your phone number and email to receive a verification code.</p>
             </div>
             <Form form={verifyForm} layout="vertical" onFinish={verifyCode} requiredMark={false}>
               <Form.Item name="phone" label={LABEL("Phone Number *")} rules={[{ required: true, message: "Phone number is required" }]}>
                 <Input
                   prefix={<PhoneOutlined style={{ color: "#999" }} />}
                   placeholder="+233 240 000 000"
+                  style={{ borderRadius: 10 }}
+                  disabled={codeSent}
+                />
+              </Form.Item>
+              <Form.Item name="email" label={LABEL("Email Address (for receiving OTP code) *")} rules={[{ required: true, type: "email", message: "Valid email is required to receive OTP" }]}>
+                <Input
+                  placeholder="your@email.com"
                   style={{ borderRadius: 10 }}
                   disabled={codeSent}
                 />
@@ -239,6 +252,9 @@ export default function BookAppointmentPage() {
                 <Col xs={24} md={8}><Form.Item name="startTime" label={LABEL("Start Time *")} rules={[{ required: true }]}><Input type="time" style={{ borderRadius: 10 }} /></Form.Item></Col>
                 <Col xs={24} md={8}><Form.Item name="endTime" label={LABEL("End Time *")} rules={[{ required: true }]}><Input type="time" style={{ borderRadius: 10 }} /></Form.Item></Col>
               </Row>
+              <Form.Item name="photo" label={LABEL("Your Photo (optional)")}>
+                <PhotoCapture size={80} />
+              </Form.Item>
               <Form.Item name="notes" label={LABEL("Additional Notes")}><Input.TextArea rows={2} style={{ borderRadius: 10 }} /></Form.Item>
               <button
                 type="submit"

@@ -89,6 +89,7 @@ export async function POST(request: NextRequest) {
         role: data.role,
         departmentId: data.departmentId || null,
         branchId: data.branchId || null,
+        image: data.image || null,
       },
     });
 

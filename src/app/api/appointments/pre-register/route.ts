@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { firstName, lastName, email, phone, company, purpose, date, startTime, endTime, notes } = body;
+    const { firstName, lastName, email, phone, company, purpose, date, startTime, endTime, notes, photo } = body;
 
     if (!firstName || !lastName || !phone || !purpose || !date || !startTime || !endTime) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -72,7 +72,14 @@ export async function POST(request: NextRequest) {
           email: email || null,
           phone,
           company: company || null,
+          photo: photo || null,
         },
+      });
+    } else if (photo && !visitor.photo) {
+      // Update photo if visitor exists but has no photo
+      visitor = await prisma.visitor.update({
+        where: { id: visitor.id },
+        data: { photo },
       });
     }
 
