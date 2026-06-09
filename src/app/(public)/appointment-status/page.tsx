@@ -84,7 +84,7 @@ function AppointmentStatusContent() {
 
         {appointment && (
           <Card title="Appointment Details" extra={<Tag color={statusTagColor[appointment.status] || "default"}>{appointment.status}</Tag>}>
-            <Descriptions column={2} size="small">
+            <Descriptions column={{ xs: 1, sm: 2 }} size="small">
               <Descriptions.Item label="Reference"><Text code>{appointment.appointmentCode}</Text></Descriptions.Item>
               <Descriptions.Item label="Date">{new Date(appointment.date).toLocaleDateString()}</Descriptions.Item>
               <Descriptions.Item label="Time">

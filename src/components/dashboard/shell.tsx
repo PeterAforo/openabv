@@ -338,9 +338,12 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
           .vf-sidebar { display: none !important; }
           .vf-main { margin-left: 0 !important; }
           .vf-mobile-menu-btn { display: flex !important; }
-          .vf-search-input { width: 160px !important; }
+          .vf-search-input { width: 140px !important; }
           .vf-user-info { display: none !important; }
           .vf-header { padding: 0 12px !important; gap: 8px !important; }
+        }
+        @media (max-width: 480px) {
+          .vf-search-input { display: none !important; }
         }
         @media (min-width: 992px) {
           .vf-mobile-drawer .ant-drawer-mask,

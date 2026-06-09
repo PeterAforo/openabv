@@ -158,10 +158,23 @@
   .ant-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
+
+  .ant-table-content {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   .ant-table {
-    min-width: 600px;
+    min-width: 520px;
+    font-size: 13px !important;
+  }
+
+  .ant-table-cell {
+    padding: 10px 8px !important;
+    white-space: nowrap;
   }
 
   /* Make Ant Design modals nearly full-screen on mobile */
