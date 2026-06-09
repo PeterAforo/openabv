@@ -218,7 +218,7 @@ export function AuditLogList({ logs: _initialLogs }: { logs: AuditLog[] }) {
               <Col span={12}><Text type="secondary">User:</Text><br /><Text>{detailItem.user ? `${detailItem.user.firstName} ${detailItem.user.lastName} (${detailItem.user.email})` : "System"}</Text></Col>
               <Col span={12}><Text type="secondary">IP Address:</Text><br /><Text style={{ fontFamily: "monospace" }}>{detailItem.ipAddress || "-"}</Text></Col>
             </Row>
-            {detailItem.oldValues && (
+            {detailItem.oldValues != null && (
               <div style={{ marginTop: 16 }}>
                 <Text type="secondary">Old Values:</Text>
                 <pre style={{ background: "#F8FAFC", padding: 12, borderRadius: 8, fontSize: 12, maxHeight: 200, overflow: "auto" }}>
@@ -226,7 +226,7 @@ export function AuditLogList({ logs: _initialLogs }: { logs: AuditLog[] }) {
                 </pre>
               </div>
             )}
-            {detailItem.newValues && (
+            {detailItem.newValues != null && (
               <div style={{ marginTop: 8 }}>
                 <Text type="secondary">New Values:</Text>
                 <pre style={{ background: "#F0FFF4", padding: 12, borderRadius: 8, fontSize: 12, maxHeight: 200, overflow: "auto" }}>
