@@ -154,6 +154,7 @@ export default function SubscriptionsPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 10 }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No subscription plans configured" }}
         />
       </Card>

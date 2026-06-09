@@ -141,6 +141,7 @@ export default function ContractorsPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 15, showSizeChanger: true }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No contractors or vendors found" }}
         />
       </Card>

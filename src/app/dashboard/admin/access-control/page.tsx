@@ -139,6 +139,7 @@ export default function AccessControlPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 10 }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No access control devices registered" }}
         />
       </Card>

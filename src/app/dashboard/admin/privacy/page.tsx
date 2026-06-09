@@ -152,6 +152,7 @@ export default function PrivacyPage() {
           rowKey="id"
           loading={isLoading}
           pagination={false}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No retention policies configured" }}
         />
       </Card>

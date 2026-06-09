@@ -84,7 +84,7 @@ export default function ReceptionistAppointmentsPage() {
         ]} />
       </Space>
 
-      <Table<Appointment> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No appointments found" /> }} />
+      <Table<Appointment> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} scroll={{ x: 700 }} locale={{ emptyText: <Empty description="No appointments found" /> }} />
     </div>
   );
 }

@@ -148,6 +148,7 @@ export default function DocumentsPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 15, showSizeChanger: true }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No documents uploaded" }}
         />
       </Card>

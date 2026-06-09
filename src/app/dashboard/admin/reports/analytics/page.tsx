@@ -113,17 +113,17 @@ export default function AnalyticsPage() {
       <Row gutter={[16, 16]}>
         <Col xs={24} md={12}>
           <Card title="Department Visit Volume" size="small">
-            <Table columns={deptColumns} dataSource={data.departmentVisits} rowKey="department" pagination={false} size="small" locale={{ emptyText: "No data" }} />
+            <Table columns={deptColumns} dataSource={data.departmentVisits} rowKey="department" pagination={false} size="small" scroll={{ x: 400 }} locale={{ emptyText: "No data" }} />
           </Card>
         </Col>
         <Col xs={24} md={12}>
           <Card title="Top Staff by Visits" size="small">
-            <Table columns={staffColumns} dataSource={data.staffVisitFrequency} rowKey="staff" pagination={false} size="small" locale={{ emptyText: "No data" }} />
+            <Table columns={staffColumns} dataSource={data.staffVisitFrequency} rowKey="staff" pagination={false} size="small" scroll={{ x: 400 }} locale={{ emptyText: "No data" }} />
           </Card>
         </Col>
         <Col xs={24} md={12}>
           <Card title="Appointment Status Breakdown" size="small">
-            <Table columns={statusColumns} dataSource={data.statusBreakdown} rowKey="status" pagination={false} size="small" />
+            <Table columns={statusColumns} dataSource={data.statusBreakdown} rowKey="status" pagination={false} size="small" scroll={{ x: 400 }} />
           </Card>
         </Col>
       </Row>

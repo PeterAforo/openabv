@@ -67,7 +67,7 @@ export default function StaffHistoryPage() {
         <Input prefix={<SearchOutlined />} placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} allowClear style={{ maxWidth: 300 }} />
       </div>
 
-      <Table<HistoryEntry> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No history found" /> }} />
+      <Table<HistoryEntry> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} scroll={{ x: 600 }} locale={{ emptyText: <Empty description="No history found" /> }} />
     </div>
   );
 }

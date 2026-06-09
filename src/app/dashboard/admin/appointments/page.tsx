@@ -130,7 +130,7 @@ export default function AdminAppointmentsPage() {
 
       <Input prefix={<SearchOutlined />} placeholder="Search appointments..." value={search} onChange={(e) => setSearch(e.target.value)} allowClear style={{ marginBottom: 16, maxWidth: 320 }} />
 
-      <Table<Appointment> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} />
+      <Table<Appointment> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} scroll={{ x: 700 }} />
     </div>
   );
 }

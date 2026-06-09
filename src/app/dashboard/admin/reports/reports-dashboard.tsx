@@ -174,6 +174,7 @@ export function ReportsDashboard({ stats: initialStats }: Props) {
               rowKey="id"
               size="small"
               pagination={false}
+              scroll={{ x: 400 }}
               locale={{ emptyText: <Empty description="No data" /> }}
             />
           </Card>
@@ -218,6 +219,7 @@ export function ReportsDashboard({ stats: initialStats }: Props) {
               { title: "Purpose", dataIndex: "purpose", ellipsis: true },
               { title: "Type", dataIndex: "isWalkIn", render: (v: boolean) => <Tag color={v ? "orange" : "blue"}>{v ? "Walk-In" : "Appointment"}</Tag> },
             ]}
+            scroll={{ x: 500 }}
           />
           <Title level={5} style={{ marginTop: 16 }}>Appointments</Title>
           <Table
@@ -232,6 +234,7 @@ export function ReportsDashboard({ stats: initialStats }: Props) {
               { title: "Purpose", dataIndex: "purpose", ellipsis: true },
               { title: "Status", dataIndex: "status", render: (s: string) => <Tag>{s}</Tag> },
             ]}
+            scroll={{ x: 500 }}
           />
         </Card>
       )}

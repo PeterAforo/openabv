@@ -151,15 +151,53 @@
 @media (max-width: 640px) {
   /* Dashboard main content — reduce padding on mobile */
   .vf-main main {
-    padding: 16px !important;
+    padding: 12px !important;
+  }
+
+  /* Constrain the inner content wrapper to prevent overflow */
+  .vf-main main > div {
+    max-width: 100% !important;
+    overflow-x: hidden;
+  }
+
+  /* Force KPI grids to exactly 2 columns on mobile */
+  .vf-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Quick action grids — stack to single column on small screens */
+  .vf-quick-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Custom table card wrappers — allow inner scroll */
+  .vf-table-card {
+    overflow: visible !important;
+    border-radius: 10px;
+  }
+  .vf-table-card > div:first-child {
+    padding: 12px 16px !important;
+  }
+  .vf-table-scroll {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin: 0;
+  }
+  .vf-table-scroll table {
+    min-width: 480px;
+  }
+  .vf-table-scroll th,
+  .vf-table-scroll td {
+    padding: 10px 12px !important;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   /* Make Ant Design tables horizontally scrollable on mobile */
   .ant-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin: 0 -12px;
-    padding: 0 12px;
   }
 
   .ant-table-content {
@@ -168,13 +206,19 @@
   }
 
   .ant-table {
-    min-width: 520px;
+    min-width: 480px;
     font-size: 13px !important;
   }
 
   .ant-table-cell {
     padding: 10px 8px !important;
     white-space: nowrap;
+  }
+
+  /* Ant table container should not clip */
+  .ant-card .ant-table-wrapper {
+    margin: 0 -12px;
+    padding: 0 12px;
   }
 
   /* Make Ant Design modals nearly full-screen on mobile */

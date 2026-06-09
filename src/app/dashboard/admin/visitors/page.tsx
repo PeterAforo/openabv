@@ -98,7 +98,7 @@ export default function AdminVisitorsPage() {
         ]} />
       </div>
 
-      <Table<VisitorLog> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No visitor logs found" /> }} />
+      <Table<VisitorLog> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} scroll={{ x: 600 }} locale={{ emptyText: <Empty description="No visitor logs found" /> }} />
     </div>
   );
 }

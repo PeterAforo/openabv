@@ -132,7 +132,7 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      <Table<User> columns={columns} dataSource={users} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} />
+      <Table<User> columns={columns} dataSource={users} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} scroll={{ x: 600 }} />
 
       <Modal title="Create New User" open={showCreate} onCancel={() => setShowCreate(false)} onOk={() => form.submit()} confirmLoading={isSubmitting} okText="Create User">
         <Form form={form} layout="vertical" onFinish={createUser}>

@@ -29,7 +29,7 @@ export function ReceptionistDashboardView({ currentVisitors, todayAppointments, 
       </div>
 
       {/* KPI Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 16 }}>
+      <div className="vf-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 16 }}>
         <KPICard title="Currently Inside" value={currentVisitors} icon={<TeamOutlined />} iconBg="rgba(0,108,75,0.1)" iconColor="#006C4B" />
         <KPICard title="Today's Appointments" value={todayAppointments} icon={<CalendarOutlined />} />
         <KPICard title="Today's Check-Ins" value={todayCheckins} icon={<UserSwitchOutlined />} iconBg="rgba(0,108,75,0.1)" iconColor="#006C4B" />

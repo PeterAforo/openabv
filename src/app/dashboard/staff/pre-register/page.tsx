@@ -142,6 +142,7 @@ export default function StaffPreRegisterPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 15, showSizeChanger: true }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: <Empty description="No pre-registered visitors" /> }}
         />
       </Card>

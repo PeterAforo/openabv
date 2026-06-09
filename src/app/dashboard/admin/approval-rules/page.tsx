@@ -144,6 +144,7 @@ export default function ApprovalRulesPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 10 }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No approval rules configured" }}
         />
       </Card>

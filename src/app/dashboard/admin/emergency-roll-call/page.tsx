@@ -237,6 +237,7 @@ export default function EmergencyRollCallPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 20 }}
+          scroll={{ x: 700 }}
         />
       </Card>
     </div>

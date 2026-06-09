@@ -84,7 +84,7 @@ export default function SecurityLogPage() {
         <Input prefix={<SearchOutlined />} placeholder="Search visitors..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} allowClear style={{ maxWidth: 300 }} />
       </div>
 
-      <Table<LogEntry> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} locale={{ emptyText: <Empty description="No visitor logs found" /> }} />
+      <Table<LogEntry> columns={columns} dataSource={filtered} rowKey="id" pagination={{ pageSize: 20, showSizeChanger: true }} scroll={{ x: 600 }} locale={{ emptyText: <Empty description="No visitor logs found" /> }} />
     </div>
   );
 }

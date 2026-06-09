@@ -196,6 +196,7 @@ export function AuditLogList({ logs: _initialLogs }: { logs: AuditLog[] }) {
             showTotal: (t) => `${t} entries`,
             onChange: (p, ps) => { setPage(p); setPageSize(ps); },
           }}
+          scroll={{ x: 800 }}
           locale={{ emptyText: <Empty description="No audit logs found" /> }}
         />
       </Card>

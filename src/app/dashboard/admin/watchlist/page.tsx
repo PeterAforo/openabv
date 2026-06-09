@@ -141,6 +141,7 @@ export default function WatchlistPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 10, showSizeChanger: true }}
+          scroll={{ x: 600 }}
           locale={{ emptyText: "No watchlist entries" }}
         />
       </Card>

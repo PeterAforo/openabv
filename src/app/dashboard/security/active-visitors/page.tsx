@@ -131,6 +131,7 @@ export default function ActiveVisitorsPage() {
           rowKey="id"
           loading={isLoading}
           pagination={{ pageSize: 15, showSizeChanger: true }}
+          scroll={{ x: 700 }}
         />
       </Card>
 

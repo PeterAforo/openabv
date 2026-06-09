@@ -39,7 +39,7 @@ export function StaffDashboardView({ stats, appointments }: Props) {
       </div>
 
       {/* KPI Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 16 }}>
+      <div className="vf-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 16 }}>
         <KPICard title="Total Appointments" value={stats.totalAppointments} icon={<CalendarOutlined />} />
         <KPICard title="Pending Approval" value={stats.pendingAppointments} icon={<ClockCircleOutlined />} iconBg="rgba(251,188,14,0.15)" iconColor="#B28400" />
         <KPICard title="Walk-In Requests" value={stats.pendingWalkins} icon={<UserOutlined />} iconBg="rgba(186,26,26,0.08)" iconColor="#BA1A1A" />
@@ -47,11 +47,11 @@ export function StaffDashboardView({ stats, appointments }: Props) {
       </div>
 
       {/* Upcoming Appointments Table */}
-      <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+      <div className="vf-table-card" style={{ background: "#fff", borderRadius: 10, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
         <div style={{ padding: "16px 24px", borderBottom: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h3 style={{ fontSize: 20, fontWeight: 600, color: "#0A2540", margin: 0 }}>Upcoming Appointments</h3>
         </div>
-        <div style={{ overflowX: "auto" }}>
+        <div className="vf-table-scroll" style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 500 }}>
             <thead>
               <tr style={{ background: "#F1F5F9", borderBottom: "1px solid #E5E7EB" }}>
