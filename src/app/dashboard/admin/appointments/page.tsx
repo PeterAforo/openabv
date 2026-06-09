@@ -109,12 +109,12 @@ export default function AdminAppointmentsPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div>
           <Title level={3} style={{ margin: 0 }}>All Appointments</Title>
           <Text type="secondary">{appointments.length} appointments</Text>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <Select value={statusFilter} onChange={setStatusFilter} style={{ width: 160 }} options={[
             { label: "All Statuses", value: "all" },
             { label: "Pending", value: "PENDING" },

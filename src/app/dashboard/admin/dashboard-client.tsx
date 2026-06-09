@@ -72,7 +72,7 @@ export function AdminDashboardClient({ stats, recentAppointments }: Props) {
       </div>
 
       {/* KPI Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 16 }}>
         <KPICard title="Total Appointments" value={stats.totalAppointments} icon={<CalendarOutlined />} />
         <KPICard title="Today's Appointments" value={stats.todayAppointments} icon={<ClockCircleOutlined />} iconBg="rgba(0,108,75,0.1)" iconColor="#006C4B" />
         <KPICard title="Pending Approval" value={stats.pendingAppointments} icon={<ExclamationCircleOutlined />} iconBg="rgba(251,188,14,0.15)" iconColor="#B28400" />
@@ -87,13 +87,13 @@ export function AdminDashboardClient({ stats, recentAppointments }: Props) {
           <h3 style={{ fontSize: 20, fontWeight: 600, color: "#0A2540", margin: 0 }}>Recent Appointments</h3>
         </div>
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 500 }}>
             <thead>
               <tr style={{ background: "#F1F5F9", borderBottom: "1px solid #E5E7EB" }}>
-                <th style={{ padding: "12px 24px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Visitor</th>
-                <th style={{ padding: "12px 24px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Host</th>
-                <th style={{ padding: "12px 24px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Date & Time</th>
-                <th style={{ padding: "12px 24px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Status</th>
+                <th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Visitor</th>
+                <th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Host</th>
+                <th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Date & Time</th>
+                <th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Status</th>
               </tr>
             </thead>
             <tbody>

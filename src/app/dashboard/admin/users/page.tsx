@@ -121,12 +121,12 @@ export default function AdminUsersPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div>
           <Title level={3} style={{ margin: 0 }}>User Management</Title>
           <Text type="secondary">{users.length} users total</Text>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <Button icon={<DownloadOutlined />} onClick={() => exportUsersCSV(users)}>Export</Button>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setShowCreate(true)}>Add User</Button>
         </div>

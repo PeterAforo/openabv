@@ -101,12 +101,12 @@ export default function QueuePage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div>
           <Title level={3} style={{ margin: 0 }}>Visitor Queue</Title>
           <Text type="secondary">Real-time visitor waiting queue management</Text>
         </div>
-        <Space>
+        <Space wrap>
           <Button type={filter === "ACTIVE" ? "primary" : "default"} size="small" onClick={() => setFilter("ACTIVE")}>Active Queue</Button>
           <Button type={filter === "ALL_TODAY" ? "primary" : "default"} size="small" onClick={() => setFilter("ALL_TODAY")}>All Today</Button>
           <Button type="text" icon={<ReloadOutlined />} onClick={fetchQueue} />
@@ -140,7 +140,7 @@ export default function QueuePage() {
               size="small"
               style={{ borderLeft: `4px solid ${borderColors[item.decision] || "#d9d9d9"}` }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ marginBottom: 4 }}>
                     <Text strong>#{item.position} {item.visitor.firstName} {item.visitor.lastName}</Text>

@@ -199,11 +199,11 @@ export function ReportsDashboard({ stats: initialStats }: Props) {
       {/* Visitor History Lookup */}
       {data?.visitorHistory && (
         <Card title={`Visitor History: ${data.visitorHistory.visitor.firstName} ${data.visitorHistory.visitor.lastName}`} style={{ marginBottom: 16 }}>
-          <Row gutter={12} style={{ marginBottom: 16 }}>
-            <Col span={6}><Text type="secondary">Phone:</Text> <Text>{data.visitorHistory.visitor.phone}</Text></Col>
-            <Col span={6}><Text type="secondary">Company:</Text> <Text>{data.visitorHistory.visitor.company || "-"}</Text></Col>
-            <Col span={6}><Text type="secondary">Total Visits:</Text> <Text strong>{data.visitorHistory.visits.length}</Text></Col>
-            <Col span={6}><Text type="secondary">Total Appointments:</Text> <Text strong>{data.visitorHistory.appointments.length}</Text></Col>
+          <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
+            <Col xs={12} sm={6}><Text type="secondary">Phone:</Text> <Text>{data.visitorHistory.visitor.phone}</Text></Col>
+            <Col xs={12} sm={6}><Text type="secondary">Company:</Text> <Text>{data.visitorHistory.visitor.company || "-"}</Text></Col>
+            <Col xs={12} sm={6}><Text type="secondary">Total Visits:</Text> <Text strong>{data.visitorHistory.visits.length}</Text></Col>
+            <Col xs={12} sm={6}><Text type="secondary">Total Appointments:</Text> <Text strong>{data.visitorHistory.appointments.length}</Text></Col>
           </Row>
           <Title level={5}>Recent Visits</Title>
           <Table

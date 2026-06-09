@@ -57,8 +57,8 @@ export default function ChatPage() {
         <Text type="secondary">Instant communication about walk-in visitor requests</Text>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: 24 }}>
-        <Card title={<><TeamOutlined /> Conversations ({conversations.length})</>} style={{ height: 600, overflow: "hidden", display: "flex", flexDirection: "column" }} bodyStyle={{ flex: 1, overflowY: "auto", padding: 0 }}>
+      <div className="vf-chat-grid" style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: 24 }}>
+        <Card className="vf-chat-conversations" title={<><TeamOutlined /> Conversations ({conversations.length})</>} style={{ height: 600, overflow: "hidden", display: "flex", flexDirection: "column" }} bodyStyle={{ flex: 1, overflowY: "auto", padding: 0 }}>
           {conversations.length === 0 ? (
             <Empty description="No conversations yet" style={{ padding: "40px 0" }} />
           ) : (
@@ -91,7 +91,7 @@ export default function ChatPage() {
               onClose={() => setActiveChatId(null)}
             />
           ) : (
-            <Card style={{ height: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Card className="vf-chat-panel" style={{ height: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Empty image={<MessageOutlined style={{ fontSize: 48, color: "#bfbfbf" }} />} description="Select a conversation to start chatting" />
             </Card>
           )}

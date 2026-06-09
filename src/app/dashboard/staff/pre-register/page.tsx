@@ -124,12 +124,12 @@ export default function StaffPreRegisterPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div>
           <Title level={3} style={{ margin: 0 }}>Pre-Register Visitors</Title>
           <Text type="secondary">Register visitors ahead of their arrival</Text>
         </div>
-        <Space>
+        <Space wrap>
           <Button icon={<ReloadOutlined />} onClick={fetchData} />
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setShowCreate(true)}>Pre-Register</Button>
         </Space>
@@ -160,9 +160,9 @@ export default function StaffPreRegisterPage() {
           <Form.Item name="company" label="Company"><Input /></Form.Item>
           <Form.Item name="purpose" label="Purpose of Visit" rules={[{ required: true }]}><Input /></Form.Item>
           <Row gutter={12}>
-            <Col span={8}><Form.Item name="date" label="Date" rules={[{ required: true }]}><Input type="date" min={new Date().toISOString().split("T")[0]} /></Form.Item></Col>
-            <Col span={8}><Form.Item name="startTime" label="Start Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
-            <Col span={8}><Form.Item name="endTime" label="End Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
+            <Col xs={24} sm={8}><Form.Item name="date" label="Date" rules={[{ required: true }]}><Input type="date" min={new Date().toISOString().split("T")[0]} /></Form.Item></Col>
+            <Col xs={12} sm={8}><Form.Item name="startTime" label="Start Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
+            <Col xs={12} sm={8}><Form.Item name="endTime" label="End Time" rules={[{ required: true }]}><Input type="time" /></Form.Item></Col>
           </Row>
           <Form.Item name="photo" label="Visitor Photo">
             <PhotoCapture />

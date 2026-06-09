@@ -20,7 +20,7 @@ interface KPICardProps {
 
 export function KPICard({ title, value, description, icon, iconBg, iconColor, trend }: KPICardProps) {
   return (
-    <div style={{ background: "#fff", padding: 24, borderRadius: 10, border: "1px solid #E5E7EB", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", transition: "box-shadow 0.2s", cursor: "default", position: "relative", overflow: "hidden" }}>
+    <div style={{ background: "#fff", padding: "16px 16px", borderRadius: 10, border: "1px solid #E5E7EB", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", transition: "box-shadow 0.2s", cursor: "default", position: "relative", overflow: "hidden" }}>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
         <div>
           <p style={{ fontSize: 12, fontWeight: 500, color: "#43474D", letterSpacing: "0.01em", margin: 0, marginBottom: 4 }}>{title}</p>

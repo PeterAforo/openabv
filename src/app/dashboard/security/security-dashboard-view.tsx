@@ -39,7 +39,7 @@ export function SecurityDashboardView({ stats, visitors }: Props) {
       </div>
 
       {/* Quick Actions */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
         <Link href="/dashboard/security/scan-qr" style={{ textDecoration: "none" }}>
           <div style={{ background: "#fff", border: "1px solid #E5E7EB", padding: 24, borderRadius: 10, display: "flex", alignItems: "center", gap: 16, cursor: "pointer", transition: "all 0.2s" }}>
             <div style={{ width: 56, height: 56, borderRadius: 10, background: "rgba(96,249,189,0.2)", color: "#006C4B", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}>
@@ -74,7 +74,7 @@ export function SecurityDashboardView({ stats, visitors }: Props) {
       </div>
 
       {/* KPI Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 16 }}>
         <KPICard title="Currently Inside" value={stats.currentVisitors} icon={<TeamOutlined />} iconBg="rgba(0,108,75,0.1)" iconColor="#006C4B" />
         <KPICard title="Today's Check-Ins" value={stats.todayCheckins} icon={<UserOutlined />} iconBg="rgba(0,108,75,0.1)" iconColor="#006C4B" />
         <KPICard title="Today's Check-Outs" value={stats.todayCheckouts} icon={<ClockCircleOutlined />} />
@@ -94,7 +94,7 @@ export function SecurityDashboardView({ stats, visitors }: Props) {
           )}
         </div>
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 500 }}>
             <thead>
               <tr style={{ background: "#F1F5F9", borderBottom: "1px solid #E5E7EB" }}>
                 <th style={{ padding: "12px 24px", fontSize: 12, fontWeight: 600, color: "#0A2540", textTransform: "uppercase", letterSpacing: "0.05em" }}>Visitor</th>

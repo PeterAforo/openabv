@@ -91,7 +91,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <h2 style={{ fontSize: 42, fontWeight: 700, color: "#fff", textAlign: "center", maxWidth: 420, lineHeight: 1.15, letterSpacing: "-0.02em", margin: 0 }}>
+          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.625rem)", fontWeight: 700, color: "#fff", textAlign: "center", maxWidth: 420, lineHeight: 1.15, letterSpacing: "-0.02em", margin: 0 }}>
             Smart Appointments.{" "}
             <br />
             <span style={{ color: "#63FCC0" }}>Secure Access.</span>
@@ -121,7 +121,7 @@ export default function LoginPage() {
           </div>
 
           <div style={{ marginBottom: 32 }}>
-            <h2 style={{ fontSize: 32, fontWeight: 700, color: "#0A2540", margin: 0, lineHeight: 1.25, letterSpacing: "-0.01em" }}>Welcome back</h2>
+            <h2 style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", fontWeight: 700, color: "#0A2540", margin: 0, lineHeight: 1.25, letterSpacing: "-0.01em" }}>Welcome back</h2>
             <p style={{ fontSize: 16, color: "#43474D", marginTop: 8, lineHeight: 1.5 }}>Please enter your credentials to access the console.</p>
           </div>
 

@@ -101,7 +101,7 @@ export default function BookAppointmentPage() {
         </div>
         <span style={{ fontSize: 20, fontWeight: 700, color: "#0A2540" }}>VisitFlow</span>
       </Link>
-      <div style={{ display: "flex", gap: 16, alignItems: "center", fontSize: 12, color: "#43474D" }}>
+      <div className="vf-booking-header-badges" style={{ display: "flex", gap: 16, alignItems: "center", fontSize: 12, color: "#43474D" }}>
         <span>Enterprise Security Ready</span>
         <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#74777E", display: "inline-block" }} />
         <span>ISO 27001 Certified</span>

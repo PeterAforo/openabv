@@ -279,7 +279,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
       {/* Main Area */}
       <div className="vf-main" style={{ flex: 1, marginLeft: 260, display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         {/* Header */}
-        <header style={{ position: "sticky", top: 0, zIndex: 50, height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", background: "#fff", borderBottom: "1px solid #E5E7EB", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+        <header className="vf-header" style={{ position: "sticky", top: 0, zIndex: 50, height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", background: "#fff", borderBottom: "1px solid #E5E7EB", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", overflow: "hidden" }}>
           {/* Left: Mobile menu + Search */}
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <button className="vf-mobile-menu-btn" onClick={() => setDrawerOpen(true)} style={{ display: "none", background: "none", border: "none", cursor: "pointer", fontSize: 20, color: "#43474D", padding: 4 }}>
@@ -288,7 +288,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
             <Input
               prefix={<SearchOutlined style={{ color: "#74777E" }} />}
               placeholder="Search visitors, hosts, or tags..."
-              style={{ width: 320, borderRadius: 8, background: "#F2F4F6", border: "1px solid #E5E7EB" }}
+              style={{ width: "100%", maxWidth: 320, borderRadius: 8, background: "#F2F4F6", border: "1px solid #E5E7EB" }}
               variant="filled"
               className="vf-search-input"
             />
@@ -333,8 +333,9 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
           .vf-sidebar { display: none !important; }
           .vf-main { margin-left: 0 !important; }
           .vf-mobile-menu-btn { display: flex !important; }
-          .vf-search-input { width: 200px !important; }
+          .vf-search-input { width: 160px !important; }
           .vf-user-info { display: none !important; }
+          .vf-header { padding: 0 12px !important; gap: 8px !important; }
         }
         @media (min-width: 992px) {
           .vf-mobile-drawer .ant-drawer-mask,
