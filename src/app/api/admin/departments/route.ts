@@ -11,7 +11,11 @@ export async function GET() {
 
   try {
     const departments = await prisma.department.findMany({
-      include: { _count: { select: { users: true } } },
+      include: {
+        _count: { select: { users: true } },
+        branch: { select: { name: true } },
+        contactPerson: { select: { firstName: true, lastName: true } },
+      },
       orderBy: { name: "asc" },
     });
     return NextResponse.json({ departments });
@@ -29,7 +33,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name, description } = body;
+    const { name, description, branchId, contactPersonId } = body;
 
     if (!name?.trim()) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -41,7 +45,12 @@ export async function POST(request: NextRequest) {
     }
 
     const department = await prisma.department.create({
-      data: { name: name.trim(), description: description?.trim() || null },
+      data: {
+        name: name.trim(),
+        description: description?.trim() || null,
+        branchId: branchId || null,
+        contactPersonId: contactPersonId || null,
+      },
     });
 
     await createAuditLog({

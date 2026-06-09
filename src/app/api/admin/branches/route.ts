@@ -11,7 +11,10 @@ export async function GET() {
 
   try {
     const branches = await prisma.branch.findMany({
-      include: { _count: { select: { users: true } } },
+      include: {
+        _count: { select: { users: true } },
+        contactPerson: { select: { firstName: true, lastName: true } },
+      },
       orderBy: { name: "asc" },
     });
     return NextResponse.json({ branches });
@@ -29,7 +32,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name, address, city, phone } = body;
+    const { name, address, city, phone, contactPersonId } = body;
 
     if (!name?.trim()) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -46,6 +49,7 @@ export async function POST(request: NextRequest) {
         address: address?.trim() || null,
         city: city?.trim() || null,
         phone: phone?.trim() || null,
+        contactPersonId: contactPersonId || null,
       },
     });
 

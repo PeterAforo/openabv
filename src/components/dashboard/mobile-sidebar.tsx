@@ -28,6 +28,8 @@ import {
   ToolOutlined,
   CrownOutlined,
   RobotOutlined,
+  QrcodeOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 
 type NavItem = { title: string; href: string; icon: React.ReactNode };
@@ -69,8 +71,10 @@ const securityNav: NavItem[] = [
 const staffNav: NavItem[] = [
   { title: "Dashboard", href: "/dashboard/staff", icon: <AppstoreOutlined /> },
   { title: "Appointments", href: "/dashboard/staff/appointments", icon: <CalendarOutlined /> },
+  { title: "Pre-Register", href: "/dashboard/staff/pre-register", icon: <UserOutlined /> },
   { title: "Walk-In Requests", href: "/dashboard/staff/walkins", icon: <UserSwitchOutlined /> },
   { title: "Calendar", href: "/dashboard/staff/calendar", icon: <CalendarOutlined /> },
+  { title: "My QR Code", href: "/dashboard/staff/qrcode", icon: <QrcodeOutlined /> },
   { title: "Live Chat", href: "/dashboard/chat", icon: <MessageOutlined /> },
   { title: "Messages", href: "/dashboard/staff/messages", icon: <MessageOutlined /> },
   { title: "Visitor History", href: "/dashboard/staff/history", icon: <ClockCircleOutlined /> },

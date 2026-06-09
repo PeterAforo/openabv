@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Card, Col, Form, Input, Modal, Row, Select, Table, Tag, Typography, Statistic } from "antd";
-import { PlusOutlined, WarningOutlined, SafetyOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Form, Input, Modal, Row, Select, Table, Tag, Typography, Statistic, Avatar } from "antd";
+import { PlusOutlined, WarningOutlined, SafetyOutlined, UserOutlined } from "@ant-design/icons";
+import { PhotoCapture } from "@/components/ui/photo-capture";
 import type { ColumnsType } from "antd/es/table";
 
 const { Title, Text } = Typography;
@@ -13,7 +14,10 @@ interface WatchlistEntry {
   lastName?: string;
   phone?: string;
   email?: string;
+  idType?: string;
   idNumber?: string;
+  photo?: string;
+  address?: string;
   riskLevel: string;
   reason: string;
   notes?: string;
@@ -63,19 +67,24 @@ export default function WatchlistPage() {
 
   const columns: ColumnsType<WatchlistEntry> = [
     {
-      title: "Name",
+      title: "Person",
       key: "name",
-      render: (_, entry) => (
-        <div>
-          <Text strong>
-            {entry.visitor ? `${entry.visitor.firstName} ${entry.visitor.lastName}` : `${entry.firstName || ""} ${entry.lastName || ""}`.trim() || "Unknown"}
-          </Text>
-          <br />
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            {entry.phone && `${entry.phone}`}{entry.email && ` · ${entry.email}`}
-          </Text>
-        </div>
-      ),
+      render: (_, entry) => {
+        const photo = entry.photo || entry.visitor?.photo;
+        const name = entry.visitor ? `${entry.visitor.firstName} ${entry.visitor.lastName}` : `${entry.firstName || ""} ${entry.lastName || ""}`.trim() || "Unknown";
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Avatar src={photo} icon={!photo ? <UserOutlined /> : undefined} size={36} />
+            <div>
+              <Text strong>{name}</Text>
+              <br />
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                {entry.phone && `${entry.phone}`}{entry.email && ` · ${entry.email}`}
+              </Text>
+            </div>
+          </div>
+        );
+      },
     },
     { title: "Reason", dataIndex: "reason", key: "reason", ellipsis: true },
     {
@@ -142,8 +151,14 @@ export default function WatchlistPage() {
         onCancel={() => setShowAdd(false)}
         footer={null}
         destroyOnClose
+        width={600}
       >
         <Form form={antForm} layout="vertical" onFinish={handleAdd}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+            <Form.Item name="photo" noStyle>
+              <PhotoCapture size={90} />
+            </Form.Item>
+          </div>
           <Row gutter={12}>
             <Col span={12}><Form.Item name="firstName" label="First Name"><Input /></Form.Item></Col>
             <Col span={12}><Form.Item name="lastName" label="Last Name"><Input /></Form.Item></Col>
@@ -153,8 +168,20 @@ export default function WatchlistPage() {
             <Col span={12}><Form.Item name="email" label="Email"><Input /></Form.Item></Col>
           </Row>
           <Row gutter={12}>
-            <Col span={12}><Form.Item name="idNumber" label="ID Number"><Input /></Form.Item></Col>
-            <Col span={12}>
+            <Col span={8}>
+              <Form.Item name="idType" label="ID Type">
+                <Select placeholder="Select" allowClear options={[
+                  { label: "National ID", value: "NATIONAL_ID" },
+                  { label: "Passport", value: "PASSPORT" },
+                  { label: "Driver's License", value: "DRIVERS_LICENSE" },
+                  { label: "Voter ID", value: "VOTER_ID" },
+                  { label: "Company ID", value: "COMPANY_ID" },
+                  { label: "Other", value: "OTHER" },
+                ]} />
+              </Form.Item>
+            </Col>
+            <Col span={8}><Form.Item name="idNumber" label="ID Number"><Input /></Form.Item></Col>
+            <Col span={8}>
               <Form.Item name="riskLevel" label="Risk Level" initialValue="MEDIUM">
                 <Select options={[
                   { label: "Low", value: "LOW" },
@@ -165,6 +192,9 @@ export default function WatchlistPage() {
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item name="address" label="Address">
+            <Input placeholder="Known address or location" />
+          </Form.Item>
           <Form.Item name="reason" label="Reason" rules={[{ required: true, message: "Reason is required" }]}>
             <Input placeholder="Why is this person flagged?" />
           </Form.Item>

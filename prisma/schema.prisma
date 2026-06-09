@@ -162,6 +162,8 @@ model User {
   calendarIntegrations CalendarIntegration[]
   sessions      Session[]
   accounts      Account[]
+  contactForDepartments Department[] @relation("DeptContact")
+  contactForBranches    Branch[]     @relation("BranchContact")
 
   @@index([email])
   @@index([role])
@@ -206,33 +208,45 @@ model VerificationToken {
 }
 
 model Department {
-  id          String    @id @default(uuid())
-  name        String    @unique
-  description String?
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  id              String    @id @default(uuid())
+  name            String    @unique
+  description     String?
+  branchId        String?
+  contactPersonId String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
 
-  users       User[]
-  appointments Appointment[]
+  branch        Branch?  @relation("DeptBranch", fields: [branchId], references: [id])
+  contactPerson User?    @relation("DeptContact", fields: [contactPersonId], references: [id])
+  users         User[]
+  appointments  Appointment[]
+
+  @@index([branchId])
+  @@index([contactPersonId])
 }
 
 model Branch {
-  id          String    @id @default(uuid())
-  name        String    @unique
-  address     String?
-  city        String?
-  phone       String?
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  id              String    @id @default(uuid())
+  name            String    @unique
+  address         String?
+  city            String?
+  phone           String?
+  contactPersonId String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
 
-  users        User[]
-  appointments Appointment[]
-  visitorLogs  VisitorLog[]
-  meetingRooms MeetingRoom[]
+  contactPerson User?    @relation("BranchContact", fields: [contactPersonId], references: [id])
+  departments   Department[] @relation("DeptBranch")
+  users         User[]
+  appointments  Appointment[]
+  visitorLogs   VisitorLog[]
+  meetingRooms  MeetingRoom[]
+
+  @@index([contactPersonId])
 }
 
 model StaffProfile {
@@ -245,6 +259,18 @@ model StaffProfile {
   availability String? // JSON string for availability schedule
 
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VisitorVerification {
+  id        String   @id @default(uuid())
+  phone     String
+  code      String
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+  @@index([code])
 }
 
 model Visitor {
@@ -514,7 +540,10 @@ model WatchlistEntry {
   lastName    String?
   phone       String?
   email       String?
+  idType      IDType?
   idNumber    String?
+  photo       String?
+  address     String?
   riskLevel   RiskLevel @default(MEDIUM)
   reason      String
   notes       String?   @db.Text

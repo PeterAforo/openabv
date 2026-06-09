@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Empty, Form, Input, Modal, Row, Spin, Tag, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Empty, Form, Input, Modal, Row, Select, Spin, Tag, Typography } from "antd";
+import { PlusOutlined, BankOutlined, UserOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 
 const { Title, Text } = Typography;
@@ -12,17 +12,28 @@ interface Department {
   name: string;
   description: string | null;
   isActive: boolean;
+  branch?: { name: string } | null;
+  contactPerson?: { firstName: string; lastName: string } | null;
   _count: { users: number };
 }
+
+interface BranchOption { id: string; name: string }
+interface StaffOption { id: string; firstName: string; lastName: string }
 
 export default function AdminDepartmentsPage() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [branches, setBranches] = useState<BranchOption[]>([]);
+  const [staffList, setStaffList] = useState<StaffOption[]>([]);
   const [form] = Form.useForm();
 
-  useEffect(() => { fetchDepartments(); }, []);
+  useEffect(() => {
+    fetchDepartments();
+    fetch("/api/admin/branches").then(r => r.json()).then(d => setBranches(d.branches || d)).catch(() => {});
+    fetch("/api/public/staff").then(r => r.json()).then(setStaffList).catch(() => {});
+  }, []);
 
   async function fetchDepartments() {
     try {
@@ -84,6 +95,10 @@ export default function AdminDepartmentsPage() {
                   <div>
                     <Text strong style={{ fontSize: 15 }}>{dept.name}</Text>
                     {dept.description && <div><Text type="secondary">{dept.description}</Text></div>}
+                    <div style={{ marginTop: 4 }}>
+                      {dept.branch && <Tag icon={<BankOutlined />} color="blue">{dept.branch.name}</Tag>}
+                      {dept.contactPerson && <Tag icon={<UserOutlined />}>{dept.contactPerson.firstName} {dept.contactPerson.lastName}</Tag>}
+                    </div>
                     <Text type="secondary" style={{ fontSize: 12 }}>{dept._count.users} staff members</Text>
                   </div>
                   <Tag color={dept.isActive ? "green" : "default"}>{dept.isActive ? "Active" : "Inactive"}</Tag>
@@ -100,8 +115,22 @@ export default function AdminDepartmentsPage() {
             <Input placeholder="Department name" />
           </Form.Item>
           <Form.Item name="description" label="Description">
-            <Input.TextArea placeholder="Optional description" rows={3} />
+            <Input.TextArea placeholder="Optional description" rows={2} />
           </Form.Item>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="branchId" label="Branch">
+                <Select placeholder="Select branch" allowClear
+                  options={branches.map(b => ({ label: b.name, value: b.id }))} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="contactPersonId" label="Contact Person" help="Main contact for official visits">
+                <Select placeholder="Select staff" allowClear showSearch optionFilterProp="label"
+                  options={staffList.map(s => ({ label: `${s.firstName} ${s.lastName}`, value: s.id }))} />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>

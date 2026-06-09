@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Button, Card, Col, Empty, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
-import { ReloadOutlined, ClockCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, TeamOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Empty, Modal, Row, Space, Spin, Statistic, Tag, Typography, Input } from "antd";
+import { ReloadOutlined, ClockCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, TeamOutlined, EyeOutlined, CalendarOutlined, PhoneOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import { usePusherEvent } from "@/hooks/use-pusher";
 import { CHANNELS, EVENTS } from "@/lib/pusher";
@@ -49,6 +49,9 @@ export default function QueuePage() {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<"ACTIVE" | "ALL_TODAY">("ACTIVE");
+  const [detailItem, setDetailItem] = useState<QueueItem | null>(null);
+  const [postponeId, setPostponeId] = useState<string | null>(null);
+  const [postponeNote, setPostponeNote] = useState("");
 
   const fetchQueue = useCallback(async () => {
     try {
@@ -72,15 +75,17 @@ export default function QueuePage() {
 
   usePusherEvent(CHANNELS.security, EVENTS.WALKIN_DECISION, () => { fetchQueue(); });
 
-  async function handleDecision(id: string, decision: string) {
+  async function handleDecision(id: string, decision: string, note = "") {
     try {
       const res = await fetch(`/api/walkins/${id}/decide`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ decision, note: "" }),
+        body: JSON.stringify({ decision, note }),
       });
       if (res.ok) {
         toast.success(`Visitor ${decision.toLowerCase()}`);
+        setPostponeId(null);
+        setPostponeNote("");
         fetchQueue();
       } else {
         const data = await res.json();
@@ -157,12 +162,23 @@ export default function QueuePage() {
                     <Tag color={decisionTagColor[item.decision] || "default"}>{item.decision}</Tag>
                   </Space>
 
-                  {item.decision === "PENDING" && (
-                    <Space size={4}>
-                      <Button size="small" type="primary" style={{ background: "#52c41a", borderColor: "#52c41a" }} icon={<CheckCircleOutlined />} onClick={() => handleDecision(item.id, "APPROVED")}>Approve</Button>
-                      <Button size="small" icon={<ClockCircleOutlined />} onClick={() => handleDecision(item.id, "WAIT")}>Wait</Button>
-                      <Button size="small" danger icon={<CloseCircleOutlined />} onClick={() => handleDecision(item.id, "DECLINED")} />
+                  {(item.decision === "PENDING" || item.decision === "WAIT") && (
+                    <Space size={4} wrap>
+                      {item.decision === "PENDING" && (
+                        <Button size="small" type="primary" style={{ background: "#52c41a", borderColor: "#52c41a" }} icon={<CheckCircleOutlined />} onClick={() => handleDecision(item.id, "APPROVED")}>Approve</Button>
+                      )}
+                      {item.decision === "PENDING" && (
+                        <Button size="small" icon={<ClockCircleOutlined />} onClick={() => handleDecision(item.id, "WAIT")}>Wait</Button>
+                      )}
+                      <Button size="small" icon={<CalendarOutlined />} onClick={() => setPostponeId(item.id)}>Postpone</Button>
+                      <Button size="small" icon={<EyeOutlined />} onClick={() => setDetailItem(item)} />
+                      {item.decision === "PENDING" && (
+                        <Button size="small" danger icon={<CloseCircleOutlined />} onClick={() => handleDecision(item.id, "DECLINED")} />
+                      )}
                     </Space>
+                  )}
+                  {item.decision === "APPROVED" && (
+                    <Button size="small" icon={<EyeOutlined />} onClick={() => setDetailItem(item)}>Details</Button>
                   )}
                 </div>
               </div>
@@ -170,6 +186,53 @@ export default function QueuePage() {
           ))}
         </div>
       )}
+
+      {/* Detail Modal */}
+      <Modal title="Visitor Details" open={!!detailItem} onCancel={() => setDetailItem(null)} footer={null} width={500}>
+        {detailItem && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div>
+              <Text strong style={{ fontSize: 16 }}>{detailItem.visitor.firstName} {detailItem.visitor.lastName}</Text>
+              <Tag color={decisionTagColor[detailItem.decision]} style={{ marginLeft: 8 }}>{detailItem.decision}</Tag>
+            </div>
+            <Row gutter={[12, 8]}>
+              <Col span={12}><Text type="secondary"><PhoneOutlined /> Phone:</Text><br /><Text>{detailItem.visitor.phone}</Text></Col>
+              <Col span={12}><Text type="secondary">Company:</Text><br /><Text>{detailItem.visitor.company || "-"}</Text></Col>
+              <Col span={12}><Text type="secondary">Visiting:</Text><br /><Text strong>{detailItem.recipient.firstName} {detailItem.recipient.lastName}</Text></Col>
+              <Col span={12}><Text type="secondary">Department:</Text><br /><Text>{detailItem.recipient.department?.name || "-"}</Text></Col>
+              <Col span={24}><Text type="secondary">Purpose:</Text><br /><Text>{detailItem.purpose}</Text></Col>
+              <Col span={12}><Text type="secondary">Arrived:</Text><br /><Text>{new Date(detailItem.createdAt).toLocaleString()}</Text></Col>
+              <Col span={12}><Text type="secondary">Wait Time:</Text><br /><Tag icon={<ClockCircleOutlined />} color="orange">{formatWaitTime(detailItem.waitTimeMinutes)}</Tag></Col>
+              {detailItem.decisionNote && <Col span={24}><Text type="secondary">Note:</Text><br /><Text italic>{detailItem.decisionNote}</Text></Col>}
+            </Row>
+            {detailItem.decision === "PENDING" && (
+              <Space style={{ marginTop: 8 }}>
+                <Button type="primary" style={{ background: "#52c41a", borderColor: "#52c41a" }} onClick={() => { handleDecision(detailItem.id, "APPROVED"); setDetailItem(null); }}>Approve</Button>
+                <Button onClick={() => { handleDecision(detailItem.id, "WAIT"); setDetailItem(null); }}>Ask to Wait</Button>
+                <Button danger onClick={() => { handleDecision(detailItem.id, "DECLINED"); setDetailItem(null); }}>Decline</Button>
+              </Space>
+            )}
+          </div>
+        )}
+      </Modal>
+
+      {/* Postpone Modal */}
+      <Modal
+        title="Postpone Visitor"
+        open={!!postponeId}
+        onCancel={() => { setPostponeId(null); setPostponeNote(""); }}
+        onOk={() => { if (postponeId) handleDecision(postponeId, "RESCHEDULED", postponeNote); }}
+        okText="Postpone"
+      >
+        <Text>Ask the visitor to come back at a later time.</Text>
+        <Input.TextArea
+          value={postponeNote}
+          onChange={e => setPostponeNote(e.target.value)}
+          placeholder="e.g., Please come back at 2:00 PM — the host is in a meeting."
+          rows={3}
+          style={{ marginTop: 12 }}
+        />
+      </Modal>
     </div>
   );
 }

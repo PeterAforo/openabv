@@ -41,14 +41,23 @@ function exportUsersCSV(users: User[]) {
   URL.revokeObjectURL(url);
 }
 
+interface DeptOption { id: string; name: string }
+interface BranchOption { id: string; name: string }
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [departments, setDepartments] = useState<DeptOption[]>([]);
+  const [branches, setBranches] = useState<BranchOption[]>([]);
   const [form] = Form.useForm();
 
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => {
+    fetchUsers();
+    fetch("/api/public/departments").then(r => r.json()).then(setDepartments).catch(() => {});
+    fetch("/api/admin/branches").then(r => r.json()).then(d => setBranches(d.branches || d)).catch(() => {});
+  }, []);
 
   async function fetchUsers() {
     try {
@@ -98,7 +107,11 @@ export default function AdminUsersPage() {
       sorter: (a, b) => `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`),
     },
     { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Role", dataIndex: "role", key: "role", render: (r: string) => <Tag color="blue">{r.replace("_", " ")}</Tag> },
+    { title: "Role", dataIndex: "role", key: "role", render: (r: string) => <Tag color="blue">{r.replace("_", " ")}</Tag>,
+      filters: ["ADMIN","SECURITY","RECEPTIONIST","STAFF","DEPARTMENT_HEAD"].map(r => ({ text: r.replace("_"," "), value: r })),
+      onFilter: (v, record) => record.role === v,
+    },
+    { title: "Branch", key: "branch", render: (_: unknown, u: User) => u.branch?.name || "-" },
     { title: "Status", dataIndex: "isActive", key: "status", render: (v: boolean) => <Tag color={v ? "green" : "red"}>{v ? "Active" : "Inactive"}</Tag> },
     { title: "Joined", dataIndex: "createdAt", key: "joined", render: (v: string) => new Date(v).toLocaleDateString() },
   ];
@@ -129,14 +142,27 @@ export default function AdminUsersPage() {
           <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}><Input /></Form.Item>
           <Form.Item name="password" label="Password" rules={[{ required: true, min: 6 }]}><Input.Password /></Form.Item>
           <Form.Item name="phone" label="Phone"><Input /></Form.Item>
-          <Form.Item name="role" label="Role" initialValue="STAFF">
-            <Select options={[
-              { label: "Admin", value: "ADMIN" },
-              { label: "Security", value: "SECURITY" },
-              { label: "Receptionist", value: "RECEPTIONIST" },
-              { label: "Staff", value: "STAFF" },
-              { label: "Department Head", value: "DEPARTMENT_HEAD" },
-            ]} />
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="role" label="Role" initialValue="STAFF">
+                <Select options={[
+                  { label: "Admin", value: "ADMIN" },
+                  { label: "Security", value: "SECURITY" },
+                  { label: "Receptionist", value: "RECEPTIONIST" },
+                  { label: "Staff", value: "STAFF" },
+                  { label: "Department Head", value: "DEPARTMENT_HEAD" },
+                ]} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="branchId" label="Branch" rules={[{ required: true, message: "Branch is required" }]}>
+                <Select placeholder="Select branch" allowClear options={branches.map(b => ({ label: b.name, value: b.id }))} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item name="departmentId" label="Department" help="Required for Staff and Department Head roles">
+            <Select placeholder="Select department" allowClear showSearch optionFilterProp="label"
+              options={departments.map(d => ({ label: d.name, value: d.id }))} />
           </Form.Item>
         </Form>
       </Modal>

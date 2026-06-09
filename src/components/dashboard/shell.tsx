@@ -24,6 +24,7 @@ import {
   MenuOutlined,
   SearchOutlined,
   ScanOutlined,
+  QrcodeOutlined,
   AlertOutlined,
   TeamOutlined,
   HomeOutlined,
@@ -89,8 +90,10 @@ function getNavItems(role: string): NavItem[] {
   const staff: NavItem[] = [
     { key: "/dashboard/staff", icon: <DashboardOutlined />, label: "Dashboard" },
     { key: "/dashboard/staff/appointments", icon: <CalendarOutlined />, label: "Appointments" },
+    { key: "/dashboard/staff/pre-register", icon: <UserOutlined />, label: "Pre-Register" },
     { key: "/dashboard/staff/walkins", icon: <CheckCircleOutlined />, label: "Walk-In Requests" },
     { key: "/dashboard/staff/calendar", icon: <CalendarOutlined />, label: "Calendar" },
+    { key: "/dashboard/staff/qrcode", icon: <QrcodeOutlined />, label: "My QR Code" },
     { key: "/dashboard/chat", icon: <MessageOutlined />, label: "Live Chat" },
     { key: "/dashboard/staff/history", icon: <ClockCircleOutlined />, label: "Visitor History" },
     { key: "/dashboard/staff/notifications", icon: <BellOutlined />, label: "Notifications" },

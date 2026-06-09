@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Card, Col, Input, Row, Statistic, Table, Tag, Typography, Avatar } from "antd";
-import { DownloadOutlined, SearchOutlined, CheckCircleOutlined, WarningOutlined, TeamOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Modal, Progress, Row, Select, Space, Statistic, Table, Tag, Typography, Avatar, message } from "antd";
+import { DownloadOutlined, SearchOutlined, CheckCircleOutlined, WarningOutlined, TeamOutlined, AlertOutlined, ReloadOutlined, SafetyOutlined } from "@ant-design/icons";
+import { toast } from "sonner";
 import type { ColumnsType } from "antd/es/table";
 
 interface VisitorEntry {
@@ -30,8 +31,30 @@ export default function EmergencyRollCallPage() {
   const [summary, setSummary] = useState({ total: 0, accounted: 0, unaccounted: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [alarmActive, setAlarmActive] = useState(false);
+  const [alarmStart, setAlarmStart] = useState<Date | null>(null);
+  const [elapsed, setElapsed] = useState("");
 
   useEffect(() => { fetchVisitors(); }, []);
+
+  // Auto-refresh every 15 seconds during active alarm
+  useEffect(() => {
+    if (!alarmActive) return;
+    const interval = setInterval(fetchVisitors, 15000);
+    return () => clearInterval(interval);
+  }, [alarmActive]);
+
+  // Elapsed timer
+  useEffect(() => {
+    if (!alarmStart) return;
+    const interval = setInterval(() => {
+      const diff = Math.floor((Date.now() - alarmStart.getTime()) / 1000);
+      const m = Math.floor(diff / 60);
+      const s = diff % 60;
+      setElapsed(`${m}:${s.toString().padStart(2, "0")}`);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [alarmStart]);
 
   async function fetchVisitors() {
     setIsLoading(true);
@@ -55,6 +78,28 @@ export default function EmergencyRollCallPage() {
       });
       fetchVisitors();
     } catch { /* ignore */ }
+  }
+
+  function triggerAlarm() {
+    Modal.confirm({
+      title: "Activate Emergency Roll Call?",
+      content: "This will start a live emergency roll call session. All checked-in visitors will need to be accounted for.",
+      okText: "Activate",
+      okButtonProps: { danger: true },
+      onOk() {
+        setAlarmActive(true);
+        setAlarmStart(new Date());
+        toast.success("Emergency roll call activated");
+        fetchVisitors();
+      },
+    });
+  }
+
+  async function markAllSafe() {
+    for (const v of visitors.filter(x => !x.isAccountedFor)) {
+      await markAccounted(v.id, true);
+    }
+    toast.success("All visitors marked as safe");
   }
 
   function exportCSV() {
@@ -133,13 +178,43 @@ export default function EmergencyRollCallPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 8 }}>
         <div>
-          <Title level={3} style={{ margin: 0 }}><WarningOutlined style={{ color: "#ff4d4f" }} /> Emergency Roll Call</Title>
+          <Title level={3} style={{ margin: 0 }}>
+            {alarmActive ? <AlertOutlined style={{ color: "#ff4d4f" }} /> : <SafetyOutlined style={{ color: "#0A2540" }} />}
+            {" "}Emergency Roll Call
+            {alarmActive && <Tag color="red" style={{ marginLeft: 8 }}>ACTIVE — {elapsed}</Tag>}
+          </Title>
           <Text type="secondary">All visitors currently inside the building</Text>
         </div>
-        <Button icon={<DownloadOutlined />} onClick={exportCSV}>Export CSV</Button>
+        <Space>
+          {!alarmActive ? (
+            <Button type="primary" danger icon={<AlertOutlined />} size="large" onClick={triggerAlarm}>Activate Emergency</Button>
+          ) : (
+            <Button onClick={() => { setAlarmActive(false); setAlarmStart(null); }}>End Emergency</Button>
+          )}
+          <Button icon={<ReloadOutlined />} onClick={fetchVisitors} />
+          <Button icon={<DownloadOutlined />} onClick={exportCSV}>Export CSV</Button>
+        </Space>
       </div>
+
+      {/* Progress Bar */}
+      {summary.total > 0 && (
+        <Card size="small" style={{ marginBottom: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <Text strong>Accountability Progress</Text>
+            <Progress
+              percent={Math.round((summary.accounted / summary.total) * 100)}
+              strokeColor={summary.accounted === summary.total ? "#52c41a" : "#faad14"}
+              style={{ flex: 1 }}
+            />
+            <Text>{summary.accounted}/{summary.total}</Text>
+            {summary.unaccounted > 0 && (
+              <Button size="small" type="primary" style={{ background: "#52c41a", borderColor: "#52c41a" }} onClick={markAllSafe}>Mark All Safe</Button>
+            )}
+          </div>
+        </Card>
+      )}
 
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={8}>
