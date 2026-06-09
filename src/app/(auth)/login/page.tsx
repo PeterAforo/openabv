@@ -178,7 +178,20 @@ export default function LoginPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <button
               type="button"
-              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+              onClick={async () => {
+                try {
+                  const result = await signIn("google", { callbackUrl: "/dashboard", redirect: false });
+                  if (result?.error) {
+                    if (result.error === "Configuration") {
+                      toast.error("Google Sign-In is not configured. Please use email/password or contact your administrator.");
+                    } else {
+                      toast.error(result.error === "OAuthAccountNotLinked" ? "This email is already registered with a password. Please sign in with your password." : "Google sign-in failed. Please try again.");
+                    }
+                  }
+                } catch {
+                  toast.error("Google Sign-In is not available.");
+                }
+              }}
               disabled={isLoading}
               style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, padding: "12px 16px", border: "1px solid #C4C6CE", borderRadius: 10, background: "#fff", cursor: "pointer", fontSize: 16, fontWeight: 600, color: "#191C1E", transition: "background 0.15s" }}
             >
