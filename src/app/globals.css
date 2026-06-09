@@ -33,33 +33,34 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --background: 220 20% 4%;
+    --foreground: 210 20% 95%;
+    --card: 220 18% 8%;
+    --card-foreground: 210 20% 95%;
+    --popover: 220 18% 8%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 160 100% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 30% 14%;
+    --secondary-foreground: 210 20% 95%;
+    --muted: 210 25% 12%;
+    --muted-foreground: 215 16% 60%;
+    --accent: 210 25% 12%;
+    --accent-foreground: 210 20% 95%;
+    --destructive: 0 84% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 18% 16%;
+    --input: 220 18% 16%;
+    --ring: 160 100% 39%;
+    --radius: 0.625rem;
+    --sidebar-background: 220 20% 6%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 160 100% 39%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 220 18% 12%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 220 18% 14%;
+    --sidebar-ring: 160 100% 39%;
   }
 }
 
@@ -97,6 +98,52 @@
   img {
     max-width: 100%;
     height: auto;
+  }
+}
+
+/* ==================== SAFE AREA INSETS (iOS Notch) ==================== */
+@supports (padding: env(safe-area-inset-top)) {
+  /* Fixed sidebar — respect left notch */
+  .vf-sidebar {
+    padding-left: env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Sticky header — respect top notch */
+  .vf-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Main content — respect bottom/right insets */
+  .vf-main main {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  /* Full-height pages (login, booking) */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Fixed bottom elements (chat widget, toasts) */
+  .vf-chat-widget {
+    bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    right: calc(16px + env(safe-area-inset-right)) !important;
+  }
+
+  .sonner-toaster {
+    top: calc(8px + env(safe-area-inset-top)) !important;
+  }
+
+  /* Mobile drawer */
+  .vf-mobile-drawer .ant-drawer-body {
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+
+  /* Modals */
+  .ant-modal {
+    margin-top: calc(8px + env(safe-area-inset-top)) !important;
   }
 }
 
@@ -204,6 +251,93 @@
     word-break: break-all;
     white-space: pre-wrap;
   }
+
+  /* ==================== TOUCH TARGETS (44px minimum) ==================== */
+  /* Apple HIG & WCAG 2.5.8: minimum 44×44px touch targets */
+  .ant-btn-sm,
+  .ant-btn[size="small"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+
+  /* Icon-only small buttons */
+  .ant-btn-sm.ant-btn-icon-only,
+  .ant-btn-icon-only[size="small"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Default buttons — ensure adequate height */
+  .ant-btn {
+    min-height: 40px !important;
+  }
+
+  /* Dropdown trigger areas */
+  .ant-dropdown-trigger {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  /* Table action buttons */
+  .ant-table-cell .ant-btn-sm {
+    min-height: 36px !important;
+    min-width: 36px !important;
+  }
+
+  /* Tag touch targets */
+  .ant-tag {
+    min-height: 28px !important;
+    line-height: 26px !important;
+  }
+
+  /* Tab touch targets */
+  .ant-tabs-tab {
+    min-height: 44px !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Select touch targets */
+  .ant-select-selector {
+    min-height: 44px !important;
+  }
+
+  /* Switch touch area */
+  .ant-switch {
+    min-width: 52px !important;
+    min-height: 28px !important;
+  }
+
+  /* Pagination touch targets */
+  .ant-pagination-item,
+  .ant-pagination-prev,
+  .ant-pagination-next {
+    min-width: 40px !important;
+    min-height: 40px !important;
+    line-height: 38px !important;
+  }
+
+  /* Notification bell / icon buttons */
+  .vf-header a,
+  .vf-header button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Checkbox / Radio touch targets */
+  .ant-checkbox-wrapper,
+  .ant-radio-wrapper {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
 }
 
 /* Tablet adjustments */
@@ -244,6 +378,168 @@
     align-items: flex-start !important;
     gap: 12px !important;
   }
+}
+
+/* ==================== DARK MODE ==================== */
+.dark {
+  color-scheme: dark;
+}
+
+/* Dark mode overrides for Ant Design + inline-styled components */
+.dark .ant-card {
+  background: hsl(220 18% 8%) !important;
+  border-color: hsl(220 18% 16%) !important;
+}
+.dark .ant-card-head {
+  border-color: hsl(220 18% 16%) !important;
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-modal .ant-modal-content {
+  background: hsl(220 18% 10%) !important;
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-modal .ant-modal-header {
+  background: hsl(220 18% 10%) !important;
+}
+.dark .ant-modal .ant-modal-title {
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-table {
+  background: hsl(220 18% 8%) !important;
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-table-thead > tr > th,
+.dark .ant-table-thead > tr > td {
+  background: hsl(220 18% 10%) !important;
+  color: hsl(210 20% 90%) !important;
+  border-color: hsl(220 18% 16%) !important;
+}
+.dark .ant-table-tbody > tr > td {
+  border-color: hsl(220 18% 14%) !important;
+}
+.dark .ant-table-tbody > tr:hover > td {
+  background: hsl(220 18% 12%) !important;
+}
+.dark .ant-input,
+.dark .ant-input-affix-wrapper,
+.dark .ant-select-selector,
+.dark .ant-picker {
+  background: hsl(220 18% 10%) !important;
+  border-color: hsl(220 18% 18%) !important;
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-input::placeholder,
+.dark .ant-select-selection-placeholder {
+  color: hsl(215 16% 50%) !important;
+}
+.dark .ant-btn-default {
+  background: hsl(220 18% 12%) !important;
+  border-color: hsl(220 18% 20%) !important;
+  color: hsl(210 20% 90%) !important;
+}
+.dark .ant-btn-default:hover {
+  border-color: hsl(160 100% 39%) !important;
+  color: hsl(160 100% 39%) !important;
+}
+.dark .ant-tabs-tab {
+  color: hsl(215 16% 60%) !important;
+}
+.dark .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: hsl(160 100% 39%) !important;
+}
+.dark .ant-tabs-ink-bar {
+  background: hsl(160 100% 39%) !important;
+}
+.dark .ant-statistic-title {
+  color: hsl(215 16% 60%) !important;
+}
+.dark .ant-statistic-content {
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-empty-description {
+  color: hsl(215 16% 50%) !important;
+}
+.dark .ant-pagination-item a {
+  color: hsl(210 20% 90%) !important;
+}
+.dark .ant-pagination-item-active {
+  border-color: hsl(160 100% 39%) !important;
+}
+.dark .ant-pagination-item-active a {
+  color: hsl(160 100% 39%) !important;
+}
+.dark .ant-drawer-content {
+  background: hsl(220 18% 8%) !important;
+}
+.dark .ant-switch {
+  background: hsl(220 18% 20%) !important;
+}
+.dark .ant-switch-checked {
+  background: hsl(160 100% 39%) !important;
+}
+.dark .ant-typography {
+  color: hsl(210 20% 95%) !important;
+}
+.dark .ant-typography.ant-typography-secondary {
+  color: hsl(215 16% 55%) !important;
+}
+.dark .ant-form-item-label > label {
+  color: hsl(210 20% 90%) !important;
+}
+.dark .ant-progress-inner {
+  background: hsl(220 18% 16%) !important;
+}
+.dark .ant-spin-dot-item {
+  background: hsl(160 100% 39%) !important;
+}
+
+/* Dashboard shell dark overrides */
+.dark .vf-sidebar {
+  background: hsl(220 20% 6%) !important;
+}
+.dark .vf-header {
+  background: hsl(220 18% 6%) !important;
+  border-color: hsl(220 18% 14%) !important;
+}
+.dark .vf-main main {
+  background: hsl(220 20% 4%) !important;
+}
+
+/* Inline-styled card/table wrappers used in dashboards */
+.dark [style*="background: #fff"],
+.dark [style*="background:#fff"],
+.dark [style*="background: rgb(255, 255, 255)"] {
+  background: hsl(220 18% 8%) !important;
+}
+.dark [style*="border-bottom: 1px solid #E5E7EB"],
+.dark [style*="border-top: 1px solid #E5E7EB"],
+.dark [style*="border: 1px solid #E5E7EB"] {
+  border-color: hsl(220 18% 16%) !important;
+}
+.dark [style*="background: #F1F5F9"],
+.dark [style*="background: #F8FAFC"],
+.dark [style*="background: #F2F4F6"],
+.dark [style*="background: #F7F9FB"] {
+  background: hsl(220 18% 6%) !important;
+}
+.dark [style*="color: #0A2540"] {
+  color: hsl(210 20% 95%) !important;
+}
+.dark [style*="color: #43474D"] {
+  color: hsl(215 16% 60%) !important;
+}
+.dark [style*="color: #191C1E"] {
+  color: hsl(210 20% 90%) !important;
+}
+.dark [style*="color: #74777E"] {
+  color: hsl(215 16% 55%) !important;
+}
+.dark [style*="border-bottom: 1px solid #f0f0f0"] {
+  border-color: hsl(220 18% 14%) !important;
+}
+.dark pre {
+  background: hsl(220 18% 10%) !important;
+  color: hsl(210 20% 90%) !important;
 }
 
 @theme inline {

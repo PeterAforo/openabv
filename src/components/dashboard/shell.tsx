@@ -32,6 +32,7 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import { ChatWidget } from "./chat-widget";
+import { useTheme } from "@/hooks/use-theme";
 import type { MenuProps } from "antd";
 
 const { Text } = Typography;
@@ -150,6 +151,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
   const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
+  const { resolvedTheme, toggleTheme } = useTheme();
 
   const navItems = getNavItems(user.role);
   const initials = user.name.split(" ").map((n) => n[0]).join("").toUpperCase();
@@ -303,6 +305,9 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
               )}
             </Link>
             <QuestionCircleOutlined style={{ fontSize: 20, color: "#43474D", cursor: "pointer" }} />
+            <button onClick={toggleTheme} title={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"} style={{ background: "none", border: "none", cursor: "pointer", padding: 4, fontSize: 20, color: "#43474D", display: "flex", alignItems: "center" }}>
+              {resolvedTheme === "dark" ? "☀️" : "🌙"}
+            </button>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, paddingLeft: 16, borderLeft: "1px solid #E5E7EB" }}>
               <div style={{ textAlign: "right" }} className="vf-user-info">
